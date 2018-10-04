@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4366757, g: 0.48427194, b: 0.5645252, a: 1}
+  m_IndirectSpecularColor: {r: 0.4482453, g: 0.49827206, b: 0.5755818, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -365,6 +365,38 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4321844787087708, guid: c92a797ad0f09ca418761dc5edd178fc, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 126
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321844787087708, guid: c92a797ad0f09ca418761dc5edd178fc, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -0.649
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321844787087708, guid: c92a797ad0f09ca418761dc5edd178fc, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321844787087708, guid: c92a797ad0f09ca418761dc5edd178fc, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321844787087708, guid: c92a797ad0f09ca418761dc5edd178fc, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0.38268343
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321844787087708, guid: c92a797ad0f09ca418761dc5edd178fc, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.92387956
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321844787087708, guid: c92a797ad0f09ca418761dc5edd178fc, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321844787087708, guid: c92a797ad0f09ca418761dc5edd178fc, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -0.006
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c92a797ad0f09ca418761dc5edd178fc, type: 2}
   m_IsPrefabAsset: 0
@@ -493,6 +525,7 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114946500468508936, guid: 81687680251d57d4ead4a937cf6694e8, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 81687680251d57d4ead4a937cf6694e8, type: 2}
   m_IsPrefabAsset: 0

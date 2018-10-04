@@ -21,11 +21,10 @@ GameObject:
   - component: {fileID: 4289623838977832}
   - component: {fileID: 33807545736687138}
   - component: {fileID: 23864401362751556}
-  - component: {fileID: 135397850492810700}
-  - component: {fileID: 114405657069403636}
-  - component: {fileID: 114947958352375312}
   - component: {fileID: 54438508893056230}
+  - component: {fileID: 114405657069403636}
   - component: {fileID: 114542985102106488}
+  - component: {fileID: 114900436939164068}
   m_Layer: 0
   m_Name: experimental_player
   m_TagString: Untagged
@@ -146,14 +145,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e7d27bd02eb5ac4c8ca0f7b9292aacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 25
+  speed: 10
   tiles:
   - {fileID: 1859781924488774, guid: 81687680251d57d4ead4a937cf6694e8, type: 2}
   - {fileID: 1988823040896596, guid: c83ea849e824d2e4e86395ab3a6a02a1, type: 2}
   - {fileID: 1001714396297006, guid: 99774aa28600ce242b26c76e4e91809b, type: 2}
   - {fileID: 1803465139429836, guid: 2bcc8dc1e27e70f4ea55436e9cc82024, type: 2}
   - {fileID: 1361789809129556, guid: 035ed66e88ffe54458a27ba042676a8f, type: 2}
---- !u!114 &114947958352375312
+--- !u!114 &114900436939164068
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TransformSyncMode: 1
+  m_TransformSyncMode: 3
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -174,15 +173,3 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
---- !u!135 &135397850492810700
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1407567442860904}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}

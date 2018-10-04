@@ -13,8 +13,16 @@ public class PlayerMovement : NetworkBehaviour {
 
 	void Start () {
 		isMoving = false;
-
-		if(isLocalPlayer) GetComponent<Renderer>().material.color = Color.red;
+		List<Color> pcolors = new List<Color>(){
+			Color.red,
+			Color.yellow,
+			Color.green,
+			Color.blue,
+			Color.white,
+			Color.black
+		};
+		
+		if(isLocalPlayer) GetComponent<Renderer>().material.color = pcolors[Random.Range(0,pcolors.Count-1)];
 	}
 	
 	private int nextTile(){
@@ -26,18 +34,29 @@ public class PlayerMovement : NetworkBehaviour {
 	void Update () {
 		if(!isLocalPlayer)return;
 
-		if(Input.GetKeyDown(KeyCode.Space) && !isMoving){
-			isMoving = true;
+		if(Input.GetKeyDown(KeyCode.Space)){
+			isMoving = !isMoving; //true;
 			nextTile();
 		}
 
 		if(isMoving){
-			gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,
-			tiles[currentTile].transform.position,speed*Time.deltaTime);
+			if(!isServer){
+				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,
+					tiles[currentTile].transform.position,speed*Time.deltaTime);
+			}
+			CmdMovePlayer(tiles[currentTile].transform.position);
+			
 		
 			if(gameObject.transform.position == tiles[currentTile].transform.position){
-				isMoving = false;
+				//isMoving = false;
+				nextTile(); //loops movement automatically for debugging
 			}
 		}
+	}
+
+	[Command]
+	void CmdMovePlayer(Vector3 target){
+		gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,
+			target,speed*Time.deltaTime);
 	}
 }
