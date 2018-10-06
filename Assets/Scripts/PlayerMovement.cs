@@ -18,7 +18,6 @@ public class PlayerMovement : NetworkBehaviour {
 			Color.yellow,
 			Color.green,
 			Color.blue,
-			Color.white,
 			Color.black
 		};
 		

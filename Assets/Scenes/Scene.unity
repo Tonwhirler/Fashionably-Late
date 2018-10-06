@@ -138,7 +138,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 543809434}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -822479833, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a03d08dd02e0384e8b6e4a4f5ecbc9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_NetworkPort: 7777
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_LogLevel: 2
   m_PlayerPrefab: {fileID: 1407567442860904, guid: 2a5595968b72e7d449ab1519f9e93cf8,
     type: 2}
-  m_AutoCreatePlayer: 1
+  m_AutoCreatePlayer: 0
   m_PlayerSpawnMethod: 1
   m_OfflineScene: 
   m_OnlineScene: 
@@ -212,6 +212,8 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
+  gameManager_prefab: {fileID: 1388785431360380, guid: 55300bc2bd613dc449505e2323a29d1c,
+    type: 2}
 --- !u!4 &543809436
 Transform:
   m_ObjectHideFlags: 0
@@ -525,6 +527,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 23965756081494572, guid: 81687680251d57d4ead4a937cf6694e8,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f3939d323938a8947956dfde3b615371, type: 2}
     m_RemovedComponents:
     - {fileID: 114946500468508936, guid: 81687680251d57d4ead4a937cf6694e8, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 81687680251d57d4ead4a937cf6694e8, type: 2}
