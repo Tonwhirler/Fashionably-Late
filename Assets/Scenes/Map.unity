@@ -2176,7 +2176,7 @@ Transform:
   - {fileID: 1099412564}
   - {fileID: 1237335414}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &555087692
 Prefab:
@@ -2615,7 +2615,7 @@ Transform:
   - {fileID: 21103348}
   - {fileID: 374373319}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &700333927
 Prefab:
@@ -3371,7 +3371,7 @@ Transform:
   - {fileID: 937928376}
   - {fileID: 480865308}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &900605963
 Prefab:
@@ -3477,7 +3477,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4004453153086480, guid: e672d94e960dcea45af978b8ad13f453, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1309359137663040, guid: e672d94e960dcea45af978b8ad13f453, type: 2}
       propertyPath: m_Name
@@ -3717,7 +3717,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!4 &943871335 stripped
 Transform:
@@ -4176,6 +4176,56 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4117458019408276, guid: 8350df8b16289e445b22dedbeca77d01,
     type: 2}
   m_PrefabInternal: {fileID: 704180516}
+--- !u!1001 &1058893816
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4977889313673434, guid: 14d2671d8f0ba204e8da81f5155916f7, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -28
+      objectReference: {fileID: 0}
+    - target: {fileID: 4977889313673434, guid: 14d2671d8f0ba204e8da81f5155916f7, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4977889313673434, guid: 14d2671d8f0ba204e8da81f5155916f7, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4977889313673434, guid: 14d2671d8f0ba204e8da81f5155916f7, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4977889313673434, guid: 14d2671d8f0ba204e8da81f5155916f7, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4977889313673434, guid: 14d2671d8f0ba204e8da81f5155916f7, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4977889313673434, guid: 14d2671d8f0ba204e8da81f5155916f7, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4977889313673434, guid: 14d2671d8f0ba204e8da81f5155916f7, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4977889313673434, guid: 14d2671d8f0ba204e8da81f5155916f7, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4977889313673434, guid: 14d2671d8f0ba204e8da81f5155916f7, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 15
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 14d2671d8f0ba204e8da81f5155916f7, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1001 &1059153135
 Prefab:
   m_ObjectHideFlags: 0
@@ -6833,7 +6883,7 @@ Transform:
   - {fileID: 589541087}
   - {fileID: 951531310}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1846062382
 GameObject:
@@ -6905,7 +6955,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1853447593
 Prefab:
