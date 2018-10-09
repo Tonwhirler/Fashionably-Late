@@ -16,7 +16,7 @@ public class MyNetworkManager : NetworkManager {
 		num_players++;
         Debug.Log("Player "+num_players+" connected");
 		 
-		if(num_players==2){
+		if(num_players==1){
 			startGame();
 		}
     }

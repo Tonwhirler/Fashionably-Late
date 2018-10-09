@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class PlayerMovement : NetworkBehaviour {
+public class Player_Behavior : NetworkBehaviour {
 
 	public float speed;
 	public List<GameObject> tiles;
 
 	private int currentTile = 0;
 	private bool isMoving;
-
+	private bool doneMoving;
 	void Start () {
 		isMoving = false;
+		doneMoving = false;
 	}
 	
 	private int nextTile(){
@@ -24,11 +25,6 @@ public class PlayerMovement : NetworkBehaviour {
 	void Update () {
 		if(!isLocalPlayer)return;
 
-		if(Input.GetKeyDown(KeyCode.Space)){
-			isMoving = !isMoving; //true;
-			nextTile();
-		}
-
 		if(isMoving){
 			if(!isServer){
 				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,
@@ -38,10 +34,25 @@ public class PlayerMovement : NetworkBehaviour {
 			
 		
 			if(gameObject.transform.position == tiles[currentTile].transform.position){
-				//isMoving = false;
+				isMoving = false;
+				doneMoving = true;
 				nextTile(); //loops movement automatically for debugging
 			}
 		}
+	}
+
+	public IEnumerator TakeTurn(){
+		//dont't end turn until player has moved to a new tile
+		while(true){
+			if(Input.GetKeyDown(KeyCode.Space)){
+				isMoving = true;
+				doneMoving = false;
+				nextTile();
+			}
+
+			if(doneMoving)break; //player has reached the destination tile, end turn for now
+		}
+		return null;
 	}
 
 	[Command]
