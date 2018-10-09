@@ -90,6 +90,9 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0, a: 0}
   - {r: 0, g: 1, b: 0, a: 0}
   - {r: 1, g: 1, b: 0, a: 0}
-  start_space: {fileID: 4535463374994452, guid: 81687680251d57d4ead4a937cf6694e8,
-    type: 2}
+  start_spaces:
+  - {fileID: 4490462568060394, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
+  - {fileID: 4810128889851268, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
+  - {fileID: 4328343500058752, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
+  - {fileID: 4895780314659168, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
   max_turns: 20

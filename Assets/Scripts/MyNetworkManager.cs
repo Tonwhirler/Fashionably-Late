@@ -25,14 +25,16 @@ public class MyNetworkManager : NetworkManager {
 		GameObject _player;
 
 		Debug.Log("Starting Game");
-		gameManager_instance = Instantiate(gameManager_prefab,Vector3.zero,Quaternion.identity);
+		gameManager_instance = Instantiate(gameManager_prefab);
 		
 		for(int i=0; i<num_players; i++){
 			_player = Instantiate(playerPrefab,
-				gameManager_instance.GetComponent<GameManager>().start_space.transform.position,Quaternion.identity);
-			_player.GetComponent<Renderer>().material.color = gameManager_instance.GetComponent<GameManager>().player_colors[i];
+				gameManager_instance.GetComponent<GameManager>().start_spaces[i].transform.position,Quaternion.identity);
+			//_player.GetComponent<Renderer>().material.color = gameManager_instance.GetComponent<GameManager>().player_colors[i]; //only works with debug_player prefab
 
 			gameManager_instance.GetComponent<GameManager>().players.Add(_player);
+
+			Debug.Log("Player "+i+" spawned.");
 		}
 
 		gameManager_instance.GetComponent<GameManager>().StartGame();

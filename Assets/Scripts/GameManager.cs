@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour {
 
 	public List<GameObject> players; //references to each of the players
 	public List<Color> player_colors; //set each player's color, will be replaced with unique character models
-	public Transform start_space; //beginning tile on board
+	public List<Transform> start_spaces; //beginning tile on board
 
 	public int max_turns = 20; //prevents game from going too long
 
@@ -27,8 +27,8 @@ public class GameManager : MonoBehaviour {
 	//resets each player to start and clears the score
 	private IEnumerator ResetGame(){
 		Debug.Log("Resetting Game");
-		foreach(GameObject player in players){
-			player.GetComponent<Rigidbody>().transform.position = start_space.position;
+		for(int i=0; i<players.Count; i++){
+			players[i].GetComponent<CharacterController>().transform.position = start_spaces[i].position;
 			//player.setScore(0);
 		}
 		yield return new WaitForSeconds(3f); //3 second delay before beginning turn loop

@@ -13,15 +13,6 @@ public class PlayerMovement : NetworkBehaviour {
 
 	void Start () {
 		isMoving = false;
-		List<Color> pcolors = new List<Color>(){
-			Color.red,
-			Color.yellow,
-			Color.green,
-			Color.blue,
-			Color.black
-		};
-		
-		if(isLocalPlayer) GetComponent<Renderer>().material.color = pcolors[Random.Range(0,pcolors.Count-1)];
 	}
 	
 	private int nextTile(){
