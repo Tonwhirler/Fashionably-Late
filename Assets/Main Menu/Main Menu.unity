@@ -773,7 +773,7 @@ RectTransform:
   - {fileID: 559114499}
   - {fileID: 1446488287}
   m_Father: {fileID: 1927914609}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1375,7 +1375,7 @@ GameObject:
   - component: {fileID: 1456060835}
   - component: {fileID: 1456060836}
   m_Layer: 0
-  m_Name: Label
+  m_Name: Menu_Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1392,7 +1392,7 @@ Transform:
   m_LocalScale: {x: 0.09507455, y: 0.050000016, z: 7.046754}
   m_Children: []
   m_Father: {fileID: 1927914609}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: -180.00002}
 --- !u!212 &1456060836
 SpriteRenderer:
@@ -1881,8 +1881,8 @@ Transform:
   m_LocalPosition: {x: -4.0520945, y: 0, z: 0.3045581}
   m_LocalScale: {x: 8.250007, y: 14.560016, z: 0.5}
   m_Children:
-  - {fileID: 721915132}
   - {fileID: 1456060835}
+  - {fileID: 721915132}
   m_Father: {fileID: 1016096680}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
