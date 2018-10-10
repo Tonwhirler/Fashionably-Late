@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour {
 		for(turn_number=1; turn_number<=max_turns; turn_number++){
 			Debug.Log("Turn  "+turn_number+"start");
 			foreach(GameObject player in players){
-				Debug.Log("Player turn");
+				Debug.Log("Player "+player.GetComponent<Player_Behavior>().player_num+" turn");
 				
 				//freezes program and editor
 				yield return StartCoroutine(player.GetComponent<Player_Behavior>().TakeTurn());

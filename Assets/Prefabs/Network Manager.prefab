@@ -126,6 +126,8 @@ MonoBehaviour:
   matchMaker: {fileID: 0}
   gameManager_prefab: {fileID: 1388785431360380, guid: 55300bc2bd613dc449505e2323a29d1c,
     type: 2}
+  gameManager_instance: {fileID: 0}
+  max_connections: 2
 --- !u!114 &114802278096508842
 MonoBehaviour:
   m_ObjectHideFlags: 1

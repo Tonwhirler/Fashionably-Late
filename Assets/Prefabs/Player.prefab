@@ -1746,7 +1746,7 @@ MonoBehaviour:
     i14: 60
     i15: 160
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 1
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114360786576666276
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1760,10 +1760,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   tiles:
-  - {fileID: 1040115305863996, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
-  - {fileID: 1473026784129598, guid: 1b59c480688c64944940631b2dca35c0, type: 2}
-  - {fileID: 1455108652649216, guid: 694abd07ee245364d972f2a2d5d137a4, type: 2}
-  - {fileID: 1245867757262682, guid: 0434422017bbc484da4cf5388b20c566, type: 2}
+  - {fileID: 1512174824714292, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
+  - {fileID: 1940409123027838, guid: 1b59c480688c64944940631b2dca35c0, type: 2}
+  - {fileID: 1885062563208440, guid: 694abd07ee245364d972f2a2d5d137a4, type: 2}
+  - {fileID: 1068017958336324, guid: 0434422017bbc484da4cf5388b20c566, type: 2}
+  - {fileID: 1856263824012600, guid: 5c997f0a37d32694785775b74a22a75c, type: 2}
+  networkManager: {fileID: 1855984713378804, guid: 2c93f009229af6d41b5faae70a27f8c8,
+    type: 2}
+  player_num: 0
 --- !u!114 &114643126987091608
 MonoBehaviour:
   m_ObjectHideFlags: 1

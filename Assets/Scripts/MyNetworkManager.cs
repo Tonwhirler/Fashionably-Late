@@ -7,32 +7,44 @@ using UnityEngine.Networking;
 public class MyNetworkManager : NetworkManager {
 
 	public GameObject gameManager_prefab;
-	private GameObject gameManager_instance;
+	public GameObject gameManager_instance;
+
+	public int max_connections;//auto start the game when this is reached
 
 	private int num_players;
 
 	public override void OnServerConnect(NetworkConnection conn)
     {
-		num_players++;
         Debug.Log("Player "+num_players+" connected");
+		num_players++;
 		 
-		if(num_players==1){
+		if(num_players==max_connections){
 			startGame();
 		}
     }
 
+	
+
 	void startGame(){
 		GameObject _player;
 
-		Debug.Log("Starting Game");
 		gameManager_instance = Instantiate(gameManager_prefab);
+		Debug.Log("Starting Game with "+NetworkServer.connections.Count+" connections");
 		
-		for(int i=0; i<num_players; i++){
-//TODO: send command to each client to run the same piece of code
-			_player = Instantiate(playerPrefab,
-				gameManager_instance.GetComponent<GameManager>().start_spaces[i].transform.position,Quaternion.identity);
-			//_player.GetComponent<Renderer>().material.color = gameManager_instance.GetComponent<GameManager>().player_colors[i]; //only works with debug_player prefab
+		
 
+		 for(int i=0; i<num_players; i++){
+			 //instantiate
+			 _player = Instantiate(playerPrefab,
+				gameManager_instance.GetComponent<GameManager>().start_spaces[i].transform.position,Quaternion.identity);
+			_player.GetComponent<Player_Behavior>().player_num=i;
+
+			//bind to localplayer
+			//NetworkServer.SetClientReady(NetworkServer.connections[i]);	
+			//NetworkServer.SpawnWithClientAuthority(_player,NetworkServer.connections[i]);
+			NetworkServer.AddPlayerForConnection(NetworkServer.connections[i],_player,0);
+
+			//add reference to GameManaer
 			gameManager_instance.GetComponent<GameManager>().players.Add(_player);
 
 			Debug.Log("Player "+i+" spawned.");

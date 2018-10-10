@@ -7,13 +7,20 @@ public class Player_Behavior : NetworkBehaviour {
 
 	public float speed;
 	public List<GameObject> tiles;
+	public GameObject networkManager;
 
+	[HideInInspector]
+	public int player_num;
+	
 	private int currentTile = 0;
 	private bool isMoving;
 	private bool doneMoving;
+
+
 	void Start () {
 		isMoving = false;
 		doneMoving = false;
+		if(isLocalPlayer) GameObject.Find("Main Camera").GetComponent<CameraController>().SetPlayer(gameObject);
 	}
 	
 	private int nextTile(){
@@ -24,17 +31,21 @@ public class Player_Behavior : NetworkBehaviour {
 
 	void Update () {
 		//if(!isLocalPlayer)return;
-
+		
+		Vector3 target;
 		if(isMoving){
 			Debug.Log("moving...");
+			target = tiles[currentTile].transform.GetChild(player_num).position;
+
 			if(!isServer){
+				gameObject.transform.LookAt(target);
 				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,
-					tiles[currentTile].transform.position,speed*Time.deltaTime);
+					target,speed*Time.deltaTime);
 			}
-			//CmdMovePlayer(tiles[currentTile].transform.position);
+			CmdMovePlayer(target);
 			
 			//when player has reached destination
-			if(gameObject.transform.position == tiles[currentTile].transform.position){
+			if(gameObject.transform.position == target){
 				isMoving = false;
 				doneMoving = true;
 			}
@@ -75,6 +86,7 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[Command]
 	void CmdMovePlayer(Vector3 target){
+		gameObject.transform.LookAt(target);
 		gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,
 			target,speed*Time.deltaTime);
 	}
