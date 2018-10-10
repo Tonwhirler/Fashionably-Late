@@ -40,7 +40,10 @@ public class GameManager : MonoBehaviour {
 			Debug.Log("Turn  "+turn_number+"start");
 			foreach(GameObject player in players){
 				Debug.Log("Player turn");
-				//yield return player.TakeTurn();
+				
+				//freezes program and editor
+				yield return StartCoroutine(player.GetComponent<Player_Behavior>().TakeTurn());
+				
 			}
 			//maybe have a minigame here
 			Debug.Log("Turn  "+turn_number+"end\n");

@@ -28,6 +28,7 @@ public class MyNetworkManager : NetworkManager {
 		gameManager_instance = Instantiate(gameManager_prefab);
 		
 		for(int i=0; i<num_players; i++){
+//TODO: send command to each client to run the same piece of code
 			_player = Instantiate(playerPrefab,
 				gameManager_instance.GetComponent<GameManager>().start_spaces[i].transform.position,Quaternion.identity);
 			//_player.GetComponent<Renderer>().material.color = gameManager_instance.GetComponent<GameManager>().player_colors[i]; //only works with debug_player prefab

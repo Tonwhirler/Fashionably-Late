@@ -36,23 +36,26 @@ public class Player_Behavior : NetworkBehaviour {
 			if(gameObject.transform.position == tiles[currentTile].transform.position){
 				isMoving = false;
 				doneMoving = true;
-				nextTile(); //loops movement automatically for debugging
 			}
 		}
 	}
 
 	public IEnumerator TakeTurn(){
+		Debug.Log("Taking turn...");
 		//dont't end turn until player has moved to a new tile
-		while(true){
-			if(Input.GetKeyDown(KeyCode.Space)){
+		/*while(true){
+			if(Input.GetKeyDown(KeyCode.Space) && !isMoving){
 				isMoving = true;
-				doneMoving = false;
 				nextTile();
 			}
 
-			if(doneMoving)break; //player has reached the destination tile, end turn for now
-		}
-		return null;
+			//player has reached the destination tile, end turn for now
+			if(doneMoving){
+				doneMoving = false;
+				break;
+			}
+		}*/
+		yield return null;
 	}
 
 	[Command]
