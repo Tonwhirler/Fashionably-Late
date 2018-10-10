@@ -39,9 +39,9 @@ GameObject:
   - component: {fileID: 4155215468756720}
   - component: {fileID: 114499684699923414}
   m_Layer: 0
-  m_Name: Tile_0_Player1
+  m_Name: Tile_3_Player1
   m_TagString: Untagged
-  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -55,9 +55,9 @@ GameObject:
   - component: {fileID: 4336900507087570}
   - component: {fileID: 114568707892617638}
   m_Layer: 0
-  m_Name: Tile_0_Player4
+  m_Name: Tile_3_Player4
   m_TagString: Untagged
-  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -71,9 +71,9 @@ GameObject:
   - component: {fileID: 4505530638204070}
   - component: {fileID: 114981558005285682}
   m_Layer: 0
-  m_Name: Tile_0_Player3
+  m_Name: Tile_3_Player3
   m_TagString: Untagged
-  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -87,9 +87,9 @@ GameObject:
   - component: {fileID: 4976833364122044}
   - component: {fileID: 114618723705335324}
   m_Layer: 0
-  m_Name: Tile_0_Player2
+  m_Name: Tile_3_Player2
   m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

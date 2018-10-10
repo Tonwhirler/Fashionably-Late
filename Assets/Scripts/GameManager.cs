@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
 			players[i].GetComponent<CharacterController>().transform.position = start_spaces[i].position;
 			//player.setScore(0);
 		}
-		yield return new WaitForSeconds(3f); //3 second delay before beginning turn loop
+		yield return new WaitForSeconds(0.1f); //3 second delay before beginning turn loop
 	}
 
 	//each player takes a turn until there is a winner or there is a timeout
@@ -48,12 +48,12 @@ public class GameManager : MonoBehaviour {
 			//maybe have a minigame here
 			Debug.Log("Turn  "+turn_number+"end\n");
 		}
-		yield return null;
+		yield return new WaitForSeconds(0.1f);
 	}
 
 	//calculates the results of the game, displays statistics
 	private IEnumerator GameOver(){
 		Debug.Log("GameOver");
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(0.1f);
 	}
 }

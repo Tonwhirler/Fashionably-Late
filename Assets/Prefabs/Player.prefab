@@ -1758,11 +1758,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e7d27bd02eb5ac4c8ca0f7b9292aacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 5
   tiles:
   - {fileID: 1040115305863996, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
   - {fileID: 1473026784129598, guid: 1b59c480688c64944940631b2dca35c0, type: 2}
   - {fileID: 1455108652649216, guid: 694abd07ee245364d972f2a2d5d137a4, type: 2}
+  - {fileID: 1245867757262682, guid: 0434422017bbc484da4cf5388b20c566, type: 2}
 --- !u!114 &114643126987091608
 MonoBehaviour:
   m_ObjectHideFlags: 1
