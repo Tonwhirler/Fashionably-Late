@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class Player_Behavior : NetworkBehaviour {
 
@@ -52,12 +54,28 @@ public class Player_Behavior : NetworkBehaviour {
 		}
 	}
 
+	[TargetRpc]
+	public void TargetRpcBeginTurn(NetworkConnection target){
+		GameObject text = GameObject.Find("DebugText");
+		text.GetComponent<Text>().text = "Your turn :)";
+		Debug.Log("Turn taken");
+	}
+
+	[TargetRpc]
+	public void TargetRpcEndTurn(NetworkConnection target){
+		GameObject text = GameObject.Find("DebugText");
+		text.GetComponent<Text>().text = "Not your turn :(";
+		Debug.Log("Turn ended");
+	}
+
+	[Obsolete("Need to figure out how to refactor this to work with Rpc functions above")]
 	public IEnumerator TakeTurn(){
 		Debug.Log("Taking turn...");
 		
 		//wait for player to press space to start movement, will be replaced with GUI or control scheme
 		yield return StartCoroutine(WaitForKeyDown(KeyCode.Space));
 		
+		//set next tile and movement flags to allow movement during Update()
 		nextTile();
 			Debug.Log("Moving to tile "+currentTile);
 		isMoving=true;
@@ -65,9 +83,7 @@ public class Player_Behavior : NetworkBehaviour {
 		
 
 		yield return StartCoroutine(WaitForDoneMoving());
-
 		Debug.Log("Turn over, done moving");
-
 		yield return new WaitForSeconds(1f); //small delay to make sure movement is finished on all clients
 	}
 
