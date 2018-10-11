@@ -1758,7 +1758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e7d27bd02eb5ac4c8ca0f7b9292aacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 2.5
   tiles:
   - {fileID: 1512174824714292, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
   - {fileID: 1940409123027838, guid: 1b59c480688c64944940631b2dca35c0, type: 2}
@@ -1768,6 +1768,7 @@ MonoBehaviour:
   networkManager: {fileID: 1855984713378804, guid: 2c93f009229af6d41b5faae70a27f8c8,
     type: 2}
   player_num: 0
+  gameManager: {fileID: 0}
 --- !u!114 &114643126987091608
 MonoBehaviour:
   m_ObjectHideFlags: 1

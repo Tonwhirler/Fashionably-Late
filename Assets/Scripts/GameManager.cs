@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
 	public int max_turns = 20; //prevents game from going too long for debugging, will be removed for full game
 	
 	private int turn_number; //increments after each player acts
+
 	[HideInInspector]
 	public bool turnOver; //true when the player has finished its turn
 
@@ -32,7 +33,6 @@ public class GameManager : MonoBehaviour {
 		Debug.Log("Resetting Game");
 		for(int i=0; i<players.Count; i++){
 			players[i].GetComponent<CharacterController>().transform.position = start_spaces[i].position;
-			//player.setScore(0);
 		}
 		yield return new WaitForSeconds(0.1f); //3 second delay before beginning turn loop
 	}

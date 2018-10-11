@@ -13,12 +13,14 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[HideInInspector]
 	public int player_num;
-	public GameManager gameManager;
+	public GameManager gameManager = null;
 
 	private int currentTile = 0; //target Tile index, perhaps refactor name
 	private bool isMoving; //player is currently movint to destination tile
 	private bool doneMoving; //player has reached its destination
 	private bool isMyTurn = false; //is currently player's turn, allowing actions
+
+
 
 	void Start () {
 		isMoving = false;
@@ -33,21 +35,17 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	void Update () {
-		if(!isLocalPlayer)return;
+		//if(!isLocalPlayer)return;
 
 		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
-			nextTile();
 			Debug.Log("Moving to tile "+currentTile);
 			isMoving=true;
 			doneMoving=false;
+			nextTile();
 		}
 
 		Vector3 target;
 		if(isMoving){
-			GameObject text = GameObject.Find("DebugText");
-			String t = String.Format("Moving to Tile{0}.child({1})",currentTile,player_num);
-			text.GetComponent<Text>().text = t;
-
 			target = tiles[currentTile].transform.GetChild(player_num).position;
 
 			if(!isServer){ //prevents host from moving everything at double speed
@@ -55,8 +53,17 @@ public class Player_Behavior : NetworkBehaviour {
 				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,
 					target,speed*Time.deltaTime);
 			}
+			CmdFacePlayer(target);
 			CmdMovePlayer(target);
+
+			//set animation state to motion
+			gameObject.GetComponent<AnimationController>().PlayAnimation(AnimationStates.HumanoidWalk);
 			
+			//display distance to target on gui text
+			GameObject text = GameObject.Find("DebugText");
+			String t = String.Format("Distance to target = {0}",Vector3.Distance(gameObject.transform.position,target));
+			text.GetComponent<Text>().text = t;
+
 			//when player has reached destination
 			if(gameObject.transform.position == target){
 				TurnOver();
@@ -79,18 +86,38 @@ public class Player_Behavior : NetworkBehaviour {
 
 	private void TurnOver(){
 		isMoving = false;
+
+		gameObject.GetComponent<AnimationController>().PlayAnimation(AnimationStates.HumanoidIdle);
+
 		doneMoving = true;
 		isMyTurn = false;
 
-		gameManager.turnOver=true;
+		if(!isServer){
+			GameObject.Find("DebugText").GetComponent<Text>().text = "GameManager null, program frozen";
+		}else{
+			GameObject text = GameObject.Find("DebugText");
+			text.GetComponent<Text>().text = "Not your turn :(";
+			gameManager.turnOver=true;
+		}
 
-		GameObject text = GameObject.Find("DebugText");
-		text.GetComponent<Text>().text = "Not your turn :(";
 		Debug.Log("\tTurn ended");
-		
 	}
 
-	[Obsolete("Need to figure out how to refactor this to work with Rpc functions above")]
+	[Command]
+	void CmdMovePlayer(Vector3 target){
+		gameObject.transform.LookAt(target);
+		gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,
+			target,speed*Time.deltaTime);
+	}
+
+	[Command]
+	void CmdFacePlayer(Vector3 target){
+		gameObject.transform.LookAt(target);
+	}
+
+//=====================================================================================================
+
+	[Obsolete("Replaced by TargetRpc functions")]
 	public IEnumerator TakeTurn(){
 		Debug.Log("Taking turn...");
 		
@@ -99,7 +126,7 @@ public class Player_Behavior : NetworkBehaviour {
 		
 		//set next tile and movement flags to allow movement during Update()
 		nextTile();
-			Debug.Log("Moving to tile "+currentTile);
+		Debug.Log("Moving to tile "+currentTile);
 		isMoving=true;
 		doneMoving=false;
 		
@@ -109,6 +136,7 @@ public class Player_Behavior : NetworkBehaviour {
 		yield return new WaitForSeconds(1f); //small delay to make sure movement is finished on all clients
 	}
 
+	[Obsolete("Replaced by TargetRpc functions")]
 	private IEnumerator WaitForKeyDown(KeyCode keyCode)
 	{
 		while(!Input.GetKeyDown(keyCode)){
@@ -116,16 +144,10 @@ public class Player_Behavior : NetworkBehaviour {
 		}
 	}
 
+	[Obsolete("Replaced by TargetRpc functions")]
 	private IEnumerator WaitForDoneMoving(){
 		while(!doneMoving){
 			yield return null;
 		}
-	}
-
-	[Command]
-	void CmdMovePlayer(Vector3 target){
-		gameObject.transform.LookAt(target);
-		gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,
-			target,speed*Time.deltaTime);
 	}
 }

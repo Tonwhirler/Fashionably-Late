@@ -27,7 +27,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4579046822056426
 Transform:
@@ -65,6 +65,7 @@ MonoBehaviour:
   - {fileID: 4328343500058752, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
   - {fileID: 4895780314659168, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
   max_turns: 20
+  turnOver: 0
 --- !u!114 &114651391438829626
 MonoBehaviour:
   m_ObjectHideFlags: 1
