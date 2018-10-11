@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
 	private IEnumerator ResetGame(){
 		Debug.Log("Resetting Game");
 		for(int i=0; i<players.Count; i++){
-			players[i].GetComponent<CharacterController>().transform.position = start_spaces[i].position;
+			players[i].transform.position = start_spaces[i].position;
 		}
 		yield return new WaitForSeconds(0.1f); //3 second delay before beginning turn loop
 	}

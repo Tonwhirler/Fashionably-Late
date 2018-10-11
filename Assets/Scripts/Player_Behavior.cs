@@ -9,17 +9,21 @@ public class Player_Behavior : NetworkBehaviour {
 
 	public float speed;
 	public List<GameObject> tiles;
-	public GameObject networkManager;
 
 	[HideInInspector]
 	public int player_num;
+	[HideInInspector]
 	public GameManager gameManager = null;
 
 	private int currentTile = 0; //target Tile index, perhaps refactor name
+	[SyncVar]
 	private bool isMoving; //player is currently movint to destination tile
+	[SyncVar]
 	private bool doneMoving; //player has reached its destination
+	[SyncVar]
 	private bool isMyTurn = false; //is currently player's turn, allowing actions
 
+	[HideInInspector]
 	[SyncVar(hook = "OnChangeAnimationState")]
 	public AnimationStates animationState=AnimationStates.HumanoidIdle;
 
@@ -36,7 +40,7 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	void Update () {
-		//if(!isLocalPlayer)return;
+		if(!isLocalPlayer)return; //doesn't seem to change anything
 
 		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
 			Debug.Log("Moving to tile "+currentTile);
