@@ -21,12 +21,13 @@ GameObject:
   - component: {fileID: 4579046822056426}
   - component: {fileID: 114651391438829626}
   - component: {fileID: 114802278096508842}
+  - component: {fileID: 114458816247827878}
   m_Layer: 0
   m_Name: Network Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4579046822056426
 Transform:
@@ -41,6 +42,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114458816247827878
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1855984713378804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aee795af1dfdca247937c1a60adeec5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
+  player_colors:
+  - {r: 1, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 1, a: 0}
+  - {r: 1, g: 1, b: 0, a: 0}
+  - {r: 0, g: 1, b: 0, a: 0}
+  start_spaces:
+  - {fileID: 4490462568060394, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
+  - {fileID: 4810128889851268, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
+  - {fileID: 4328343500058752, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
+  - {fileID: 4895780314659168, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
+  max_turns: 20
+  turnOver: 0
 --- !u!114 &114651391438829626
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -61,13 +86,14 @@ MonoBehaviour:
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 1407567442860904, guid: 2a5595968b72e7d449ab1519f9e93cf8,
+  m_PlayerPrefab: {fileID: 1830868085492942, guid: 78397868dbf6e82439cd71756e4c3ca0,
     type: 2}
   m_AutoCreatePlayer: 0
   m_PlayerSpawnMethod: 1
   m_OfflineScene: 
   m_OnlineScene: 
-  m_SpawnPrefabs: []
+  m_SpawnPrefabs:
+  - {fileID: 1830868085492942, guid: 78397868dbf6e82439cd71756e4c3ca0, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -123,8 +149,7 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
-  gameManager_prefab: {fileID: 1388785431360380, guid: 55300bc2bd613dc449505e2323a29d1c,
-    type: 2}
+  max_connections: 2
 --- !u!114 &114802278096508842
 MonoBehaviour:
   m_ObjectHideFlags: 1

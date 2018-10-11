@@ -6,35 +6,47 @@ using UnityEngine.Networking;
 //The network manager will take control until the players are locked in, then it will hand over control to the GameManager
 public class MyNetworkManager : NetworkManager {
 
-	public GameObject gameManager_prefab;
-	private GameObject gameManager_instance;
+	[HideInInspector]
+	public static GameManager gameManager = null;
 
-	private int num_players;
+	public int max_connections;//auto start the game when this is reached
 
-	public override void OnServerConnect(NetworkConnection conn)
+	private int num_players = 0;
+
+	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
     {
-		num_players++;
+       	//instantiate gameManager
+		if(gameManager==null){
+				gameManager = gameObject.GetComponent<GameManager>();
+		}
         Debug.Log("Player "+num_players+" connected");
-		 
-		if(num_players==2){
+	    
+		Debug.Log("OnServerAddPlayer for player"+num_players);
+
+		//Instantiate player GameObject then bind to connection
+		GameObject _player = Instantiate(playerPrefab,gameManager.start_spaces[num_players].transform.position,Quaternion.identity);
+		_player.GetComponent<Player_Behavior>().player_num=num_players;
+		_player.GetComponent<Player_Behavior>().gameManager=gameManager;
+
+		NetworkServer.SetClientReady(conn);	
+		NetworkServer.AddPlayerForConnection(conn,_player,0);
+		gameManager.players.Add(_player);
+
+		num_players++;
+		//start game when enough players have joined, this should be replaced with NetworkLobby code
+		if(num_players==max_connections){
 			startGame();
 		}
     }
 
+	public override void OnClientConnect(NetworkConnection conn)
+    {
+		Debug.Log("OnClientConnect for player "+num_players);
+		ClientScene.AddPlayer(client.connection, 0);
+	}
+	
 	void startGame(){
-		GameObject _player;
-
-		Debug.Log("Starting Game");
-		gameManager_instance = Instantiate(gameManager_prefab,Vector3.zero,Quaternion.identity);
-		
-		for(int i=0; i<num_players; i++){
-			_player = Instantiate(playerPrefab,
-				gameManager_instance.GetComponent<GameManager>().start_space.transform.position,Quaternion.identity);
-			_player.GetComponent<Renderer>().material.color = gameManager_instance.GetComponent<GameManager>().player_colors[i];
-
-			gameManager_instance.GetComponent<GameManager>().players.Add(_player);
-		}
-
-		gameManager_instance.GetComponent<GameManager>().StartGame();
+		Debug.Log("Starting Game with "+NetworkServer.connections.Count+" connections");
+		gameManager.StartGame();
 	}
 }
