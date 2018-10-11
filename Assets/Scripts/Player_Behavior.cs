@@ -44,7 +44,10 @@ public class Player_Behavior : NetworkBehaviour {
 
 		Vector3 target;
 		if(isMoving){
-			Debug.Log("moving...");
+			GameObject text = GameObject.Find("DebugText");
+			String t = String.Format("Moving to Tile{0}.child({1})",currentTile,player_num);
+			text.GetComponent<Text>().text = t;
+
 			target = tiles[currentTile].transform.GetChild(player_num).position;
 
 			if(!isServer){ //prevents host from moving everything at double speed
@@ -64,8 +67,10 @@ public class Player_Behavior : NetworkBehaviour {
 
 
 	[TargetRpc]
-	public void TargetRpcBeginTurn(NetworkConnection target){
+	public void TargetRpcBeginTurn(NetworkConnection target,int p_num){
 		isMyTurn = true;
+
+		if(player_num!=p_num)player_num=p_num;
 
 		GameObject text = GameObject.Find("DebugText");
 		text.GetComponent<Text>().text = "Your turn :)";

@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour {
 				Debug.Log("Player "+players[i].GetComponent<Player_Behavior>().player_num+" turn");
 				
 				//Rpc client to take turn, then wait until turn is over
-				players[i].GetComponent<Player_Behavior>().TargetRpcBeginTurn(NetworkServer.connections[i]);
+				players[i].GetComponent<Player_Behavior>().TargetRpcBeginTurn(NetworkServer.connections[i],i);
 				yield return StartCoroutine(WaitForTurnOver());
 				Debug.Log("Server recognized turn ended, waiting 5 seconds");
 

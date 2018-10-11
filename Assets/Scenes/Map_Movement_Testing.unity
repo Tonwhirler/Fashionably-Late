@@ -374,11 +374,11 @@ RectTransform:
   m_Father: {fileID: 771963220}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 80, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -400, y: 0}
   m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &763983638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,8 +408,8 @@ MonoBehaviour:
     m_Alignment: 0
     m_AlignByGeometry: 1
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Not your turn
 --- !u!222 &763983639
@@ -482,8 +482,8 @@ Canvas:
   m_GameObject: {fileID: 771963216}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 1761993671}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -602,6 +602,11 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c93f009229af6d41b5faae70a27f8c8, type: 2}
   m_IsPrefabAsset: 0
+--- !u!20 &1761993671 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 20356599112452316, guid: 5ab3e5c1fb000da41b0eafc0a5577f7b,
+    type: 2}
+  m_PrefabInternal: {fileID: 512254125}
 --- !u!1001 &1941607993
 Prefab:
   m_ObjectHideFlags: 0
