@@ -20,7 +20,8 @@ public class Player_Behavior : NetworkBehaviour {
 	private bool doneMoving; //player has reached its destination
 	private bool isMyTurn = false; //is currently player's turn, allowing actions
 
-
+	[SyncVar(hook = "OnChangeAnimationState")]
+	public AnimationStates animationState=AnimationStates.HumanoidIdle;
 
 	void Start () {
 		isMoving = false;
@@ -57,7 +58,7 @@ public class Player_Behavior : NetworkBehaviour {
 			CmdMovePlayer(target);
 
 			//set animation state to motion
-			gameObject.GetComponent<AnimationController>().PlayAnimation(AnimationStates.HumanoidWalk);
+			animationState = AnimationStates.HumanoidWalk;
 			
 			//display distance to target on gui text
 			GameObject text = GameObject.Find("DebugText");
@@ -87,7 +88,7 @@ public class Player_Behavior : NetworkBehaviour {
 	private void TurnOver(){
 		isMoving = false;
 
-		gameObject.GetComponent<AnimationController>().PlayAnimation(AnimationStates.HumanoidIdle);
+		animationState = AnimationStates.HumanoidIdle;
 
 		doneMoving = true;
 		isMyTurn = false;
@@ -113,6 +114,11 @@ public class Player_Behavior : NetworkBehaviour {
 	[Command]
 	void CmdFacePlayer(Vector3 target){
 		gameObject.transform.LookAt(target);
+	}
+
+	//SyncVar hook
+	void OnChangeAnimationState(AnimationStates state){
+		GetComponent<AnimationController>().PlayAnimation(state);
 	}
 
 //=====================================================================================================
