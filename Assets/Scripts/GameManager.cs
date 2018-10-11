@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour {
 			foreach(GameObject player in players){
 				Debug.Log("Player "+player.GetComponent<Player_Behavior>().player_num+" turn");
 				
-				//freezes program and editor
+				//I think I need to make player.TakeTurn() and RPC and call it on that player's connection to fix bug
 				yield return StartCoroutine(player.GetComponent<Player_Behavior>().TakeTurn());
 				
 			}

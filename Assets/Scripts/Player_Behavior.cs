@@ -37,7 +37,7 @@ public class Player_Behavior : NetworkBehaviour {
 			Debug.Log("moving...");
 			target = tiles[currentTile].transform.GetChild(player_num).position;
 
-			if(!isServer){
+			if(!isServer){ //prevents host from moving everything at double speed
 				gameObject.transform.LookAt(target);
 				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,
 					target,speed*Time.deltaTime);

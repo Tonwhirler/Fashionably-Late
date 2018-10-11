@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4369211328193278}
   - component: {fileID: 114889792158672586}
-  - component: {fileID: 114671892253877368}
+  - component: {fileID: 114409772745932908}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -41,7 +41,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114671892253877368
+--- !u!114 &114409772745932908
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -71,7 +71,7 @@ MonoBehaviour:
     i13: 162
     i14: 157
     i15: 28
-  m_ServerOnly: 1
+  m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &114889792158672586
 MonoBehaviour:

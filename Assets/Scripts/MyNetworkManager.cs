@@ -6,50 +6,46 @@ using UnityEngine.Networking;
 //The network manager will take control until the players are locked in, then it will hand over control to the GameManager
 public class MyNetworkManager : NetworkManager {
 
-	public GameObject gameManager_prefab;
-	public GameObject gameManager_instance;
+	[HideInInspector]
+	public static GameManager gameManager = null;
 
 	public int max_connections;//auto start the game when this is reached
 
-	private int num_players;
+	private int num_players = 0;
 
-	public override void OnServerConnect(NetworkConnection conn)
+	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
     {
+       	//instantiate gameManager
+		if(gameManager==null){
+				gameManager = gameObject.GetComponent<GameManager>();
+		}
         Debug.Log("Player "+num_players+" connected");
+	    
+		Debug.Log("OnServerAddPlayer for player"+num_players);
+
+		//Instantiate player GameObject then bind to connection
+		GameObject _player = Instantiate(playerPrefab,gameManager.start_spaces[num_players].transform.position,Quaternion.identity);
+			_player.GetComponent<Player_Behavior>().player_num=num_players;
+
+		NetworkServer.SetClientReady(conn);	
+		NetworkServer.AddPlayerForConnection(conn,_player,0);
+		gameManager.players.Add(_player);
+
 		num_players++;
-		 
+		//start game when enough players have joined, this should be replaced with NetworkLobby code
 		if(num_players==max_connections){
 			startGame();
 		}
     }
 
+	public override void OnClientConnect(NetworkConnection conn)
+    {
+		Debug.Log("OnClientConnect for player "+num_players);
+		ClientScene.AddPlayer(client.connection, 0);
+	}
 	
-
 	void startGame(){
-		GameObject _player;
-
-		gameManager_instance = Instantiate(gameManager_prefab);
 		Debug.Log("Starting Game with "+NetworkServer.connections.Count+" connections");
-		
-		
-
-		 for(int i=0; i<num_players; i++){
-			 //instantiate
-			 _player = Instantiate(playerPrefab,
-				gameManager_instance.GetComponent<GameManager>().start_spaces[i].transform.position,Quaternion.identity);
-			_player.GetComponent<Player_Behavior>().player_num=i;
-
-			//bind to localplayer
-			//NetworkServer.SetClientReady(NetworkServer.connections[i]);	
-			//NetworkServer.SpawnWithClientAuthority(_player,NetworkServer.connections[i]);
-			NetworkServer.AddPlayerForConnection(NetworkServer.connections[i],_player,0);
-
-			//add reference to GameManaer
-			gameManager_instance.GetComponent<GameManager>().players.Add(_player);
-
-			Debug.Log("Player "+i+" spawned.");
-		}
-
-		gameManager_instance.GetComponent<GameManager>().StartGame();
+		gameManager.StartGame();
 	}
 }
