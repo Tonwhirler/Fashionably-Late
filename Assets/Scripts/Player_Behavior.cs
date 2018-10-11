@@ -13,11 +13,12 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[HideInInspector]
 	public int player_num;
-	
-	private int currentTile = 0;
-	private bool isMoving;
-	private bool doneMoving;
+	public GameManager gameManager;
 
+	private int currentTile = 0; //target Tile index, perhaps refactor name
+	private bool isMoving; //player is currently movint to destination tile
+	private bool doneMoving; //player has reached its destination
+	private bool isMyTurn = false; //is currently player's turn, allowing actions
 
 	void Start () {
 		isMoving = false;
@@ -32,8 +33,15 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	void Update () {
-		//if(!isLocalPlayer)return;
-		
+		if(!isLocalPlayer)return;
+
+		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
+			nextTile();
+			Debug.Log("Moving to tile "+currentTile);
+			isMoving=true;
+			doneMoving=false;
+		}
+
 		Vector3 target;
 		if(isMoving){
 			Debug.Log("moving...");
@@ -48,24 +56,33 @@ public class Player_Behavior : NetworkBehaviour {
 			
 			//when player has reached destination
 			if(gameObject.transform.position == target){
-				isMoving = false;
-				doneMoving = true;
+				TurnOver();
 			}
 		}
 	}
 
-	[TargetRpc]
-	public void TargetRpcBeginTurn(NetworkConnection target){
-		GameObject text = GameObject.Find("DebugText");
-		text.GetComponent<Text>().text = "Your turn :)";
-		Debug.Log("Turn taken");
-	}
+
 
 	[TargetRpc]
-	public void TargetRpcEndTurn(NetworkConnection target){
+	public void TargetRpcBeginTurn(NetworkConnection target){
+		isMyTurn = true;
+
+		GameObject text = GameObject.Find("DebugText");
+		text.GetComponent<Text>().text = "Your turn :)";
+		Debug.Log("\tTurn began");
+	}
+
+	private void TurnOver(){
+		isMoving = false;
+		doneMoving = true;
+		isMyTurn = false;
+
+		gameManager.turnOver=true;
+
 		GameObject text = GameObject.Find("DebugText");
 		text.GetComponent<Text>().text = "Not your turn :(";
-		Debug.Log("Turn ended");
+		Debug.Log("\tTurn ended");
+		
 	}
 
 	[Obsolete("Need to figure out how to refactor this to work with Rpc functions above")]

@@ -25,7 +25,8 @@ public class MyNetworkManager : NetworkManager {
 
 		//Instantiate player GameObject then bind to connection
 		GameObject _player = Instantiate(playerPrefab,gameManager.start_spaces[num_players].transform.position,Quaternion.identity);
-			_player.GetComponent<Player_Behavior>().player_num=num_players;
+		_player.GetComponent<Player_Behavior>().player_num=num_players;
+		_player.GetComponent<Player_Behavior>().gameManager=gameManager;
 
 		NetworkServer.SetClientReady(conn);	
 		NetworkServer.AddPlayerForConnection(conn,_player,0);
