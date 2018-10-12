@@ -13,8 +13,6 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[HideInInspector]
 	public int player_num;
-	[HideInInspector]
-	public GameManager gameManager = null;
 
 	private int currentTile = 0; //target Tile index, perhaps refactor name
 	[SyncVar]
@@ -92,25 +90,17 @@ public class Player_Behavior : NetworkBehaviour {
 
 	private void TurnOver(){
 		isMoving = false;
-
-		animationState = AnimationStates.HumanoidIdle;
-
 		doneMoving = true;
 		isMyTurn = false;
 
-		if(!isServer){
-			GameObject.Find("DebugText").GetComponent<Text>().text = "GameManager null, program frozen";
-			//testing sending message to server
-			NetworkManager.singleton.client.Send(MsgType.Highest+1,new StringMessage("turn_over"));
-			
-			GameObject.Find("DebugText").GetComponent<Text>().text = "Message sent to server";
+		animationState = AnimationStates.HumanoidIdle;
 
-		}else{
-			GameObject text = GameObject.Find("DebugText");
-			text.GetComponent<Text>().text = "Not your turn :(";
-			gameManager.turnOver=true;
-		}
+		//message the server that the turn is over
+			//should refactor this into a custom MsgType
+		NetworkManager.singleton.client.Send(MsgType.Highest+1,new StringMessage("turn_over"));
 
+		GameObject text = GameObject.Find("DebugText");
+		text.GetComponent<Text>().text = "Not your turn :(";
 		Debug.Log("\tTurn ended");
 	}
 
@@ -131,39 +121,4 @@ public class Player_Behavior : NetworkBehaviour {
 		GetComponent<AnimationController>().PlayAnimation(state);
 	}
 
-//=====================================================================================================
-
-	[Obsolete("Replaced by TargetRpc functions")]
-	public IEnumerator TakeTurn(){
-		Debug.Log("Taking turn...");
-		
-		//wait for player to press space to start movement, will be replaced with GUI or control scheme
-		yield return StartCoroutine(WaitForKeyDown(KeyCode.Space));
-		
-		//set next tile and movement flags to allow movement during Update()
-		nextTile();
-		Debug.Log("Moving to tile "+currentTile);
-		isMoving=true;
-		doneMoving=false;
-		
-
-		yield return StartCoroutine(WaitForDoneMoving());
-		Debug.Log("Turn over, done moving");
-		yield return new WaitForSeconds(1f); //small delay to make sure movement is finished on all clients
-	}
-
-	[Obsolete("Replaced by TargetRpc functions")]
-	private IEnumerator WaitForKeyDown(KeyCode keyCode)
-	{
-		while(!Input.GetKeyDown(keyCode)){
-			yield return null;
-		}
-	}
-
-	[Obsolete("Replaced by TargetRpc functions")]
-	private IEnumerator WaitForDoneMoving(){
-		while(!doneMoving){
-			yield return null;
-		}
-	}
 }
