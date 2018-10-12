@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Networking.NetworkSystem;
 
 //The network manager will take control until the players are locked in, then it will hand over control to the GameManager
 public class MyNetworkManager : NetworkManager {
@@ -18,6 +19,7 @@ public class MyNetworkManager : NetworkManager {
        	//instantiate gameManager
 		if(gameManager==null){
 				gameManager = gameObject.GetComponent<GameManager>();
+				NetworkServer.RegisterHandler(MsgType.Highest+1, OnStringMessage);
 		}
         Debug.Log("Player "+num_players+" connected");
 	    
@@ -48,5 +50,15 @@ public class MyNetworkManager : NetworkManager {
 	void startGame(){
 		Debug.Log("Starting Game with "+NetworkServer.connections.Count+" connections");
 		gameManager.StartGame();
+	}
+
+	public void OnStringMessage(NetworkMessage netMsg)
+    {
+		var msg = netMsg.ReadMessage<StringMessage>();
+		Debug.Log("Server got message: "+msg.value);
+		//replace string checking with enum
+		if(msg.value.Equals("turn_over")){
+			gameManager.turnOver=true;
+		}  
 	}
 }

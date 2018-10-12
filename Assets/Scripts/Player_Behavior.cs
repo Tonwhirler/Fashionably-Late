@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.Networking.NetworkSystem;
 
 public class Player_Behavior : NetworkBehaviour {
 
@@ -99,6 +100,11 @@ public class Player_Behavior : NetworkBehaviour {
 
 		if(!isServer){
 			GameObject.Find("DebugText").GetComponent<Text>().text = "GameManager null, program frozen";
+			//testing sending message to server
+			NetworkManager.singleton.client.Send(MsgType.Highest+1,new StringMessage("turn_over"));
+			
+			GameObject.Find("DebugText").GetComponent<Text>().text = "Message sent to server";
+
 		}else{
 			GameObject text = GameObject.Find("DebugText");
 			text.GetComponent<Text>().text = "Not your turn :(";
