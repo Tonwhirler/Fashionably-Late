@@ -4,22 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.Networking.NetworkSystem;
 
 public class Player_Behavior : NetworkBehaviour {
 
 	public float speed;
 	public List<GameObject> tiles;
-	public GameObject networkManager;
 
 	[HideInInspector]
 	public int player_num;
-	public GameManager gameManager = null;
 
 	private int currentTile = 0; //target Tile index, perhaps refactor name
+	[SyncVar]
 	private bool isMoving; //player is currently movint to destination tile
+	[SyncVar]
 	private bool doneMoving; //player has reached its destination
+	[SyncVar]
 	private bool isMyTurn = false; //is currently player's turn, allowing actions
 
+	[HideInInspector]
 	[SyncVar(hook = "OnChangeAnimationState")]
 	public AnimationStates animationState=AnimationStates.HumanoidIdle;
 
@@ -36,7 +39,7 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	void Update () {
-		//if(!isLocalPlayer)return;
+		if(!isLocalPlayer)return; //doesn't seem to change anything
 
 		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
 			Debug.Log("Moving to tile "+currentTile);
@@ -87,20 +90,17 @@ public class Player_Behavior : NetworkBehaviour {
 
 	private void TurnOver(){
 		isMoving = false;
-
-		animationState = AnimationStates.HumanoidIdle;
-
 		doneMoving = true;
 		isMyTurn = false;
 
-		if(!isServer){
-			GameObject.Find("DebugText").GetComponent<Text>().text = "GameManager null, program frozen";
-		}else{
-			GameObject text = GameObject.Find("DebugText");
-			text.GetComponent<Text>().text = "Not your turn :(";
-			gameManager.turnOver=true;
-		}
+		animationState = AnimationStates.HumanoidIdle;
 
+		//message the server that the turn is over
+			//should refactor this into a custom MsgType
+		NetworkManager.singleton.client.Send(MsgType.Highest+1,new StringMessage("turn_over"));
+
+		GameObject text = GameObject.Find("DebugText");
+		text.GetComponent<Text>().text = "Not your turn :(";
 		Debug.Log("\tTurn ended");
 	}
 
@@ -121,39 +121,4 @@ public class Player_Behavior : NetworkBehaviour {
 		GetComponent<AnimationController>().PlayAnimation(state);
 	}
 
-//=====================================================================================================
-
-	[Obsolete("Replaced by TargetRpc functions")]
-	public IEnumerator TakeTurn(){
-		Debug.Log("Taking turn...");
-		
-		//wait for player to press space to start movement, will be replaced with GUI or control scheme
-		yield return StartCoroutine(WaitForKeyDown(KeyCode.Space));
-		
-		//set next tile and movement flags to allow movement during Update()
-		nextTile();
-		Debug.Log("Moving to tile "+currentTile);
-		isMoving=true;
-		doneMoving=false;
-		
-
-		yield return StartCoroutine(WaitForDoneMoving());
-		Debug.Log("Turn over, done moving");
-		yield return new WaitForSeconds(1f); //small delay to make sure movement is finished on all clients
-	}
-
-	[Obsolete("Replaced by TargetRpc functions")]
-	private IEnumerator WaitForKeyDown(KeyCode keyCode)
-	{
-		while(!Input.GetKeyDown(keyCode)){
-			yield return null;
-		}
-	}
-
-	[Obsolete("Replaced by TargetRpc functions")]
-	private IEnumerator WaitForDoneMoving(){
-		while(!doneMoving){
-			yield return null;
-		}
-	}
 }
