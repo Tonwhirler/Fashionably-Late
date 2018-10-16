@@ -82,12 +82,15 @@ public class Player_Behavior : NetworkBehaviour {
 		if(isLocalPlayer)TurnOver(); //only local player will end turn
 	}
 
+	[ClientRpc]
+	public void RpcSetPlayerNum(int p_num){
+		player_num=p_num;
+	}
 
 	[TargetRpc]
 	public void TargetRpcBeginTurn(NetworkConnection target,int p_num){
 		isMyTurn = true; //only local player's turn is set
-
-		if(player_num!=p_num)player_num=p_num; //fixes bug where player's number was not correctly set by gameManager
+		Debug.Log("TargetRpcBeginTurn Player"+player_num+"'s turn");
 
 		GameObject text = GameObject.Find("DebugText");
 		text.GetComponent<Text>().text = "Your turn :)";

@@ -33,7 +33,9 @@ public class GameManager : MonoBehaviour {
 	private IEnumerator ResetGame(){
 		Debug.Log("Resetting Game");
 		for(int i=0; i<players.Count; i++){
+			//reset players' position to start space and bind player_num for each player object
 			players[i].transform.position = start_spaces[i].position;
+			players[i].GetComponent<Player_Behavior>().RpcSetPlayerNum(i);
 		}
 		yield return new WaitForSeconds(0.1f); //3 second delay before beginning turn loop
 	}
