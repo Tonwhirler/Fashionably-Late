@@ -50,7 +50,7 @@ public class Player_Behavior : NetworkBehaviour {
 		if(isMoving){
 			//when player has reached destination; will be replaced when the player can move multiple tiles per turn
 			if(gameObject.transform.position == tiles[currentTile].transform.GetChild(player_num).position){
-				//tell server to stop player
+				//tell server to stop player's movement on all clients, also ends localplayer's turn
 				NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
 			}
 		}
@@ -79,15 +79,15 @@ public class Player_Behavior : NetworkBehaviour {
 		isMoving=false;
 		animationState = AnimationStates.HumanoidIdle;
 
-		if(isLocalPlayer)TurnOver();
+		if(isLocalPlayer)TurnOver(); //only local player will end turn
 	}
 
 
 	[TargetRpc]
 	public void TargetRpcBeginTurn(NetworkConnection target,int p_num){
-		isMyTurn = true;
+		isMyTurn = true; //only local player's turn is set
 
-		if(player_num!=p_num)player_num=p_num;
+		if(player_num!=p_num)player_num=p_num; //fixes bug where player's number was not correctly set by gameManager
 
 		GameObject text = GameObject.Find("DebugText");
 		text.GetComponent<Text>().text = "Your turn :)";
@@ -108,7 +108,6 @@ public class Player_Behavior : NetworkBehaviour {
 	//SyncVar hook
 	void OnChangeAnimationState(AnimationStates state){
 		GetComponent<AnimationController>().PlayAnimation(state);
-		//TODO: send command to server to set this player's animation
 	}
 
 }

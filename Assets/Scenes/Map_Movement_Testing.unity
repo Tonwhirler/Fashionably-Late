@@ -599,6 +599,11 @@ Prefab:
       propertyPath: max_connections
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114651391438829626, guid: 2c93f009229af6d41b5faae70a27f8c8,
+        type: 2}
+      propertyPath: m_SpawnPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c93f009229af6d41b5faae70a27f8c8, type: 2}
   m_IsPrefabAsset: 0

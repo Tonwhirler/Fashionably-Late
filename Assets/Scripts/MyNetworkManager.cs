@@ -9,7 +9,8 @@ public enum MyMessageType
 {
     TurnOver = 1,
 	PlayerMove = 2,
-	PlayerStop = 3
+	PlayerStop = 3,
+	ItemUsed = 4
 }
 
 //The network manager is the server and has a subcomponent GameManager
@@ -22,13 +23,16 @@ public class MyNetworkManager : NetworkManager {
 
 	private int num_players = 0;//number of players currently in the game
 
+	private bool hasStartedGame=false; //locks clients from joining game after it has started
+
 	//this is called when a player connects to the server as a host or client
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
     {
+		if(hasStartedGame)return;
+
        	//instantiate gameManager once, when host connects
 		if(gameManager==null){
 				gameManager = gameObject.GetComponent<GameManager>(); //put here to ensure GameManager has been instantiated
-				//NetworkServer.RegisterHandler(MsgType.Highest+1, OnStringMessage); //message listener binding
 				NetworkServer.RegisterHandler(MsgType.Highest+1, OnEnumMessage);
 		}
         Debug.Log("Player "+num_players+" connected");
@@ -36,7 +40,6 @@ public class MyNetworkManager : NetworkManager {
 		//Instantiate player GameObject then bind to connection
 		GameObject _player = Instantiate(playerPrefab,gameManager.start_spaces[num_players].transform.position,Quaternion.identity);
 		_player.GetComponent<Player_Behavior>().player_num=num_players;
-
 		NetworkServer.SetClientReady(conn);	
 		NetworkServer.AddPlayerForConnection(conn,_player,0);
 		gameManager.players.Add(_player);
@@ -51,12 +54,16 @@ public class MyNetworkManager : NetworkManager {
 
 	public override void OnClientConnect(NetworkConnection conn)
     {
+		if(hasStartedGame)return;
+
 		Debug.Log("OnClientConnect for player "+num_players);
 		ClientScene.AddPlayer(client.connection, 0);
 	}
 	
-	void startGame(){
+	void startGame()
+	{
 		Debug.Log("Starting Game with "+NetworkServer.connections.Count+" connections");
+		hasStartedGame=true; //locks out more clients from joining
 		gameManager.StartGame();
 	}
 
@@ -82,6 +89,7 @@ public class MyNetworkManager : NetworkManager {
 				break;
 
 			default:
+				Debug.Log("Server got unidentified message from connection "+netMsg.conn);
 				break;
 		}
 	}
