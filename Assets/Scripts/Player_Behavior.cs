@@ -18,8 +18,6 @@ public class Player_Behavior : NetworkBehaviour {
 	[SyncVar]
 	private bool isMoving; //player is currently movint to destination tile
 	[SyncVar]
-	private bool doneMoving; //player has reached its destination
-	[SyncVar]
 	private bool isMyTurn = false; //is currently player's turn, allowing actions
 
 	[HideInInspector]
@@ -28,7 +26,6 @@ public class Player_Behavior : NetworkBehaviour {
 
 	void Start () {
 		isMoving = false;
-		doneMoving = false;
 		if(isLocalPlayer) GameObject.Find("Main Camera").GetComponent<CameraController>().SetPlayer(gameObject);
 	}
 	
@@ -39,42 +36,51 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	void Update () {
-		if(!isLocalPlayer)return; //doesn't seem to change anything
+		//all clients can move this gameObject
 
-		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
-			Debug.Log("Moving to tile "+currentTile);
-			isMoving=true;
-			doneMoving=false;
-			nextTile();
+		if(isMoving){
+			//move to next tile in list
+			Vector3 target = tiles[currentTile].transform.GetChild(player_num).position;
+			gameObject.transform.LookAt(target);
+			gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,speed*Time.deltaTime);
 		}
 
-		Vector3 target;
+		if(!isLocalPlayer)return; //only local player can detect input
+
 		if(isMoving){
-			target = tiles[currentTile].transform.GetChild(player_num).position;
-
-			if(!isServer){ //prevents host from moving everything at double speed
-				gameObject.transform.LookAt(target);
-				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,
-					target,speed*Time.deltaTime);
+			//when player has reached destination; will be replaced when the player can move multiple tiles per turn
+			if(gameObject.transform.position == tiles[currentTile].transform.GetChild(player_num).position){
+				//tell server to stop player
+				NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
 			}
-			CmdFacePlayer(target);
-			CmdMovePlayer(target);
+		}
 
-			//set animation state to motion
-			animationState = AnimationStates.HumanoidWalk;
-			
-			//display distance to target on gui text
-			GameObject text = GameObject.Find("DebugText");
-			String t = String.Format("Distance to target = {0}",Vector3.Distance(gameObject.transform.position,target));
-			text.GetComponent<Text>().text = t;
-
-			//when player has reached destination
-			if(gameObject.transform.position == target){
-				TurnOver();
-			}
+		//only check for input once per turn
+		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
+			Debug.Log("Moving to tile "+currentTile);
+			//tell server to move player
+			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerMove));
 		}
 	}
 
+	[ClientRpc]
+	public void RpcMove(){
+		//wait for server to respond before starting to move; should move all client's versions of this object
+		Debug.Log("RpcMove");
+		
+		nextTile();
+		isMoving=true; 
+		animationState = AnimationStates.HumanoidWalk;
+	}
+
+	[ClientRpc]
+	public void RpcStop(){
+		Debug.Log("RpcStop");
+		isMoving=false;
+		animationState = AnimationStates.HumanoidIdle;
+
+		if(isLocalPlayer)TurnOver();
+	}
 
 
 	[TargetRpc]
@@ -89,36 +95,20 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	private void TurnOver(){
-		isMoving = false;
-		doneMoving = true;
 		isMyTurn = false;
 
-		animationState = AnimationStates.HumanoidIdle;
-
 		//message the server that the turn is over
-			//should refactor this into a custom MsgType
-		NetworkManager.singleton.client.Send(MsgType.Highest+1,new StringMessage("turn_over"));
+		NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.TurnOver));
 
 		GameObject text = GameObject.Find("DebugText");
 		text.GetComponent<Text>().text = "Not your turn :(";
 		Debug.Log("\tTurn ended");
 	}
 
-	[Command]
-	void CmdMovePlayer(Vector3 target){
-		gameObject.transform.LookAt(target);
-		gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,
-			target,speed*Time.deltaTime);
-	}
-
-	[Command]
-	void CmdFacePlayer(Vector3 target){
-		gameObject.transform.LookAt(target);
-	}
-
 	//SyncVar hook
 	void OnChangeAnimationState(AnimationStates state){
 		GetComponent<AnimationController>().PlayAnimation(state);
+		//TODO: send command to server to set this player's animation
 	}
 
 }

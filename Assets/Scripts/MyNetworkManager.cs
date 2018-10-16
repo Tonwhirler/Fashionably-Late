@@ -4,6 +4,14 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
 
+//represents the different messages a client can send to the server
+public enum MyMessageType
+{
+    TurnOver = 1,
+	PlayerMove = 2,
+	PlayerStop = 3
+}
+
 //The network manager is the server and has a subcomponent GameManager
 public class MyNetworkManager : NetworkManager {
 
@@ -20,7 +28,8 @@ public class MyNetworkManager : NetworkManager {
        	//instantiate gameManager once, when host connects
 		if(gameManager==null){
 				gameManager = gameObject.GetComponent<GameManager>(); //put here to ensure GameManager has been instantiated
-				NetworkServer.RegisterHandler(MsgType.Highest+1, OnStringMessage); //message listener binding
+				//NetworkServer.RegisterHandler(MsgType.Highest+1, OnStringMessage); //message listener binding
+				NetworkServer.RegisterHandler(MsgType.Highest+1, OnEnumMessage);
 		}
         Debug.Log("Player "+num_players+" connected");
 
@@ -51,15 +60,29 @@ public class MyNetworkManager : NetworkManager {
 		gameManager.StartGame();
 	}
 
-	public void OnStringMessage(NetworkMessage netMsg)
-    {
-		var msg = netMsg.ReadMessage<StringMessage>();
-
-		Debug.Log("Server got message: '"+msg.value+"' from connection "+netMsg.conn);
+	public void OnEnumMessage(NetworkMessage netMsg)
+	{
+		IntegerMessage msg = netMsg.ReadMessage<IntegerMessage>();
 		
-		//replace string checking with enum
-		if(msg.value.Equals("turn_over")){
-			gameManager.turnOver=true;
-		}  
+		switch(msg.value){
+			case (int) MyMessageType.TurnOver:
+					Debug.Log("Server got message: TurnOver from connection "+netMsg.conn);
+					gameManager.turnOver=true;
+				break;
+			
+			case (int) MyMessageType.PlayerMove:
+					Debug.Log("Server got message: PlayerMove from connection "+netMsg.conn);
+					gameManager.MoveCurrentPlayer();
+				break;
+
+			
+			case (int) MyMessageType.PlayerStop:
+					Debug.Log("Server got message: PlayerStop from connection "+netMsg.conn);
+					gameManager.StopCurrentPlayer();
+				break;
+
+			default:
+				break;
+		}
 	}
 }

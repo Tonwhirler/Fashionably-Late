@@ -12,10 +12,11 @@ public class GameManager : MonoBehaviour {
 	public int max_turns = 20; //prevents game from going too long for debugging, will be removed for full game
 	
 	private int turn_number; //increments after each player acts
+	private int currentPlayer=0; //current player's index in players
 
 	[HideInInspector]
 	public bool turnOver; //true when the player has finished its turn
-
+	
 	//To be called by the NetworkManager
 	public void StartGame(){
 		StartCoroutine(GameLoop());
@@ -43,6 +44,8 @@ public class GameManager : MonoBehaviour {
 			Debug.Log("Turn  "+turn_number+"start");
 			for(int i=0; i<players.Count; i++){
 				turnOver=false;
+				currentPlayer=i;
+
 				Debug.Log("Player "+players[i].GetComponent<Player_Behavior>().player_num+" turn");
 				
 				//Rpc client to take turn, then wait until turn is over
@@ -69,5 +72,15 @@ public class GameManager : MonoBehaviour {
 		while(!turnOver){
 			yield return null;
 		}
+	}
+
+	public void MoveCurrentPlayer(){
+		Debug.Log("Moving player"+currentPlayer);
+		players[currentPlayer].GetComponent<Player_Behavior>().RpcMove();
+	}
+
+	public void StopCurrentPlayer(){
+		Debug.Log("Stopping player"+currentPlayer);
+		players[currentPlayer].GetComponent<Player_Behavior>().RpcStop();
 	}
 }
