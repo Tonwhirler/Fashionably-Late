@@ -745,7 +745,6 @@ GameObject:
   - component: {fileID: 95552881913507908}
   - component: {fileID: 114643126987091608}
   - component: {fileID: 114236383825695116}
-  - component: {fileID: 114015411061791246}
   - component: {fileID: 114360786576666276}
   - component: {fileID: 54941401167864060}
   m_Layer: 0
@@ -1709,27 +1708,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114015411061791246
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1830868085492942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TransformSyncMode: 1
-  m_SendInterval: 0.1
-  m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
-  m_SyncSpin: 0
-  m_MovementTheshold: 0.001
-  m_VelocityThreshold: 0.0001
-  m_SnapThreshold: 5
-  m_InterpolateRotation: 1
-  m_InterpolateMovement: 1
 --- !u!114 &114236383825695116
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1781,7 +1759,6 @@ MonoBehaviour:
   - {fileID: 1068017958336324, guid: 0434422017bbc484da4cf5388b20c566, type: 2}
   - {fileID: 1856263824012600, guid: 5c997f0a37d32694785775b74a22a75c, type: 2}
   player_num: 0
-  gameManager: {fileID: 0}
   animationState: 2
 --- !u!114 &114643126987091608
 MonoBehaviour:
