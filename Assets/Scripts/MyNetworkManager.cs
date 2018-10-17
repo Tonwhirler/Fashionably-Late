@@ -10,7 +10,8 @@ public enum MyMessageType
     TurnOver = 1,
 	PlayerMove = 2,
 	PlayerStop = 3,
-	ItemUsed = 4
+	PlayerTargetChange = 4,
+	ItemUsed = 5
 }
 
 //The network manager is the server and has a subcomponent GameManager
@@ -86,6 +87,11 @@ public class MyNetworkManager : NetworkManager {
 			case (int) MyMessageType.PlayerStop:
 					Debug.Log("Server got message: PlayerStop from connection "+netMsg.conn);
 					gameManager.StopCurrentPlayer();
+				break;
+
+				case (int) MyMessageType.PlayerTargetChange:
+					Debug.Log("Server got message: PlayerTargetChange from connection "+netMsg.conn);
+					gameManager.ChangePlayerTarget();
 				break;
 
 			default:

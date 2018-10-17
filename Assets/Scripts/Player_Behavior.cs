@@ -14,15 +14,21 @@ public class Player_Behavior : NetworkBehaviour {
 	[HideInInspector]
 	public int player_num;
 
-	private int currentTileIndex = 0; //index of tile player will move to
-	private int numSpacesToMove = 0; //how many tiles the player can move, as determined by dice roll
-
-	private bool isMoving = false; //player is currently moving to destination tile
-	private bool isMyTurn = false; //is currently player's turn, allowing actions
-
 	[HideInInspector]
 	[SyncVar(hook = "OnChangeAnimationState")]
 	public AnimationStates animationState=AnimationStates.HumanoidIdle;
+
+	[HideInInspector]
+	public int numSpacesToMove = 0; //how many tiles the player can move, as determined by dice roll
+
+	[SyncVar]
+	private int currentTileIndex = 0; //index of tile player will move to
+
+	private bool isChangingTarget = false; //disable checking if the player has reached the target while the target is being changed
+
+	private bool isMoving = false; //player is currently moving to destination tile
+	private bool isMyTurn = false; //is currently player's turn, allowing actions
+	private bool doneMoving = false; //true when player has used all available moves
 
 	void Start () {
 		if(isLocalPlayer) GameObject.Find("Main Camera").GetComponent<CameraController>().SetPlayer(gameObject);
@@ -51,17 +57,40 @@ public class Player_Behavior : NetworkBehaviour {
 		//only local player can detect input
 		if(!isLocalPlayer)return;
 
+		GameObject text = GameObject.Find("DebugText");
+		String t = numSpacesToMove+" spaces left to move\nDistance to target = "+Vector3.Distance(gameObject.transform.position,tiles[currentTileIndex].transform.GetChild(player_num).position);
+		text.GetComponent<Text>().text = t;
+
 		if(isMoving){
 			//when player has reached destination; will be replaced when the player can move multiple tiles per turn
-			if(gameObject.transform.position == tiles[currentTileIndex].transform.GetChild(player_num).position){
+			if(!isChangingTarget && gameObject.transform.position == tiles[currentTileIndex].transform.GetChild(player_num).position){
+				if(numSpacesToMove <= 1 && !doneMoving){
 				//tell server to stop player's movement on all clients, also ends localplayer's turn
-				NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
+					NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
+					doneMoving=true;//prevents multiple messages being sent
+				}else if(numSpacesToMove > 1){
+					numSpacesToMove-=1;
+
+					Debug.Log(numSpacesToMove+" spaces left to move");
+
+					//message server to changetarget
+					isChangingTarget=true;
+					NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerTargetChange));
+				}
 			}
 		}
 
 		//only check for input once per turn
 		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
 			Debug.Log("Moving to tile "+currentTileIndex);
+
+			numSpacesToMove=2;
+
+			Debug.Log(numSpacesToMove+" spaces left to move");
+			text = GameObject.Find("DebugText");
+			t = numSpacesToMove+" spaces left to move";
+			text.GetComponent<Text>().text = t;
+
 			//tell server to tell each client to move player
 			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerMove));
 		}
@@ -69,18 +98,10 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[ClientRpc]
 	public void RpcMove(){
-		if(numSpacesToMove <= 0)numSpacesToMove=2; //will be replaced with dice roll
-		
-		/*Debug.Log(numSpacesToMove+" spaces left to move");
-		if(isLocalPlayer){
-			GameObject text = GameObject.Find("DebugText");
-			String t = numSpacesToMove+" spaces left to move";
-			text.GetComponent<Text>().text = t;
-		}*/
-
 		nextTile(); 
 		animationState = AnimationStates.HumanoidWalk;
 		isMoving=true;
+		doneMoving = false;
 	}
 
 	[ClientRpc]
@@ -90,25 +111,7 @@ public class Player_Behavior : NetworkBehaviour {
 		isMoving=false;
 		animationState = AnimationStates.HumanoidIdle;
 
-		if(isLocalPlayer)TurnOver(); //only local player will end turn
-
-
-		/* bug with client losing track of numSpacesToMove
-		numSpacesToMove--;
-		Debug.Log("...moving again, "+numSpacesToMove+" left to move");
-		if(isLocalPlayer){
-			GameObject text = GameObject.Find("DebugText");
-			String t = numSpacesToMove+" spaces left to move";
-			text.GetComponent<Text>().text = t;
-		}
-
-		if(numSpacesToMove <= 0){
-			isMoving=false;
-			animationState = AnimationStates.HumanoidIdle;
-			if(isLocalPlayer)TurnOver();
-		}else{
-			nextTile();
-		}*/
+		if(isLocalPlayer)TurnOver();
 	}
 
 	[ClientRpc]
@@ -116,11 +119,17 @@ public class Player_Behavior : NetworkBehaviour {
 		player_num=p_num;
 	}
 
-	[TargetRpc]
-	public void TargetRpcBeginTurn(NetworkConnection target,int p_num){
-		isMyTurn = true; //only local player's turn flag is set
-		Debug.Log("TargetRpcBeginTurn Player"+player_num+"'s turn");
+	[ClientRpc]
+	public void RpcChangeTarget(){
+		nextTile();
+		isChangingTarget=false;
+	}
 
+	[TargetRpc]
+	public void TargetRpcBeginTurn(NetworkConnection target){
+		isMyTurn = true; //only local player's turn flag is set
+
+		Debug.Log("TargetRpcBeginTurn Player"+player_num+"'s turn");
 		GameObject text = GameObject.Find("DebugText");
 		text.GetComponent<Text>().text = "Your turn :)";
 		Debug.Log("\tTurn began");

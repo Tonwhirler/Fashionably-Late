@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour {
 				Debug.Log("Player "+players[i].GetComponent<Player_Behavior>().player_num+" turn");
 				
 				//Rpc client to take turn, then wait until turn is over
-				players[i].GetComponent<Player_Behavior>().TargetRpcBeginTurn(NetworkServer.connections[i],i);
+				players[i].GetComponent<Player_Behavior>().TargetRpcBeginTurn(NetworkServer.connections[i]);
 				yield return StartCoroutine(WaitForTurnOver());
 				Debug.Log("Server recognized turn ended, waiting 1 second");
 
@@ -84,5 +84,10 @@ public class GameManager : MonoBehaviour {
 	public void StopCurrentPlayer(){
 		Debug.Log("Stopping player"+currentPlayer);
 		players[currentPlayer].GetComponent<Player_Behavior>().RpcStop();
+	}
+
+	public void ChangePlayerTarget(){
+		Debug.Log("Changing target tile of player"+currentPlayer);
+		players[currentPlayer].GetComponent<Player_Behavior>().RpcChangeTarget();
 	}
 }
