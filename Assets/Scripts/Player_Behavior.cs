@@ -30,8 +30,11 @@ public class Player_Behavior : NetworkBehaviour {
 	private bool isMyTurn = false; //is currently player's turn, allowing actions
 	private bool doneMoving = false; //true when player has used all available moves
 
+	private GameObject text;//debug textbox on screen
+
 	void Start () {
 		if(isLocalPlayer) GameObject.Find("Main Camera").GetComponent<CameraController>().SetPlayer(gameObject);
+		text = GameObject.Find("DebugText");
 	}
 	
 	private int nextTile(){
@@ -57,8 +60,10 @@ public class Player_Behavior : NetworkBehaviour {
 		//only local player can detect input
 		if(!isLocalPlayer)return;
 
-		GameObject text = GameObject.Find("DebugText");
-		String t = numSpacesToMove+" spaces left to move\nDistance to target = "+Vector3.Distance(gameObject.transform.position,tiles[currentTileIndex].transform.GetChild(player_num).position);
+		//display detailed debugging info for localPlayer
+		String t = "isMyTurn = "+isMyTurn+"\n"
+			+numSpacesToMove+" spaces left to move\n"
+			+"Distance to target = "+Vector3.Distance(gameObject.transform.position,tiles[currentTileIndex].transform.GetChild(player_num).position);
 		text.GetComponent<Text>().text = t;
 
 		if(isMoving){
@@ -67,6 +72,7 @@ public class Player_Behavior : NetworkBehaviour {
 				if(numSpacesToMove <= 1 && !doneMoving){
 				//tell server to stop player's movement on all clients, also ends localplayer's turn
 					NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
+					numSpacesToMove=0;
 					doneMoving=true;//prevents multiple messages being sent
 				}else if(numSpacesToMove > 1){
 					numSpacesToMove-=1;
@@ -85,11 +91,6 @@ public class Player_Behavior : NetworkBehaviour {
 			Debug.Log("Moving to tile "+currentTileIndex);
 
 			numSpacesToMove=2;
-
-			Debug.Log(numSpacesToMove+" spaces left to move");
-			text = GameObject.Find("DebugText");
-			t = numSpacesToMove+" spaces left to move";
-			text.GetComponent<Text>().text = t;
 
 			//tell server to tell each client to move player
 			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerMove));
@@ -130,9 +131,6 @@ public class Player_Behavior : NetworkBehaviour {
 		isMyTurn = true; //only local player's turn flag is set
 
 		Debug.Log("TargetRpcBeginTurn Player"+player_num+"'s turn");
-		GameObject text = GameObject.Find("DebugText");
-		text.GetComponent<Text>().text = "Your turn :)";
-		Debug.Log("\tTurn began");
 	}
 
 	private void TurnOver(){
@@ -140,9 +138,7 @@ public class Player_Behavior : NetworkBehaviour {
 
 		//message the server that the turn is over
 		NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.TurnOver));
-
-		GameObject text = GameObject.Find("DebugText");
-		text.GetComponent<Text>().text = "Not your turn :(";
+		
 		Debug.Log("\tTurn ended");
 	}
 
