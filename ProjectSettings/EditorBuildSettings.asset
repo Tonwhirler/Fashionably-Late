@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Map_lobby.unity
+    guid: 4f78ba2371b66024c9631a9e4807fb4f
+  - enabled: 1
     path: Assets/Scenes/Map_Movement_Testing.unity
     guid: 4585abc5a940eaf4288a53d08d91f36a
   m_configObjects: {}
