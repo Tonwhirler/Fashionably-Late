@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Types;
 using UnityEngine.Networking.Match;
+using UnityEngine.Networking.NetworkSystem;
 using System.Collections;
 
 
@@ -52,6 +53,56 @@ namespace Prototype.NetworkLobby
         protected ulong _currentMatchID;
 
         protected LobbyHook _lobbyHooks;
+
+
+//===============================================================================================================
+//My NetworkManager Code
+    [HideInInspector]
+	public static GameManager gameManager = null;
+
+    //represents the different messages a client can send to the server
+    public enum MyMessageType
+    {
+        TurnOver = 1,
+        PlayerMove = 2,
+        PlayerStop = 3,
+        PlayerTargetChange = 4,
+        ItemUsed = 5
+    }
+
+    public void OnEnumMessage(NetworkMessage netMsg)
+	{
+		IntegerMessage msg = netMsg.ReadMessage<IntegerMessage>();
+		
+		switch(msg.value){
+			case (int) MyMessageType.TurnOver:
+					Debug.Log("Server got message: TurnOver from connection "+netMsg.conn);
+					gameManager.turnOver=true;
+				break;
+			
+			case (int) MyMessageType.PlayerMove:
+					Debug.Log("Server got message: PlayerMove from connection "+netMsg.conn);
+					gameManager.MoveCurrentPlayer();
+				break;
+
+			
+			case (int) MyMessageType.PlayerStop:
+					Debug.Log("Server got message: PlayerStop from connection "+netMsg.conn);
+					gameManager.StopCurrentPlayer();
+				break;
+
+				case (int) MyMessageType.PlayerTargetChange:
+					Debug.Log("Server got message: PlayerTargetChange from connection "+netMsg.conn);
+					gameManager.ChangePlayerTarget();
+				break;
+
+			default:
+				Debug.Log("Server got unidentified message from connection "+netMsg.conn);
+				break;
+		}
+	}
+
+//===============================================================================================================
 
         void Start()
         {
@@ -114,6 +165,24 @@ namespace Prototype.NetworkLobby
                 //backDelegate = StopGameClbk;
                 topPanel.isInGame = true;
                 topPanel.ToggleVisibility(false);
+
+//=======================================================================
+//Initiate GameManager
+                gameManager = gameObject.GetComponent<GameManager>();
+				NetworkServer.RegisterHandler(MsgType.Highest+1, OnEnumMessage);
+
+                //bind players to GameManager
+                for(int i=0; i<NetworkServer.connections.Count; i++){
+                    Debug.Log("Connection "+i+":");
+                    Debug.Log("\t"+NetworkServer.connections[i].playerControllers[0].gameObject+
+                                "\n\t"+NetworkServer.connections[i].playerControllers[0].gameObject.GetComponent<Player_Behavior>());
+                    gameManager.players.Add(NetworkServer.connections[i].playerControllers[0].gameObject);
+                }
+
+                //can't start game here, need to start game only after the scene has loaded
+                //gameManager.StartGame();
+//=======================================================================
+            
             }
         }
 

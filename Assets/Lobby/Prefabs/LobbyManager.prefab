@@ -603,6 +603,7 @@ GameObject:
   - component: {fileID: 11422868}
   - component: {fileID: 11466428}
   - component: {fileID: 11475086}
+  - component: {fileID: 114024721191829082}
   - component: {fileID: 11415508}
   m_Layer: 5
   m_Name: LobbyManager
@@ -881,7 +882,7 @@ GameObject:
   - component: {fileID: 22237402}
   - component: {fileID: 11402578}
   m_Layer: 5
-  m_Name: NetworkLobbyExample
+  m_Name: FashionablyLate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1159,7 +1160,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 0
-  m_Text: NETWORK LOBBY EXAMPLE
+  m_Text: Fashionably Late
 --- !u!114 &11403610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2757,7 +2758,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 0
-  m_Text: MATCHMAKER
+  m_Text: MATCHMAKER (Not Implemented)
 --- !u!114 &11462742
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3199,7 +3200,7 @@ MonoBehaviour:
   m_LogLevel: 2
   m_PlayerPrefab: {fileID: 0}
   m_AutoCreatePlayer: 1
-  m_PlayerSpawnMethod: 0
+  m_PlayerSpawnMethod: 1
   m_OfflineScene: Lobby
   m_OnlineScene: 
   m_SpawnPrefabs: []
@@ -3269,7 +3270,7 @@ MonoBehaviour:
   m_LobbyScene: Lobby
   m_PlayScene: Map_Movement_Testing
   lobbySlots: []
-  prematchCountdown: 3
+  prematchCountdown: 4
   topPanel: {fileID: 11424994}
   mainMenuPanel: {fileID: 22442386}
   lobbyPanel: {fileID: 22443498}
@@ -4970,8 +4971,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 22463094}
   - {fileID: 22453414}
+  - {fileID: 22463094}
   m_Father: {fileID: 22459552}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5133,11 +5134,11 @@ RectTransform:
   - {fileID: 22468472}
   - {fileID: 22409996}
   m_Father: {fileID: 22442386}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -440.00012}
+  m_AnchoredPosition: {x: 0, y: -0.00009155273}
   m_SizeDelta: {x: 0, y: 440}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &22455308
@@ -5237,11 +5238,11 @@ RectTransform:
   - {fileID: 22420200}
   - {fileID: 22455308}
   m_Father: {fileID: 22442386}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000091552734}
+  m_AnchoredPosition: {x: 0, y: -440.0001}
   m_SizeDelta: {x: 0, y: 440}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &22464820
@@ -5755,3 +5756,27 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 155310}
   m_IsPrefabAsset: 1
+--- !u!114 &114024721191829082
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 155310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aee795af1dfdca247937c1a60adeec5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
+  player_colors:
+  - {r: 1, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 1, a: 0}
+  - {r: 1, g: 1, b: 0, a: 0}
+  - {r: 0, g: 1, b: 0, a: 0}
+  start_spaces:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  max_turns: 20
+  turnOver: 0
