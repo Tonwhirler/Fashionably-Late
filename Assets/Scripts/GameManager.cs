@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour {
 	private IEnumerator ResetGame(){
 		Debug.Log("Resetting Game");
 		for(int i=0; i<players.Count; i++){
+			Debug.Log("\tPlayer"+i);
 			//reset players' position to start space and bind player_num for each player object
 			players[i].transform.position = start_spaces[i].position;
 			players[i].GetComponent<Player_Behavior>().RpcSetPlayerNum(i);
@@ -76,6 +77,13 @@ public class GameManager : MonoBehaviour {
 		while(!turnOver){
 			yield return null;
 		}
+	}
+
+	public bool AddPlayer(GameObject player){
+		Debug.Log("GameManager.Adding player"+players.Count);
+		players.Add(player);
+		if(players.Count == NetworkServer.connections.Count)return true;
+		return false;
 	}
 
 	public void MoveCurrentPlayer(){
