@@ -7,6 +7,17 @@ using UnityEngine.Networking.Match;
 using UnityEngine.Networking.NetworkSystem;
 using System.Collections;
 
+//=== Global Scope
+//represents the different messages a client can send to the server
+public enum MyMessageType
+{
+    TurnOver = 1,
+    PlayerMove = 2,
+    PlayerStop = 3,
+    PlayerTargetChange = 4,
+    ItemUsed = 5
+}
+//===
 
 namespace Prototype.NetworkLobby
 {
@@ -60,16 +71,6 @@ namespace Prototype.NetworkLobby
 	public static GameManager gameManager = null;
 
     private bool canStartGame = false;
-
-    //represents the different messages a client can send to the server
-    public enum MyMessageType
-    {
-        TurnOver = 1,
-        PlayerMove = 2,
-        PlayerStop = 3,
-        PlayerTargetChange = 4,
-        ItemUsed = 5
-    }
 
     public void OnEnumMessage(NetworkMessage netMsg)
 	{
