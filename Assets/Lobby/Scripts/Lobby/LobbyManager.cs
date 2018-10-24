@@ -107,10 +107,23 @@ namespace Prototype.NetworkLobby
             //bind players to GameManager
             canStartGame = gameManager.AddPlayer(gamePlayer);
 
-            if(canStartGame){
-                Debug.Log("CanStartGame!");
-            }
+            if(canStartGame)gameManager.StartGame();
             return true;
+        }
+
+        public override void OnLobbyServerSceneChanged(string sceneName){
+            if(sceneName == playScene){
+                Debug.Log("in playScene!");
+
+                //this is only called if the game is run in the editor and the editor is host
+
+                /*if(canStartGame){
+                    Debug.Log("starting game");
+                    gameManager.StartGame();
+                }else{
+                    Debug.Log("game is not ready yet");
+                }*/
+            }
         }
 
 //===============================================================================================================
@@ -182,15 +195,19 @@ namespace Prototype.NetworkLobby
                 topPanel.isInGame = true;
                 topPanel.ToggleVisibility(false);
 
-//===
+            }
+
+/*/===
+                //canStartGame is false if a built version is host
+
                 if(canStartGame){
-                    Debug.Log("starting game");
+                    Debug.Log("starting game in ClientSceneChanged");
                     gameManager.StartGame();
                 }else{
-                    Debug.Log("game is not ready yet");
+                    Debug.Log("game is not ready yet in ClientSceneChanged");
                 }
-//===
-            }
+//===*/
+
         }
 
         public void ChangeTo(RectTransform newPanel)
