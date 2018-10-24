@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour {
 	
 	//Sequence of Gameplay elements on macro level
 	private IEnumerator GameLoop(){
+		yield return new WaitForSeconds(1f); //code band-aid for game starting before scene is finished loading
+
 		yield return StartCoroutine(ResetGame());
 		yield return StartCoroutine(TurnLoop());
 		yield return StartCoroutine(GameOver());
@@ -37,8 +40,7 @@ public class GameManager : MonoBehaviour {
 		for(int i=0; i<players.Count; i++){
 			Debug.Log("\tPlayer"+i);
 			//reset players' position to start space and bind player_num for each player object
-			players[i].transform.position = start_spaces[i].position;
-			players[i].GetComponent<Player_Behavior>().RpcSetPlayerNum(i);
+			players[i].GetComponent<Player_Behavior>().RpcResetPlayer(i, start_spaces[i].position);
 		}
 		yield return new WaitForSeconds(0.1f); //3 second delay before beginning turn loop
 	}

@@ -223,35 +223,39 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4727241231363116, guid: 5ab3e5c1fb000da41b0eafc0a5577f7b, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -61.5
+      value: -52
       objectReference: {fileID: 0}
     - target: {fileID: 4727241231363116, guid: 5ab3e5c1fb000da41b0eafc0a5577f7b, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 10.8
+      value: 12.04
       objectReference: {fileID: 0}
     - target: {fileID: 4727241231363116, guid: 5ab3e5c1fb000da41b0eafc0a5577f7b, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -92.6
+      value: -92
       objectReference: {fileID: 0}
     - target: {fileID: 4727241231363116, guid: 5ab3e5c1fb000da41b0eafc0a5577f7b, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0.4123559
+      value: 0.35355338
       objectReference: {fileID: 0}
     - target: {fileID: 4727241231363116, guid: 5ab3e5c1fb000da41b0eafc0a5577f7b, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.35355338
       objectReference: {fileID: 0}
     - target: {fileID: 4727241231363116, guid: 5ab3e5c1fb000da41b0eafc0a5577f7b, type: 2}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.1464466
       objectReference: {fileID: 0}
     - target: {fileID: 4727241231363116, guid: 5ab3e5c1fb000da41b0eafc0a5577f7b, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 0.91102284
+      value: 0.8535535
       objectReference: {fileID: 0}
     - target: {fileID: 4727241231363116, guid: 5ab3e5c1fb000da41b0eafc0a5577f7b, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4727241231363116, guid: 5ab3e5c1fb000da41b0eafc0a5577f7b, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5ab3e5c1fb000da41b0eafc0a5577f7b, type: 2}
@@ -408,7 +412,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 10, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &763983638
@@ -443,7 +447,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Not your turn
+  m_Text: Text
 --- !u!222 &763983639
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -514,7 +518,7 @@ Canvas:
   m_GameObject: {fileID: 771963216}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 1761993671}
   m_PlaneDistance: 100
   m_PixelPerfect: 0

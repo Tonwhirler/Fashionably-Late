@@ -11,7 +11,7 @@ public class Player_Behavior : NetworkBehaviour {
 	public float speed;
 	public List<GameObject> tiles;
 
-	[HideInInspector]
+	
 	public int player_num;
 
 	[HideInInspector]
@@ -117,8 +117,9 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	public void RpcSetPlayerNum(int p_num){
+	public void RpcResetPlayer(int p_num, Vector3 position){
 		player_num=p_num;
+		transform.position = position;
 	}
 
 	[ClientRpc]
