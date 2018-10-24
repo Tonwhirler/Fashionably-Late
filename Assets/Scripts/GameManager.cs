@@ -5,7 +5,9 @@ using UnityEngine.Networking;
 
 public class GameManager : MonoBehaviour {
 
+	[HideInInspector]
 	public List<GameObject> players; //references to each of the players
+	
 	public List<Color> player_colors; //set each player's color, will be replaced with unique character models
 	public List<Transform> start_spaces; //beginning tile on board
 	

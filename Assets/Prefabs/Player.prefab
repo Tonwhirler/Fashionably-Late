@@ -1760,6 +1760,8 @@ MonoBehaviour:
   - {fileID: 1856263824012600, guid: 5c997f0a37d32694785775b74a22a75c, type: 2}
   player_num: 0
   animationState: 2
+  numSpacesToMove: 0
+  tiles_per_turn: 3
 --- !u!114 &114643126987091608
 MonoBehaviour:
   m_ObjectHideFlags: 1

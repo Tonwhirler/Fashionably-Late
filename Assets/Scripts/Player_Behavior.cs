@@ -20,6 +20,7 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[HideInInspector]
 	public int numSpacesToMove = 0; //how many tiles the player can move, as determined by dice roll
+	public int tiles_per_turn;
 
 	[SyncVar]
 	private int currentTileIndex = 0; //index of tile player will move to
@@ -90,7 +91,7 @@ public class Player_Behavior : NetworkBehaviour {
 		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
 			Debug.Log("Moving to tile "+currentTileIndex);
 
-			numSpacesToMove=2;
+			numSpacesToMove=tiles_per_turn;
 
 			//tell server to tell each client to move player
 			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerMove));
