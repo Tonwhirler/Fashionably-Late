@@ -56,9 +56,10 @@ namespace Prototype.NetworkLobby
 
 
 //===============================================================================================================
-//My NetworkManager Code
     [HideInInspector]
 	public static GameManager gameManager = null;
+
+    private bool canStartGame = false;
 
     //represents the different messages a client can send to the server
     public enum MyMessageType
@@ -102,6 +103,16 @@ namespace Prototype.NetworkLobby
 		}
 	}
 
+        public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer){
+            //bind players to GameManager
+            canStartGame = gameManager.AddPlayer(gamePlayer);
+
+            if(canStartGame){
+                Debug.Log("CanStartGame!");
+            }
+            return true;
+        }
+
 //===============================================================================================================
 
         void Start()
@@ -116,6 +127,11 @@ namespace Prototype.NetworkLobby
             DontDestroyOnLoad(gameObject);
 
             SetServerInfo("Offline", "None");
+
+            //====
+            gameManager = gameObject.GetComponent<GameManager>();
+			NetworkServer.RegisterHandler(MsgType.Highest+1, OnEnumMessage);
+            //====
         }
 
         public override void OnLobbyClientSceneChanged(NetworkConnection conn)
@@ -166,23 +182,14 @@ namespace Prototype.NetworkLobby
                 topPanel.isInGame = true;
                 topPanel.ToggleVisibility(false);
 
-//=======================================================================
-//Initiate GameManager
-                gameManager = gameObject.GetComponent<GameManager>();
-				NetworkServer.RegisterHandler(MsgType.Highest+1, OnEnumMessage);
-
-                //bind players to GameManager
-                for(int i=0; i<NetworkServer.connections.Count; i++){
-                    Debug.Log("Connection "+i+":");
-                    Debug.Log("\t"+NetworkServer.connections[i].playerControllers[0].gameObject+
-                                "\n\t"+NetworkServer.connections[i].playerControllers[0].gameObject.GetComponent<Player_Behavior>());
-                    gameManager.players.Add(NetworkServer.connections[i].playerControllers[0].gameObject);
+//===
+                if(canStartGame){
+                    Debug.Log("starting game");
+                    gameManager.StartGame();
+                }else{
+                    Debug.Log("game is not ready yet");
                 }
-
-                //can't start game here, need to start game only after the scene has loaded
-                //gameManager.StartGame();
-//=======================================================================
-            
+//===
             }
         }
 
@@ -393,7 +400,7 @@ namespace Prototype.NetworkLobby
 
         }
 
-        public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
+        /*public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
         {
             //This hook allows you to apply state data from the lobby-player to the game-player
             //just subclass "LobbyHook" and add it to the lobby object.
@@ -402,7 +409,7 @@ namespace Prototype.NetworkLobby
                 _lobbyHooks.OnLobbyServerSceneLoadedForPlayer(this, lobbyPlayer, gamePlayer);
 
             return true;
-        }
+        }*/
 
         // --- Countdown management
 
