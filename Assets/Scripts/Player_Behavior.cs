@@ -8,11 +8,14 @@ using UnityEngine.Networking.NetworkSystem;
 
 public class Player_Behavior : NetworkBehaviour {
 	
-	private float speed = 2.5f;
+	private float speed = 10f;
 	//private float boostSpeed = 5f;
 
 	public GameObject currentTile;
 	public GameObject targetTile;
+
+	[SyncVar] //not syncing
+	private int fork_choice;
 	
 	[HideInInspector]
 	public int player_num;
@@ -48,7 +51,8 @@ public class Player_Behavior : NetworkBehaviour {
 
 			//need to wait for player input in selecting path
 			System.Random rng = new System.Random();
-			targetTile = targets[rng.Next(0,targets.Count)]; //for debugging, randomly choose
+			fork_choice = rng.Next(0,targets.Count);
+			targetTile = targets[fork_choice]; //for debugging, randomly choose
 		}else if(targets.Count == 1){
 				Debug.Log("linear path");
 			targetTile = targets[0];
@@ -115,7 +119,7 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[ClientRpc]
 	public void RpcMove(){
-		targetNextTile(); 
+		targetNextTile();
 			Debug.Log("Moving to tile "+targetTile);
 		animationState = AnimationStates.HumanoidWalk;
 		isMoving=true;
