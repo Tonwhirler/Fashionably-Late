@@ -23,7 +23,6 @@ GameObject:
   - component: {fileID: 23338131872049426}
   - component: {fileID: 136192417592421634}
   - component: {fileID: 114989478899076648}
-  - component: {fileID: 114280861878822818}
   m_Layer: 0
   m_Name: Tile_3_Fork
   m_TagString: Untagged
@@ -202,38 +201,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1068017958336324}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114280861878822818
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1068017958336324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 4
-    i1: 52
-    i2: 66
-    i3: 32
-    i4: 23
-    i5: 187
-    i6: 196
-    i7: 132
-    i8: 218
-    i9: 76
-    i10: 245
-    i11: 56
-    i12: 139
-    i13: 32
-    i14: 197
-    i15: 102
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
 --- !u!114 &114989478899076648
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1757,7 +1757,7 @@ MonoBehaviour:
   player_num: 0
   animationState: 2
   numSpacesToMove: 0
-  max_tiles_per_turn: 3
+  max_tiles_per_turn: 5
 --- !u!114 &114643126987091608
 MonoBehaviour:
   m_ObjectHideFlags: 1

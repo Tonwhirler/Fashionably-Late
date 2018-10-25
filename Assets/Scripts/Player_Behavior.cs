@@ -43,15 +43,19 @@ public class Player_Behavior : NetworkBehaviour {
 		currentTile = targetTile;
 
 		List<GameObject> targets = currentTile.GetComponent<Tile>().nextTiles;
-		if(targets.Count != 1){
+		if(targets.Count > 1){
 				Debug.Log("Fork in the road!");
 
 			//need to wait for player input in selecting path
-
-			targetTile = targets[0]; //for debugging, always choose left
-		}else{
+			System.Random rng = new System.Random();
+			targetTile = targets[rng.Next(0,targets.Count)]; //for debugging, randomly choose
+		}else if(targets.Count == 1){
 				Debug.Log("linear path");
 			targetTile = targets[0];
+		}else{
+			Debug.Log("currentTile = " + currentTile);
+			Debug.Log("targets = "+currentTile.GetComponent<Tile>().nextTiles);
+			Debug.Log("crash"+targets[0]);
 		}
 	}
 

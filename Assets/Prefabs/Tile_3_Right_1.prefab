@@ -52,11 +52,9 @@ GameObject:
   - component: {fileID: 33815545049369262}
   - component: {fileID: 23922105296658482}
   - component: {fileID: 136785054021974794}
-  - component: {fileID: 114575651829163346}
   - component: {fileID: 114166512103600556}
-  - component: {fileID: 114758994877691760}
   m_Layer: 0
-  m_Name: Tile_5
+  m_Name: Tile_3_Right_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -215,51 +213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextTiles:
-  - {fileID: 1512174824714292, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
---- !u!114 &114575651829163346
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1571619219185030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 090993e44c75f4444b1728b7e0ab7789, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextTiles: []
---- !u!114 &114758994877691760
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1571619219185030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 161
-    i1: 201
-    i2: 247
-    i3: 244
-    i4: 30
-    i5: 54
-    i6: 174
-    i7: 4
-    i8: 200
-    i9: 235
-    i10: 105
-    i11: 156
-    i12: 216
-    i13: 166
-    i14: 141
-    i15: 184
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  - {fileID: 1571619219185030, guid: 1529014ccaa3a514480276f6384343c9, type: 2}
 --- !u!136 &136785054021974794
 CapsuleCollider:
   m_ObjectHideFlags: 1
