@@ -1751,17 +1751,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e7d27bd02eb5ac4c8ca0f7b9292aacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2.5
-  tiles:
-  - {fileID: 1512174824714292, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
-  - {fileID: 1940409123027838, guid: 1b59c480688c64944940631b2dca35c0, type: 2}
-  - {fileID: 1885062563208440, guid: 694abd07ee245364d972f2a2d5d137a4, type: 2}
-  - {fileID: 1068017958336324, guid: 0434422017bbc484da4cf5388b20c566, type: 2}
-  - {fileID: 1856263824012600, guid: 5c997f0a37d32694785775b74a22a75c, type: 2}
+  currentTile: {fileID: 1512174824714292, guid: 6f67713d7a016ed4aa3f1bcf4b525a93,
+    type: 2}
+  targetTile: {fileID: 1512174824714292, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
   player_num: 0
   animationState: 2
   numSpacesToMove: 0
-  tiles_per_turn: 3
+  max_tiles_per_turn: 5
 --- !u!114 &114643126987091608
 MonoBehaviour:
   m_ObjectHideFlags: 1

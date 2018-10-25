@@ -7,6 +7,18 @@ using UnityEngine.Networking.Match;
 using UnityEngine.Networking.NetworkSystem;
 using System.Collections;
 
+//=== Global Scope
+//represents the different messages a client can send to the server
+public enum MyMessageType
+{
+    TurnOver = 1,
+    PlayerMove = 2,
+    PlayerStop = 3,
+    PlayerTargetChange = 4,
+    PlayerForkChoice_Left = 5,
+    PlayerForkChoice_Right = 6
+}
+//===
 
 namespace Prototype.NetworkLobby
 {
@@ -61,16 +73,6 @@ namespace Prototype.NetworkLobby
 
     private bool canStartGame = false;
 
-    //represents the different messages a client can send to the server
-    public enum MyMessageType
-    {
-        TurnOver = 1,
-        PlayerMove = 2,
-        PlayerStop = 3,
-        PlayerTargetChange = 4,
-        ItemUsed = 5
-    }
-
     public void OnEnumMessage(NetworkMessage netMsg)
 	{
 		IntegerMessage msg = netMsg.ReadMessage<IntegerMessage>();
@@ -96,6 +98,17 @@ namespace Prototype.NetworkLobby
 					Debug.Log("Server got message: PlayerTargetChange from connection "+netMsg.conn);
 					gameManager.ChangePlayerTarget();
 				break;
+
+            case (int) MyMessageType.PlayerForkChoice_Left:
+                    Debug.Log("Server got message: PlayerForkChoice_Left from connection "+netMsg.conn);
+                    gameManager.PlayerForkChoice(0);
+                break;
+
+            case (int) MyMessageType.PlayerForkChoice_Right:
+                    Debug.Log("Server got message: PlayerForkChoice_Right from connection "+netMsg.conn);
+                    gameManager.PlayerForkChoice(1);
+                break;
+
 
 			default:
 				Debug.Log("Server got unidentified message from connection "+netMsg.conn);

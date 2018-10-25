@@ -7,11 +7,14 @@ using UnityEngine.UI;
 using UnityEngine.Networking.NetworkSystem;
 
 public class Player_Behavior : NetworkBehaviour {
-
-	public float speed;
-	public List<GameObject> tiles;
-
 	
+	private float speed = 10f;
+	//private float boostSpeed = 5f;
+
+	public GameObject currentTile;
+	public GameObject targetTile;
+	
+	[HideInInspector]
 	public int player_num;
 
 	[HideInInspector]
@@ -20,40 +23,44 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[HideInInspector]
 	public int numSpacesToMove = 0; //how many tiles the player can move, as determined by dice roll
-	public int tiles_per_turn;
-
-	[SyncVar]
-	private int currentTileIndex = 0; //index of tile player will move to
+	public int max_tiles_per_turn; //upper bound on dice roll
 
 	private bool isChangingTarget = false; //disable checking if the player has reached the target while the target is being changed
 
 	private bool isMoving = false; //player is currently moving to destination tile
 	private bool isMyTurn = false; //is currently player's turn, allowing actions
 	private bool doneMoving = false; //true when player has used all available moves
+	private bool atFork = false;
 
-	private GameObject text;//debug textbox on screen
-
+	private GameObject text_debug;//debug textbox on screen
+	private GameObject text_turn;//turn textbox on screen
 	void Start () {
 		if(isLocalPlayer) GameObject.Find("Main Camera").GetComponent<CameraController>().SetPlayer(gameObject);
-		text = GameObject.Find("DebugText");
+		text_debug = GameObject.Find("DebugText");
+		text_turn = GameObject.Find("TurnText");
 	}
 	
-	private int nextTile(){
-		int oldTile = currentTileIndex;
-		//will be refactored to allow branching paths to be chosen
-			//tiles will also be stored in a linked list instead of a linear list
-		currentTileIndex++;
-		if(currentTileIndex==tiles.Count)currentTileIndex=0;
-		
-		Debug.Log("moving from tile "+oldTile+" to "+currentTileIndex);
-		return currentTileIndex;
+	//returns false if target has been chosen, true if the target is still being chosen (fork)
+	private bool targetNextTile(){
+		currentTile = targetTile;
+
+		List<GameObject> targets = currentTile.GetComponent<Tile>().nextTiles;
+		if(targets.Count > 1){ //currently only supports forks with 2 choices
+				Debug.Log("Fork in the road! Waiting for player input...");
+			atFork = true;
+			return true;
+		}else{
+				Debug.Log("linear path");
+			targetTile = targets[0];
+			return false;
+		}
 	}
 
 	void Update () {
 		//all clients can move this gameObject
 		if(isMoving){
 			//move to next tile
-			Vector3 target = tiles[currentTileIndex].transform.GetChild(player_num).position;
+			Vector3 target = targetTile.transform.GetChild(player_num).position;
 			gameObject.transform.LookAt(target);
 			gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,speed*Time.deltaTime);
 		}
@@ -61,15 +68,30 @@ public class Player_Behavior : NetworkBehaviour {
 		//only local player can detect input
 		if(!isLocalPlayer)return;
 
-		//display detailed debugging info for localPlayer
-		String t = "isMyTurn = "+isMyTurn+"\n"
-			+numSpacesToMove+" spaces left to move\n"
-			+"Distance to target = "+Vector3.Distance(gameObject.transform.position,tiles[currentTileIndex].transform.GetChild(player_num).position);
-		text.GetComponent<Text>().text = t;
+		if(isMyTurn){
+			text_turn.GetComponent<Text>().text = "Your turn!";
+			if(!isMoving) text_debug.GetComponent<Text>().text ="Press SPACE to continue!";
+			
+		}else{
+			text_turn.GetComponent<Text>().text = "Not your turn.";
+			text_debug.GetComponent<Text>().text = "";
+		}
 
 		if(isMoving){
+			if(isMyTurn){
+				//display detailed debugging info for localPlayer
+				String t = numSpacesToMove+" spaces left to move\n";
+
+				if(atFork){
+					t+="Press the LEFT or RIGHT arrow key to continue!";
+				}else{
+					t+="Distance to target = "+Vector3.Distance(gameObject.transform.position,targetTile.transform.GetChild(player_num).position);
+				} 
+				text_debug.GetComponent<Text>().text = t;
+			}
+
 			//when player has reached destination; will be replaced when the player can move multiple tiles per turn
-			if(!isChangingTarget && gameObject.transform.position == tiles[currentTileIndex].transform.GetChild(player_num).position){
+			if(!isChangingTarget && gameObject.transform.position == targetTile.transform.GetChild(player_num).position){
 				if(numSpacesToMove <= 1 && !doneMoving){
 				//tell server to stop player's movement on all clients, also ends localplayer's turn
 					NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
@@ -77,9 +99,7 @@ public class Player_Behavior : NetworkBehaviour {
 					doneMoving=true;//prevents multiple messages being sent
 				}else if(numSpacesToMove > 1){
 					numSpacesToMove-=1;
-
-					Debug.Log(numSpacesToMove+" spaces left to move");
-
+						Debug.Log(numSpacesToMove+" spaces left to move");
 					//message server to changetarget
 					isChangingTarget=true;
 					NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerTargetChange));
@@ -87,21 +107,44 @@ public class Player_Behavior : NetworkBehaviour {
 			}
 		}
 
-		//only check for input once per turn
+		//space bar begins player movement only at beginning of turn
 		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
-			Debug.Log("Moving to tile "+currentTileIndex);
-
-			numSpacesToMove=tiles_per_turn;
-
+			System.Random rng = new System.Random();
+			numSpacesToMove = rng.Next(1,max_tiles_per_turn+1);
+				Debug.Log("You rolled a "+numSpacesToMove);
 			//tell server to tell each client to move player
 			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerMove));
 		}
+
+		if(Input.GetKeyDown(KeyCode.RightArrow) && atFork && isMyTurn){
+			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerForkChoice_Right));
+		}else if(Input.GetKeyDown(KeyCode.LeftArrow) && atFork && isMyTurn){
+			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerForkChoice_Left));
+		}
+
+	}
+
+	[ClientRpc]
+	public void RpcForkChoice(int i){ //0 is left and 1 is right
+			List<GameObject> targets = currentTile.GetComponent<Tile>().nextTiles;
+			targetTile = targets[i];
+			
+			isChangingTarget = false; //continues movement
+			atFork = false; //locks further left/right arrow key detection
+
+			animationState = AnimationStates.HumanoidWalk;
 	}
 
 	[ClientRpc]
 	public void RpcMove(){
-		nextTile(); 
-		animationState = AnimationStates.HumanoidWalk;
+		targetNextTile();
+			Debug.Log("Moving to tile "+targetTile);
+		if(atFork){
+			animationState = AnimationStates.HumanoidIdle;
+		}else{
+			animationState = AnimationStates.HumanoidWalk;
+		}
+		
 		isMoving=true;
 		doneMoving = false;
 	}
@@ -109,7 +152,7 @@ public class Player_Behavior : NetworkBehaviour {
 	[ClientRpc]
 	public void RpcStop(){
 		//doesn't implement the ability to move multiple spaces in a turn, but works for single space movement
-		Debug.Log("RpcStop");
+			Debug.Log("RpcStop");
 		isMoving=false;
 		animationState = AnimationStates.HumanoidIdle;
 
@@ -117,31 +160,32 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	public void RpcResetPlayer(int p_num, Vector3 position){
+	public void RpcResetPlayer(int p_num){ //cannot send objects though rpc commands
 		player_num=p_num;
-		transform.position = position;
+		transform.position = currentTile.transform.GetChild(player_num).position;
 	}
 
 	[ClientRpc]
 	public void RpcChangeTarget(){
-		nextTile();
-		isChangingTarget=false;
+		isChangingTarget=targetNextTile();
+		if(atFork){
+			animationState = AnimationStates.HumanoidIdle;
+		}else{
+			animationState = AnimationStates.HumanoidWalk;
+		}
 	}
 
 	[TargetRpc]
 	public void TargetRpcBeginTurn(NetworkConnection target){
 		isMyTurn = true; //only local player's turn flag is set
-
-		Debug.Log("TargetRpcBeginTurn Player"+player_num+"'s turn");
+			Debug.Log("TargetRpcBeginTurn Player"+player_num+"'s turn");
 	}
 
 	private void TurnOver(){
 		isMyTurn = false;
-
 		//message the server that the turn is over
 		NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.TurnOver));
-		
-		Debug.Log("\tTurn ended");
+			Debug.Log("\tTurn ended");
 	}
 
 	//SyncVar hook to change animations

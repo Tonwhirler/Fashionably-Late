@@ -9,9 +9,6 @@ public class GameManager : MonoBehaviour {
 	[HideInInspector]
 	public List<GameObject> players; //references to each of the players
 	
-	public List<Color> player_colors; //set each player's color, will be replaced with unique character models
-	public List<Transform> start_spaces; //beginning tile on board
-	
 	public int max_turns = 20; //prevents game from going too long for debugging, will be removed for full game
 	
 	private int turn_number; //increments after each player acts
@@ -40,7 +37,7 @@ public class GameManager : MonoBehaviour {
 		for(int i=0; i<players.Count; i++){
 			Debug.Log("\tPlayer"+i);
 			//reset players' position to start space and bind player_num for each player object
-			players[i].GetComponent<Player_Behavior>().RpcResetPlayer(i, start_spaces[i].position);
+			players[i].GetComponent<Player_Behavior>().RpcResetPlayer(i);
 		}
 		yield return new WaitForSeconds(0.1f); //3 second delay before beginning turn loop
 	}
@@ -101,5 +98,14 @@ public class GameManager : MonoBehaviour {
 	public void ChangePlayerTarget(){
 		Debug.Log("Changing target tile of player"+currentPlayer);
 		players[currentPlayer].GetComponent<Player_Behavior>().RpcChangeTarget();
+	}
+
+	public void PlayerForkChoice(int i){
+		if(i==0){
+			Debug.Log("Player"+currentPlayer+" chose the left path");
+		}else{
+			Debug.Log("Player"+currentPlayer+" chose the right path");
+		}
+		players[currentPlayer].GetComponent<Player_Behavior>().RpcForkChoice(i);
 	}
 }

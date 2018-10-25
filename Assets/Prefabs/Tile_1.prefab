@@ -82,6 +82,7 @@ GameObject:
   - component: {fileID: 33605242142471716}
   - component: {fileID: 23213718635758986}
   - component: {fileID: 136190774336267120}
+  - component: {fileID: 114863540724300884}
   m_Layer: 0
   m_Name: Tile_1
   m_TagString: Untagged
@@ -200,6 +201,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1940409123027838}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114863540724300884
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1940409123027838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 090993e44c75f4444b1728b7e0ab7789, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextTiles:
+  - {fileID: 1885062563208440, guid: 694abd07ee245364d972f2a2d5d137a4, type: 2}
 --- !u!136 &136190774336267120
 CapsuleCollider:
   m_ObjectHideFlags: 1
