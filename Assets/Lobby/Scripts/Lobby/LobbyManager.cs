@@ -15,7 +15,8 @@ public enum MyMessageType
     PlayerMove = 2,
     PlayerStop = 3,
     PlayerTargetChange = 4,
-    ItemUsed = 5
+    PlayerForkChoice_Left = 5,
+    PlayerForkChoice_Right = 6
 }
 //===
 
@@ -97,6 +98,17 @@ namespace Prototype.NetworkLobby
 					Debug.Log("Server got message: PlayerTargetChange from connection "+netMsg.conn);
 					gameManager.ChangePlayerTarget();
 				break;
+
+            case (int) MyMessageType.PlayerForkChoice_Left:
+                    Debug.Log("Server got message: PlayerForkChoice_Left from connection "+netMsg.conn);
+                    gameManager.PlayerForkChoice(0);
+                break;
+
+            case (int) MyMessageType.PlayerForkChoice_Right:
+                    Debug.Log("Server got message: PlayerForkChoice_Right from connection "+netMsg.conn);
+                    gameManager.PlayerForkChoice(1);
+                break;
+
 
 			default:
 				Debug.Log("Server got unidentified message from connection "+netMsg.conn);

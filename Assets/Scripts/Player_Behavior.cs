@@ -13,9 +13,6 @@ public class Player_Behavior : NetworkBehaviour {
 
 	public GameObject currentTile;
 	public GameObject targetTile;
-
-	[SyncVar] //not syncing
-	private int fork_choice;
 	
 	[HideInInspector]
 	public int player_num;
@@ -33,6 +30,7 @@ public class Player_Behavior : NetworkBehaviour {
 	private bool isMoving = false; //player is currently moving to destination tile
 	private bool isMyTurn = false; //is currently player's turn, allowing actions
 	private bool doneMoving = false; //true when player has used all available moves
+	private bool atFork = false;
 
 	private GameObject text_debug;//debug textbox on screen
 	private GameObject text_turn;//turn textbox on screen
@@ -42,24 +40,19 @@ public class Player_Behavior : NetworkBehaviour {
 		text_turn = GameObject.Find("TurnText");
 	}
 	
-	private void targetNextTile(){
+	//returns false if target has been chosen, true if the target is still being chosen (fork)
+	private bool targetNextTile(){
 		currentTile = targetTile;
 
 		List<GameObject> targets = currentTile.GetComponent<Tile>().nextTiles;
-		if(targets.Count > 1){
-				Debug.Log("Fork in the road!");
-
-			//need to wait for player input in selecting path
-			System.Random rng = new System.Random();
-			fork_choice = rng.Next(0,targets.Count);
-			targetTile = targets[fork_choice]; //for debugging, randomly choose
-		}else if(targets.Count == 1){
+		if(targets.Count > 1){ //currently only supports forks with 2 choices
+				Debug.Log("Fork in the road! Waiting for player input...");
+			atFork = true;
+			return true;
+		}else{
 				Debug.Log("linear path");
 			targetTile = targets[0];
-		}else{
-			Debug.Log("currentTile = " + currentTile);
-			Debug.Log("targets = "+currentTile.GetComponent<Tile>().nextTiles);
-			Debug.Log("crash"+targets[0]);
+			return false;
 		}
 	}
 
@@ -77,6 +70,8 @@ public class Player_Behavior : NetworkBehaviour {
 
 		if(isMyTurn){
 			text_turn.GetComponent<Text>().text = "Your turn!";
+			if(!isMoving) text_debug.GetComponent<Text>().text ="Press SPACE to continue!";
+			
 		}else{
 			text_turn.GetComponent<Text>().text = "Not your turn.";
 			text_debug.GetComponent<Text>().text = "";
@@ -85,8 +80,13 @@ public class Player_Behavior : NetworkBehaviour {
 		if(isMoving){
 			if(isMyTurn){
 				//display detailed debugging info for localPlayer
-				String t = numSpacesToMove+" spaces left to move\n"
-					+"Distance to target = "+Vector3.Distance(gameObject.transform.position,targetTile.transform.GetChild(player_num).position);
+				String t = numSpacesToMove+" spaces left to move\n";
+
+				if(atFork){
+					t+="Press the LEFT or RIGHT arrow key to continue!";
+				}else{
+					t+="Distance to target = "+Vector3.Distance(gameObject.transform.position,targetTile.transform.GetChild(player_num).position);
+				} 
 				text_debug.GetComponent<Text>().text = t;
 			}
 
@@ -107,7 +107,7 @@ public class Player_Behavior : NetworkBehaviour {
 			}
 		}
 
-		//only check for input once per turn
+		//space bar begins player movement only at beginning of turn
 		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
 			System.Random rng = new System.Random();
 			numSpacesToMove = rng.Next(1,max_tiles_per_turn+1);
@@ -115,13 +115,36 @@ public class Player_Behavior : NetworkBehaviour {
 			//tell server to tell each client to move player
 			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerMove));
 		}
+
+		if(Input.GetKeyDown(KeyCode.RightArrow) && atFork && isMyTurn){
+			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerForkChoice_Right));
+		}else if(Input.GetKeyDown(KeyCode.LeftArrow) && atFork && isMyTurn){
+			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerForkChoice_Left));
+		}
+
+	}
+
+	[ClientRpc]
+	public void RpcForkChoice(int i){ //0 is left and 1 is right
+			List<GameObject> targets = currentTile.GetComponent<Tile>().nextTiles;
+			targetTile = targets[i];
+			
+			isChangingTarget = false; //continues movement
+			atFork = false; //locks further left/right arrow key detection
+
+			animationState = AnimationStates.HumanoidWalk;
 	}
 
 	[ClientRpc]
 	public void RpcMove(){
 		targetNextTile();
 			Debug.Log("Moving to tile "+targetTile);
-		animationState = AnimationStates.HumanoidWalk;
+		if(atFork){
+			animationState = AnimationStates.HumanoidIdle;
+		}else{
+			animationState = AnimationStates.HumanoidWalk;
+		}
+		
 		isMoving=true;
 		doneMoving = false;
 	}
@@ -144,8 +167,12 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[ClientRpc]
 	public void RpcChangeTarget(){
-		targetNextTile();
-		isChangingTarget=false;
+		isChangingTarget=targetNextTile();
+		if(atFork){
+			animationState = AnimationStates.HumanoidIdle;
+		}else{
+			animationState = AnimationStates.HumanoidWalk;
+		}
 	}
 
 	[TargetRpc]

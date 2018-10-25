@@ -99,4 +99,13 @@ public class GameManager : MonoBehaviour {
 		Debug.Log("Changing target tile of player"+currentPlayer);
 		players[currentPlayer].GetComponent<Player_Behavior>().RpcChangeTarget();
 	}
+
+	public void PlayerForkChoice(int i){
+		if(i==0){
+			Debug.Log("Player"+currentPlayer+" chose the left path");
+		}else{
+			Debug.Log("Player"+currentPlayer+" chose the right path");
+		}
+		players[currentPlayer].GetComponent<Player_Behavior>().RpcForkChoice(i);
+	}
 }
