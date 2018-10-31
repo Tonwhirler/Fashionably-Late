@@ -117,21 +117,29 @@ public class Player_Behavior : NetworkBehaviour {
 				text_debug.GetComponent<Text>().text = t;
 			}
 
-			//when player has reached destination; will be replaced when the player can move multiple tiles per turn
-			if(!isChangingTarget && (
-				(isMovingForward && gameObject.transform.position == targetTile_forward.transform.GetChild(player_num).position)
-			|| (!isMovingForward && gameObject.transform.position == targetTile_backward.transform.GetChild(player_num).position)
-			)){
-				if(numSpacesToMove <= 1 && !doneMoving){
-					numSpacesToMove=0; //for display purposes
-					doneMoving=true;//prevents multiple messages being sent
-					NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
-				}else if(numSpacesToMove > 1){
-					numSpacesToMove-=1;
-						Debug.Log(numSpacesToMove+" spaces left to move");
-					//message server to changetarget
-					isChangingTarget=true;
-					NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerTargetChange));
+			//check if player has reached destination; skip if player is still changing target (includes forked path decision making)
+			if(!isChangingTarget){
+				bool hasReachedDestination = false; //used to prevent big code duplication
+				if(isMovingForward && gameObject.transform.position == targetTile_forward.transform.GetChild(player_num).position){
+					Debug.Log("Forwards destination reached!");
+					hasReachedDestination = true;
+				}else if(!isMovingForward && gameObject.transform.position == targetTile_backward.transform.GetChild(player_num).position){
+					Debug.Log("Backwards destination reached!");
+					hasReachedDestination = true;
+				}
+
+				if(hasReachedDestination){
+					if(numSpacesToMove <= 1 && !doneMoving){
+						numSpacesToMove=0; //for display purposes
+						doneMoving=true;//prevents multiple messages being sent
+						NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
+					}else if(numSpacesToMove > 1){
+						numSpacesToMove-=1;
+							Debug.Log(numSpacesToMove+" spaces left to move");
+						//message server to changetarget
+						isChangingTarget=true;
+						NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerTargetChange));
+					}
 				}
 			}
 		}
@@ -188,7 +196,8 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[ClientRpc]
 	public void RpcMove(){
-		targetNextTile(true);
+		isMovingForward = true;
+		isChangingTarget=targetNextTile(true);
 
 		Debug.Log("Moving to tile "+targetTile_forward);
 		
@@ -204,7 +213,8 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[ClientRpc]
 	public void RpcMoveBackwards(){
-		targetNextTile(false);
+		isMovingForward = false;
+		isChangingTarget=targetNextTile(false);
 
 		Debug.Log("Moving to tile "+targetTile_backward);
 		
