@@ -213,9 +213,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextTiles:
-  - {fileID: 0}
+  - {fileID: 1207118776172712, guid: effc8b26b64711d41950691bc830bd1a, type: 2}
   previousTiles:
-  - {fileID: 0}
+  - {fileID: 1164800120777378, guid: 858830713bd631e439d87b81ea27bbb0, type: 2}
   isFinal: 0
 --- !u!136 &136813270805238350
 CapsuleCollider:

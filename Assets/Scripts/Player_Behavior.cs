@@ -126,7 +126,7 @@ public class Player_Behavior : NetworkBehaviour {
 		//space bar begins player movement only at beginning of turn
 		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
 			System.Random rng = new System.Random();
-			numSpacesToMove = rng.Next(1,max_tiles_per_turn+1);
+			numSpacesToMove = 100;//rng.Next(1,max_tiles_per_turn+1);
 				Debug.Log("You rolled a "+numSpacesToMove);
 			//tell server to tell each client to move player
 			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerMove));
