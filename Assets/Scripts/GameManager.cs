@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour {
 
 	public void MoveCurrentPlayer(){
 		Debug.Log("Moving player"+currentPlayer);
-		players[currentPlayer].GetComponent<Player_Behavior>().RpcMove(true);
+		players[currentPlayer].GetComponent<Player_Behavior>().RpcMove();
 	}
 
 	public void StopCurrentPlayer(){
@@ -111,6 +111,6 @@ public class GameManager : MonoBehaviour {
 
 	public void ApplyItemBackwards(int spaces){
 		Debug.Log("Moving Player Backwards "+spaces+" spaces");
-		players[currentPlayer].GetComponent<Player_Behavior>().RpcMove(false);
+		players[currentPlayer].GetComponent<Player_Behavior>().RpcMoveBackwards();
 	}
 }

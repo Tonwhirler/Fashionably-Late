@@ -112,7 +112,7 @@ namespace Prototype.NetworkLobby
 
             case (int) MyMessageType.ItemMoveBackwards:
                     Debug.Log("Server got message: ItemMoveBackwards from connection "+netMsg.conn);
-                    int numSpaces = 1; //modify when quality testing
+                    int numSpaces = 1; //modify when quality testing; different strength items could have different movements (think mushroom and golden mushroom from mario party)
                     gameManager.ApplyItemBackwards(numSpaces);
                 break;
 
