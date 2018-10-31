@@ -16,7 +16,8 @@ public enum MyMessageType
     PlayerStop = 3,
     PlayerTargetChange = 4,
     PlayerForkChoice_Left = 5,
-    PlayerForkChoice_Right = 6
+    PlayerForkChoice_Right = 6,
+    ItemMoveBackwards = 7
 }
 //===
 
@@ -109,6 +110,11 @@ namespace Prototype.NetworkLobby
                     gameManager.PlayerForkChoice(1);
                 break;
 
+            case (int) MyMessageType.ItemMoveBackwards:
+                    Debug.Log("Server got message: ItemMoveBackwards from connection "+netMsg.conn);
+                    int numSpaces = 1; //modify when quality testing
+                    gameManager.ApplyItemBackwards(numSpaces);
+                break;
 
 			default:
 				Debug.Log("Server got unidentified message from connection "+netMsg.conn);

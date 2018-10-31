@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour {
 
 	public void MoveCurrentPlayer(){
 		Debug.Log("Moving player"+currentPlayer);
-		players[currentPlayer].GetComponent<Player_Behavior>().RpcMove();
+		players[currentPlayer].GetComponent<Player_Behavior>().RpcMove(true);
 	}
 
 	public void StopCurrentPlayer(){
@@ -107,5 +107,10 @@ public class GameManager : MonoBehaviour {
 			Debug.Log("Player"+currentPlayer+" chose the right path");
 		}
 		players[currentPlayer].GetComponent<Player_Behavior>().RpcForkChoice(i);
+	}
+
+	public void ApplyItemBackwards(int spaces){
+		Debug.Log("Moving Player Backwards "+spaces+" spaces");
+		players[currentPlayer].GetComponent<Player_Behavior>().RpcMove(false);
 	}
 }
