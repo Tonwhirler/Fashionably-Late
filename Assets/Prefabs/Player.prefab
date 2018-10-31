@@ -1751,6 +1751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e7d27bd02eb5ac4c8ca0f7b9292aacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug_forceBackwardMovement: 1
   currentTile: {fileID: 1532454524123844, guid: 1b59c480688c64944940631b2dca35c0,
     type: 2}
   targetTile_forward: {fileID: 1532454524123844, guid: 1b59c480688c64944940631b2dca35c0,

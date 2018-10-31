@@ -7,8 +7,9 @@ using UnityEngine.UI;
 using UnityEngine.Networking.NetworkSystem;
 
 public class Player_Behavior : NetworkBehaviour {
-	
-	private float speed = 10f; //2.5f is normal speed
+	public bool debug_forceBackwardMovement; //set in prefab editor
+
+	private float speed = 100f; //2.5f is normal speed
 	//private float boostSpeed = 5f;
 
 	public GameObject currentTile;
@@ -151,15 +152,17 @@ public class Player_Behavior : NetworkBehaviour {
 			numSpacesToMove = rng.Next(1,max_tiles_per_turn+1);
 
 			//force player to move n spaces for movement debugging
-			numSpacesToMove = 1;
+			numSpacesToMove = 100;
 
 				Debug.Log("You rolled a "+numSpacesToMove);
 
-			//tell server to tell each client to move player forwards
-			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerMove));
-			
-			//force player to move backwards for debugging
-			//NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
+			if(debug_forceBackwardMovement){
+				//force player to move backwards for debugging
+				NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
+			}else{
+				//tell server to tell each client to move player forwards
+				NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerMove));
+			}
 		}
 
 		if(Input.GetKeyDown(KeyCode.RightArrow) && atFork && isMyTurn){
