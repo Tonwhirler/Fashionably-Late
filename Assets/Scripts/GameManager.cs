@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
 
 	[HideInInspector]
-	public List<GameObject> players; //references to each of the players
+	public List<GameObject> activePlayers; //references to each of the players in the game
 	
 	public int max_turns = 20; //prevents game from going too long for debugging, will be removed for full game
 	
@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour {
 	[HideInInspector]
 	public bool turnOver; //true when the player has finished its turn
 	
+	private bool firstPlayerHasEnded = false; //true when first player has reached the end goal
+	private bool secondPlayerHasEnded = false;	//true when second player has reached the end goal
+
 	//To be called by the NetworkManager
 	public void StartGame(){
 		StartCoroutine(GameLoop());
@@ -24,7 +27,7 @@ public class GameManager : MonoBehaviour {
 	
 	//Sequence of Gameplay elements on macro level
 	private IEnumerator GameLoop(){
-		yield return new WaitForSeconds(1f); //code band-aid for game starting before scene is finished loading
+		yield return new WaitForSeconds(1f); //band-aid for game starting before scene is finished loading
 
 		yield return StartCoroutine(ResetGame());
 		yield return StartCoroutine(TurnLoop());
@@ -34,34 +37,52 @@ public class GameManager : MonoBehaviour {
 	//resets each player to start and clears the score
 	private IEnumerator ResetGame(){
 		Debug.Log("Resetting Game");
-		for(int i=0; i<players.Count; i++){
+		for(int i=0; i<activePlayers.Count; i++){
 			Debug.Log("\tPlayer"+i);
 			//reset players' position to start space and bind player_num for each player object
-			players[i].GetComponent<Player_Behavior>().RpcResetPlayer(i);
+			activePlayers[i].GetComponent<Player_Behavior>().RpcResetPlayer(i);
 		}
-		yield return new WaitForSeconds(0.1f); //3 second delay before beginning turn loop
+		yield return new WaitForSeconds(0.1f); //delay before beginning turn loop
 	}
 
 	//each player takes a turn until there is a winner or there is a timeout
 	private IEnumerator TurnLoop(){
+		int playerToRemove = 0;
+		bool hasSetFristPlayer = false;
+		bool hasRemovedFirstPlayer = false;
+
 		for(turn_number=1; turn_number<=max_turns; turn_number++){
 			Debug.Log("Turn  "+turn_number+"start");
-			for(int i=0; i<players.Count; i++){
+			for(int i=0; i<activePlayers.Count; i++){
 				turnOver=false;
 				currentPlayer=i;
 
-				Debug.Log("Player "+players[i].GetComponent<Player_Behavior>().player_num+" turn");
+				Debug.Log("Player "+activePlayers[i].GetComponent<Player_Behavior>().player_num+" turn");
 				
-				//Rpc client to take turn, then wait until turn is over
-				players[i].GetComponent<Player_Behavior>().TargetRpcBeginTurn(NetworkServer.connections[i]);
-				yield return StartCoroutine(WaitForTurnOver());
-				Debug.Log("Server recognized turn ended, waiting 1 second");
+				//Rpc client to take turn
+				activePlayers[i].GetComponent<Player_Behavior>().TargetRpcBeginTurn(NetworkServer.connections[i]);
+				yield return StartCoroutine(WaitForTurnOver()); //wait here until player's turn is over
 
-				yield return new WaitForSeconds(1f);
+				if(secondPlayerHasEnded){ //go directly to game over
+					break;
+				}else if(firstPlayerHasEnded && !hasSetFristPlayer){ //remove current player after the turn round is over
+					//NOTE: a flag will be needed in player script when using items out of turn is implemented so finished player cannot act out of turn
+					playerToRemove = i;
+					hasSetFristPlayer = true; //fixes bug where playerToRemove is overwritten by the last player
+				}
+
+				Debug.Log("Server recognized turn ended, waiting 1 second");
+				yield return new WaitForSeconds(1f); //wait 1 second before starting next turn as a buffer for network
 			}
-			//maybe have a minigame here
-			//maybe display score after all players have taken their turn
 			Debug.Log("Turn  "+turn_number+"end\n");
+
+			if(secondPlayerHasEnded)break; //allows breaking out of nested loop from inner loop
+
+			if(firstPlayerHasEnded && !hasRemovedFirstPlayer){
+				Debug.Log("Removing Player"+playerToRemove+" from turn loop");
+				activePlayers.RemoveAt(playerToRemove);
+				hasRemovedFirstPlayer = true; //prevents this conditional from executing again
+			}
 		}
 		yield return new WaitForSeconds(0.1f);
 	}
@@ -73,31 +94,31 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private IEnumerator WaitForTurnOver(){
-		while(!turnOver){
+		while(!turnOver){ //this acts as a blocking routine done in parallel to rest of program
 			yield return null;
 		}
 	}
 
 	public bool AddPlayer(GameObject player){
-		Debug.Log("GameManager.Adding player"+players.Count);
-		players.Add(player);
-		if(players.Count == NetworkServer.connections.Count)return true;
+		Debug.Log("GameManager.Adding player"+activePlayers.Count);
+		activePlayers.Add(player);
+		if(activePlayers.Count == NetworkServer.connections.Count)return true;
 		return false;
 	}
 
 	public void MoveCurrentPlayer(){
 		Debug.Log("Moving player"+currentPlayer);
-		players[currentPlayer].GetComponent<Player_Behavior>().RpcMove();
+		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcMove();
 	}
 
 	public void StopCurrentPlayer(){
 		Debug.Log("Stopping player"+currentPlayer);
-		players[currentPlayer].GetComponent<Player_Behavior>().RpcStop();
+		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcStop();
 	}
 
 	public void ChangePlayerTarget(){
 		Debug.Log("Changing target tile of player"+currentPlayer);
-		players[currentPlayer].GetComponent<Player_Behavior>().RpcChangeTarget();
+		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcChangeTarget();
 	}
 
 	public void PlayerForkChoice(int i){
@@ -106,11 +127,22 @@ public class GameManager : MonoBehaviour {
 		}else{
 			Debug.Log("Player"+currentPlayer+" chose the right path");
 		}
-		players[currentPlayer].GetComponent<Player_Behavior>().RpcForkChoice(i);
+		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcForkChoice(i);
 	}
 
 	public void ApplyItemBackwards(int spaces){
 		Debug.Log("Moving Player Backwards "+spaces+" spaces");
-		players[currentPlayer].GetComponent<Player_Behavior>().RpcMoveBackwards();
+		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcMoveBackwards();
+	}
+
+	public void EndCurrentPlayer(){ //when the current player has reached the goal, remove from turn cycle list
+		if(firstPlayerHasEnded){
+			Debug.Log("secondPlayerHasEnded");
+			secondPlayerHasEnded = true;
+		}else{
+			Debug.Log("firstPlayerHasEnded");
+			firstPlayerHasEnded = true;
+		}
+		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcStop_ReachedFinish();
 	}
 }
