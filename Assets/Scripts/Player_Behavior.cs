@@ -7,12 +7,15 @@ using UnityEngine.UI;
 using UnityEngine.Networking.NetworkSystem;
 
 public class Player_Behavior : NetworkBehaviour {
-	public bool debug_forceBackwardMovement; //set in prefab editor
-	public int debug_forceDiceRoll; //fix dice roll
+	public bool debug_enable_DebugMode; //only use debug_force variables when true
+	public bool debug_force_BackwardMovement; //set in prefab editor
+	public int debug_force_DiceRoll; //fix dice roll
+	public float debug_force_Speed; //fix player speed
 
-	private float speed = 100f; //2.5f is normal speed
-	//private float boostSpeed = 5f;
+	private float speed = 2.5f; //2.5f is normal speed
+	//private float boostSpeed = 5f; //make item-based movement faster with running animation
 
+	//these are visible to inspector to allow the linking of player prefab and tile prefab
 	public GameObject currentTile;
 	public GameObject targetTile_forward;
 	public GameObject targetTile_backward;
@@ -28,14 +31,15 @@ public class Player_Behavior : NetworkBehaviour {
 	public int numSpacesToMove = 0; //how many tiles the player can move, as determined by dice roll
 	public int max_tiles_per_turn; //upper bound on dice roll
 
-	private bool isChangingTarget = false; //disable checking if the player has reached the target while the target is being changed
+	private bool isMyTurn = false; //is currently player's turn, allowing actions
 
 	private bool isMoving = false; //player is currently moving to destination tile
 	private bool isMovingForward = true;
-	private bool isMyTurn = false; //is currently player's turn, allowing actions
 	private bool doneMoving = false; //true when player has used all available moves
+	private bool isChangingTarget = false; //disable checking if the player has reached the target while the target is being changed
 	private bool atFork = false;
 
+	//UI Elements, when HUD is done, make these public and set in inspector
 	private GameObject text_debug;//debug textbox on screen
 	private GameObject text_turn;//turn textbox on screen
 	private GameObject text_finished;
@@ -45,6 +49,8 @@ public class Player_Behavior : NetworkBehaviour {
 		text_debug = GameObject.Find("DebugText");
 		text_turn = GameObject.Find("TurnText");
 		text_finished = GameObject.Find("FinishText");
+
+		if(debug_enable_DebugMode)GameObject.Find("DebugModeText").GetComponent<Text>().text = "<DEBUG MODE ENABLED>";
 	}
 	
 	//returns false if target has been chosen, true if the target is still being chosen (fork)
@@ -89,7 +95,12 @@ public class Player_Behavior : NetworkBehaviour {
 			}
 			 
 			gameObject.transform.LookAt(target);
-			gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,speed*Time.deltaTime);
+			if(debug_enable_DebugMode){
+				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,debug_force_Speed*Time.deltaTime);
+			}else{
+				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,speed*Time.deltaTime);
+			}
+			
 		}
 
 		//only local player can detect input
@@ -159,18 +170,19 @@ public class Player_Behavior : NetworkBehaviour {
 
 		//space bar begins player movement only at beginning of turn
 		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
-			System.Random rng = new System.Random();
-
-			numSpacesToMove = rng.Next(1,max_tiles_per_turn+1);
 
 			//force player to move n spaces for movement debugging
-			if(debug_forceDiceRoll > 0) numSpacesToMove = debug_forceDiceRoll;
-
-			if(player_num!=0)numSpacesToMove = 20;//force second player to move less so first player can finish first
+			if(debug_enable_DebugMode){
+				numSpacesToMove = debug_force_DiceRoll;
+				if(player_num!=0)numSpacesToMove = 6;//force second player to move less so first player can finish first
+			}else{
+				System.Random rng = new System.Random(); //C# System.Random, not Unity.Random
+				numSpacesToMove = rng.Next(1,max_tiles_per_turn+1);
+			}
 
 				Debug.Log("You rolled a "+numSpacesToMove);
 
-			if(debug_forceBackwardMovement){
+			if(debug_enable_DebugMode && debug_force_BackwardMovement){
 				//force player to move backwards for debugging
 				NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
 			}else{
@@ -262,7 +274,7 @@ public class Player_Behavior : NetworkBehaviour {
 		isMoving=false;
 		animationState = AnimationStates.HumanoidIdle;
 		if(isLocalPlayer){
-			text_finished.GetComponent<Text>().text = "You have arrived first, waiting for party to start...";
+			text_finished.GetComponent<Text>().text = "You have arrived at the party, waiting for party to start...";
 			TurnOver();
 		}
 	}

@@ -20,18 +20,27 @@ public class GameManager : MonoBehaviour {
 	private bool firstPlayerHasEnded = false; //true when first player has reached the end goal
 	private bool secondPlayerHasEnded = false;	//true when second player has reached the end goal
 
+	private GameObject readyScreen;
+	private GameObject gameOverScreen;
+
 	//To be called by the NetworkManager
 	public void StartGame(){
+		readyScreen = GameObject.Find("Ready Splashscreen");
+		gameOverScreen = GameObject.Find("Game Over Splashscreen");
 		StartCoroutine(GameLoop());
 	}
 	
 	//Sequence of Gameplay elements on macro level
 	private IEnumerator GameLoop(){
+		readyScreen.GetComponent<CanvasGroup>().alpha = 1f;
 		yield return new WaitForSeconds(1f); //band-aid for game starting before scene is finished loading
-
 		yield return StartCoroutine(ResetGame());
+		readyScreen.GetComponent<CanvasGroup>().alpha = 0f;
+		
 		yield return StartCoroutine(TurnLoop());
+
 		yield return StartCoroutine(GameOver());
+		gameOverScreen.GetComponent<CanvasGroup>().alpha = 1f;
 	}
 
 	//resets each player to start and clears the score
@@ -59,8 +68,10 @@ public class GameManager : MonoBehaviour {
 
 				Debug.Log("Player "+activePlayers[i].GetComponent<Player_Behavior>().player_num+" turn");
 				
-				//Rpc client to take turn
-				activePlayers[i].GetComponent<Player_Behavior>().TargetRpcBeginTurn(NetworkServer.connections[i]);
+				//Rpc client to take turn, assumes player_num is correctly tied to player's network connection index
+				activePlayers[i].GetComponent<Player_Behavior>().TargetRpcBeginTurn(
+					NetworkServer.connections[activePlayers[i].GetComponent<Player_Behavior>().player_num]);
+
 				yield return StartCoroutine(WaitForTurnOver()); //wait here until player's turn is over
 
 				if(secondPlayerHasEnded){ //go directly to game over
