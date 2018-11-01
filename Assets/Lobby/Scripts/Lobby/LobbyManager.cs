@@ -11,13 +11,14 @@ using System.Collections;
 //represents the different messages a client can send to the server
 public enum MyMessageType
 {
-    TurnOver = 1,
-    PlayerMove = 2,
-    PlayerStop = 3,
-    PlayerTargetChange = 4,
-    PlayerForkChoice_Left = 5,
-    PlayerForkChoice_Right = 6,
-    ItemMoveBackwards = 7
+    TurnOver = 1, //player's turn is over
+    PlayerMove = 2, //player begins to move
+    PlayerStop = 3, //player has moved all of dice roll
+    PlayerStop_Final = 4, //player has landed on final tile
+    PlayerTargetChange = 5, //player has reached tile, but still has movement left
+    PlayerForkChoice_Left = 6, //player chose the left forked path
+    PlayerForkChoice_Right = 7, //player chose the right forked path
+    ItemMoveBackwards = 8 //item to move the player backwards a specific number of spaces
 }
 //===
 
@@ -95,6 +96,11 @@ namespace Prototype.NetworkLobby
 					gameManager.StopCurrentPlayer();
 				break;
 
+            	case (int) MyMessageType.PlayerStop_Final:
+					Debug.Log("Server got message: PlayerStop_Final from connection "+netMsg.conn);
+					gameManager.EndCurrentPlayer();
+				break;
+
 				case (int) MyMessageType.PlayerTargetChange:
 					Debug.Log("Server got message: PlayerTargetChange from connection "+netMsg.conn);
 					gameManager.ChangePlayerTarget();
@@ -126,23 +132,9 @@ namespace Prototype.NetworkLobby
             //bind players to GameManager
             canStartGame = gameManager.AddPlayer(gamePlayer);
 
+            //start game when all players in the lobby are bound
             if(canStartGame)gameManager.StartGame();
             return true;
-        }
-
-        public override void OnLobbyServerSceneChanged(string sceneName){
-            if(sceneName == playScene){
-                Debug.Log("in playScene!");
-
-                //this is only called if the game is run in the editor and the editor is host
-
-                /*if(canStartGame){
-                    Debug.Log("starting game");
-                    gameManager.StartGame();
-                }else{
-                    Debug.Log("game is not ready yet");
-                }*/
-            }
         }
 
 //===============================================================================================================
