@@ -115,6 +115,7 @@ GameObject:
   - component: {fileID: 22282130}
   - component: {fileID: 11407368}
   - component: {fileID: 11491566}
+  - component: {fileID: 225165112153785946}
   m_Layer: 5
   m_Name: CreateButton
   m_TagString: Untagged
@@ -325,6 +326,7 @@ GameObject:
   - component: {fileID: 22420200}
   - component: {fileID: 22204166}
   - component: {fileID: 11411062}
+  - component: {fileID: 225011701219813958}
   m_Layer: 5
   m_Name: FindAGame
   m_TagString: Untagged
@@ -377,6 +379,7 @@ GameObject:
   - component: {fileID: 22466426}
   - component: {fileID: 22289234}
   - component: {fileID: 11413568}
+  - component: {fileID: 225656763051843870}
   m_Layer: 5
   m_Name: OR
   m_TagString: Untagged
@@ -639,6 +642,7 @@ GameObject:
   - component: {fileID: 22409970}
   - component: {fileID: 22293916}
   - component: {fileID: 11461806}
+  - component: {fileID: 225277663833811134}
   m_Layer: 5
   m_Name: Matchmaker
   m_TagString: Untagged
@@ -864,6 +868,7 @@ GameObject:
   - component: {fileID: 22240290}
   - component: {fileID: 11490910}
   - component: {fileID: 11478738}
+  - component: {fileID: 225445922642042036}
   m_Layer: 5
   m_Name: DedicatedServerButton
   m_TagString: Untagged
@@ -916,6 +921,7 @@ GameObject:
   - component: {fileID: 22203670}
   - component: {fileID: 11422522}
   - component: {fileID: 11430100}
+  - component: {fileID: 225552489391526038}
   m_Layer: 5
   m_Name: ListServerButton
   m_TagString: Untagged
@@ -1001,6 +1007,7 @@ GameObject:
   - component: {fileID: 22409562}
   - component: {fileID: 22235552}
   - component: {fileID: 11418158}
+  - component: {fileID: 225990058056181728}
   m_Layer: 5
   m_Name: CreateAGame
   m_TagString: Untagged
@@ -1072,6 +1079,7 @@ GameObject:
   - component: {fileID: 22247678}
   - component: {fileID: 11430502}
   - component: {fileID: 11484364}
+  - component: {fileID: 225272085896922386}
   m_Layer: 5
   m_Name: InputField
   m_TagString: Untagged
@@ -1295,7 +1303,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 199766}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
@@ -5769,7 +5777,93 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   players: []
-  start_space: {fileID: 1512174824714292, guid: 6f67713d7a016ed4aa3f1bcf4b525a93,
-    type: 2}
   max_turns: 20
   turnOver: 0
+--- !u!225 &225011701219813958
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 128758}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!225 &225165112153785946
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 115900}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!225 &225272085896922386
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 198742}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!225 &225277663833811134
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 157748}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!225 &225445922642042036
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 181294}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!225 &225552489391526038
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 185718}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!225 &225656763051843870
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 135376}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!225 &225990058056181728
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 195798}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

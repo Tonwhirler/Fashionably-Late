@@ -7,12 +7,14 @@ using UnityEngine.UI;
 using UnityEngine.Networking.NetworkSystem;
 
 public class Player_Behavior : NetworkBehaviour {
-	
-	private float speed = 10f;
+	public bool debug_forceBackwardMovement; //set in prefab editor
+
+	private float speed = 100f; //2.5f is normal speed
 	//private float boostSpeed = 5f;
 
 	public GameObject currentTile;
-	public GameObject targetTile;
+	public GameObject targetTile_forward;
+	public GameObject targetTile_backward;
 	
 	[HideInInspector]
 	public int player_num;
@@ -28,6 +30,7 @@ public class Player_Behavior : NetworkBehaviour {
 	private bool isChangingTarget = false; //disable checking if the player has reached the target while the target is being changed
 
 	private bool isMoving = false; //player is currently moving to destination tile
+	private bool isMovingForward = true;
 	private bool isMyTurn = false; //is currently player's turn, allowing actions
 	private bool doneMoving = false; //true when player has used all available moves
 	private bool atFork = false;
@@ -41,18 +44,32 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 	
 	//returns false if target has been chosen, true if the target is still being chosen (fork)
-	private bool targetNextTile(){
-		currentTile = targetTile;
-
-		List<GameObject> targets = currentTile.GetComponent<Tile>().nextTiles;
-		if(targets.Count > 1){ //currently only supports forks with 2 choices
-				Debug.Log("Fork in the road! Waiting for player input...");
-			atFork = true;
-			return true;
+	private bool targetNextTile(bool forwards){
+		if(forwards){
+			currentTile = targetTile_forward;
+			List<GameObject> targets = currentTile.GetComponent<Tile>().nextTiles;
+			if(targets.Count > 1){ //currently only supports forks with 2 choices
+					Debug.Log("Fork in the road! Waiting for player input...");
+				atFork = true;
+				return true;
+			}else{
+					Debug.Log("linear path");
+				targetTile_forward = targets[0];
+				return false;
+			}
 		}else{
-				Debug.Log("linear path");
-			targetTile = targets[0];
-			return false;
+			currentTile = targetTile_backward;
+
+			List<GameObject> targets = currentTile.GetComponent<Tile>().previousTiles;
+			if(targets.Count > 1){ //currently only supports forks with 2 choices
+					Debug.Log("Fork in the road! Waiting for player input...");
+				atFork = true;
+				return true;
+			}else{
+					Debug.Log("linear path");
+				targetTile_backward = targets[0];
+				return false;
+			}
 		}
 	}
 
@@ -60,7 +77,13 @@ public class Player_Behavior : NetworkBehaviour {
 		//all clients can move this gameObject
 		if(isMoving){
 			//move to next tile
-			Vector3 target = targetTile.transform.GetChild(player_num).position;
+			Vector3 target;
+			if(isMovingForward){
+				target = targetTile_forward.transform.GetChild(player_num).position;
+			}else{
+				target = targetTile_backward.transform.GetChild(player_num).position;
+			}
+			 
 			gameObject.transform.LookAt(target);
 			gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,speed*Time.deltaTime);
 		}
@@ -85,24 +108,39 @@ public class Player_Behavior : NetworkBehaviour {
 				if(atFork){
 					t+="Press the LEFT or RIGHT arrow key to continue!";
 				}else{
-					t+="Distance to target = "+Vector3.Distance(gameObject.transform.position,targetTile.transform.GetChild(player_num).position);
+					if(isMovingForward){
+						t+="Distance to target = "+Vector3.Distance(gameObject.transform.position,targetTile_forward.transform.GetChild(player_num).position);
+					}else{
+						t+="Distance to target = "+Vector3.Distance(gameObject.transform.position,targetTile_backward.transform.GetChild(player_num).position);
+					}
+					
 				} 
 				text_debug.GetComponent<Text>().text = t;
 			}
 
-			//when player has reached destination; will be replaced when the player can move multiple tiles per turn
-			if(!isChangingTarget && gameObject.transform.position == targetTile.transform.GetChild(player_num).position){
-				if(numSpacesToMove <= 1 && !doneMoving){
-				//tell server to stop player's movement on all clients, also ends localplayer's turn
-					NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
-					numSpacesToMove=0;
-					doneMoving=true;//prevents multiple messages being sent
-				}else if(numSpacesToMove > 1){
-					numSpacesToMove-=1;
-						Debug.Log(numSpacesToMove+" spaces left to move");
-					//message server to changetarget
-					isChangingTarget=true;
-					NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerTargetChange));
+			//check if player has reached destination; skip if player is still changing target (includes forked path decision making)
+			if(!isChangingTarget){
+				bool hasReachedDestination = false; //used to prevent big code duplication
+				if(isMovingForward && gameObject.transform.position == targetTile_forward.transform.GetChild(player_num).position){
+					Debug.Log("Forwards destination reached!");
+					hasReachedDestination = true;
+				}else if(!isMovingForward && gameObject.transform.position == targetTile_backward.transform.GetChild(player_num).position){
+					Debug.Log("Backwards destination reached!");
+					hasReachedDestination = true;
+				}
+
+				if(hasReachedDestination){
+					if(numSpacesToMove <= 1 && !doneMoving){
+						numSpacesToMove=0; //for display purposes
+						doneMoving=true;//prevents multiple messages being sent
+						NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
+					}else if(numSpacesToMove > 1){
+						numSpacesToMove-=1;
+							Debug.Log(numSpacesToMove+" spaces left to move");
+						//message server to changetarget
+						isChangingTarget=true;
+						NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerTargetChange));
+					}
 				}
 			}
 		}
@@ -110,10 +148,21 @@ public class Player_Behavior : NetworkBehaviour {
 		//space bar begins player movement only at beginning of turn
 		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
 			System.Random rng = new System.Random();
+
 			numSpacesToMove = rng.Next(1,max_tiles_per_turn+1);
+
+			//force player to move n spaces for movement debugging
+			numSpacesToMove = 100;
+
 				Debug.Log("You rolled a "+numSpacesToMove);
-			//tell server to tell each client to move player
-			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerMove));
+
+			if(debug_forceBackwardMovement){
+				//force player to move backwards for debugging
+				NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
+			}else{
+				//tell server to tell each client to move player forwards
+				NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerMove));
+			}
 		}
 
 		if(Input.GetKeyDown(KeyCode.RightArrow) && atFork && isMyTurn){
@@ -126,19 +175,52 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[ClientRpc]
 	public void RpcForkChoice(int i){ //0 is left and 1 is right
-			List<GameObject> targets = currentTile.GetComponent<Tile>().nextTiles;
-			targetTile = targets[i];
-			
-			isChangingTarget = false; //continues movement
-			atFork = false; //locks further left/right arrow key detection
+			if(isMovingForward){
+				List<GameObject> targets = currentTile.GetComponent<Tile>().nextTiles;
+				targetTile_forward = targets[i];
+				
+				isChangingTarget = false; //continues movement
+				atFork = false; //locks further left/right arrow key detection
 
-			animationState = AnimationStates.HumanoidWalk;
+				animationState = AnimationStates.HumanoidWalk;
+			}else{
+				List<GameObject> targets = currentTile.GetComponent<Tile>().previousTiles;
+				
+				targetTile_backward = targets[i];
+				//only fork that has 3 choices is the backwards path of the ending tile, so there is no need to handle 3 choices
+
+				isChangingTarget = false; //continues movement
+				atFork = false; //locks further left/right arrow key detection
+
+				animationState = AnimationStates.HumanoidWalk;
+			}
+			
 	}
 
 	[ClientRpc]
 	public void RpcMove(){
-		targetNextTile();
-			Debug.Log("Moving to tile "+targetTile);
+		isMovingForward = true;
+		isChangingTarget=targetNextTile(true);
+
+		Debug.Log("Moving to tile "+targetTile_forward);
+		
+		if(atFork){
+			animationState = AnimationStates.HumanoidIdle;
+		}else{
+			animationState = AnimationStates.HumanoidWalk;
+		}
+		
+		isMoving=true;
+		doneMoving = false;
+	}
+
+	[ClientRpc]
+	public void RpcMoveBackwards(){
+		isMovingForward = false;
+		isChangingTarget=targetNextTile(false);
+
+		Debug.Log("Moving to tile "+targetTile_backward);
+		
 		if(atFork){
 			animationState = AnimationStates.HumanoidIdle;
 		}else{
@@ -151,10 +233,12 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[ClientRpc]
 	public void RpcStop(){
-		//doesn't implement the ability to move multiple spaces in a turn, but works for single space movement
+
 			Debug.Log("RpcStop");
 		isMoving=false;
 		animationState = AnimationStates.HumanoidIdle;
+
+		//if the player used an item, restart their turn, else end their turn
 
 		if(isLocalPlayer)TurnOver();
 	}
@@ -167,7 +251,7 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[ClientRpc]
 	public void RpcChangeTarget(){
-		isChangingTarget=targetNextTile();
+		isChangingTarget=targetNextTile(isMovingForward);
 		if(atFork){
 			animationState = AnimationStates.HumanoidIdle;
 		}else{

@@ -108,4 +108,9 @@ public class GameManager : MonoBehaviour {
 		}
 		players[currentPlayer].GetComponent<Player_Behavior>().RpcForkChoice(i);
 	}
+
+	public void ApplyItemBackwards(int spaces){
+		Debug.Log("Moving Player Backwards "+spaces+" spaces");
+		players[currentPlayer].GetComponent<Player_Behavior>().RpcMoveBackwards();
+	}
 }

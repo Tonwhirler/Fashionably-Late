@@ -1751,9 +1751,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e7d27bd02eb5ac4c8ca0f7b9292aacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentTile: {fileID: 1512174824714292, guid: 6f67713d7a016ed4aa3f1bcf4b525a93,
+  debug_forceBackwardMovement: 1
+  currentTile: {fileID: 1532454524123844, guid: 1b59c480688c64944940631b2dca35c0,
     type: 2}
-  targetTile: {fileID: 1512174824714292, guid: 6f67713d7a016ed4aa3f1bcf4b525a93, type: 2}
+  targetTile_forward: {fileID: 1532454524123844, guid: 1b59c480688c64944940631b2dca35c0,
+    type: 2}
+  targetTile_backward: {fileID: 1532454524123844, guid: 1b59c480688c64944940631b2dca35c0,
+    type: 2}
   player_num: 0
   animationState: 2
   numSpacesToMove: 0
