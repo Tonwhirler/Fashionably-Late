@@ -46,7 +46,8 @@ public class Player_Behavior : NetworkBehaviour {
 
 	void Start () {
 		if(isLocalPlayer) GameObject.Find("Main Camera").GetComponent<CameraController>().SetPlayer(gameObject);
-		text_debug = GameObject.Find("DebugText");
+        if(isLocalPlayer) GameObject.Find("Main Camera").GetComponent<CameraController>().SetPlayer(gameObject);
+        text_debug = GameObject.Find("DebugText");
 		text_turn = GameObject.Find("TurnText");
 		text_finished = GameObject.Find("FinishText");
 
