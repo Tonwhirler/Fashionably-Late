@@ -17,8 +17,7 @@ public class Player_Behavior : NetworkBehaviour {
 
 	//these are visible to inspector to allow the linking of player prefab and tile prefab
 	public GameObject currentTile;
-	public GameObject targetTile_forward;
-	public GameObject targetTile_backward;
+	public GameObject targetTile;
 	
 	[HideInInspector]
 	public int player_num;
@@ -30,11 +29,13 @@ public class Player_Behavior : NetworkBehaviour {
 	[HideInInspector]
 	public int numSpacesToMove = 0; //how many tiles the player can move, as determined by dice roll
 	public int max_tiles_per_turn; //upper bound on dice roll
-
-	private bool isMyTurn = false; //is currently player's turn, allowing actions
-
-	private bool isMoving = false; //player is currently moving to destination tile
-	private bool isMovingForward = true;
+    [HideInInspector]
+    public bool isMyTurn = false; //is currently player's turn, allowing actions
+    [HideInInspector]
+    public bool isMoving = false; //player is currently moving to destination tile
+    [HideInInspector]
+    public bool isFrozen = false; //player is currently frozen and cannot move for one turn
+    private bool isMovingForward = true;
 	private bool doneMoving = false; //true when player has used all available moves
 	private bool isChangingTarget = false; //disable checking if the player has reached the target while the target is being changed
 	private bool atFork = false;
@@ -46,18 +47,21 @@ public class Player_Behavior : NetworkBehaviour {
 
 	void Start () {
 		if(isLocalPlayer) GameObject.Find("Main Camera").GetComponent<CameraController>().SetPlayer(gameObject);
-        if(isLocalPlayer) GameObject.Find("Main Camera").GetComponent<CameraController>().SetPlayer(gameObject);
+        if(isLocalPlayer) GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().SetPlayer(gameObject);
+        if (isLocalPlayer) GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().GiveStartingAbilities();
         text_debug = GameObject.Find("DebugText");
 		text_turn = GameObject.Find("TurnText");
 		text_finished = GameObject.Find("FinishText");
+        targetTile = GameObject.Find("Tile_0_Start");
 
-		if(debug_enable_DebugMode)GameObject.Find("DebugModeText").GetComponent<Text>().text = "<DEBUG MODE ENABLED>";
+
+        if (debug_enable_DebugMode)GameObject.Find("DebugModeText").GetComponent<Text>().text = "<DEBUG MODE ENABLED>";
 	}
 	
 	//returns false if target has been chosen, true if the target is still being chosen (fork)
 	private bool targetNextTile(bool forwards){
 		if(forwards){
-			currentTile = targetTile_forward;
+			currentTile = targetTile;
 			List<GameObject> targets = currentTile.GetComponent<Tile>().nextTiles;
 			if(targets.Count > 1){ //currently only supports forks with 2 choices
 					Debug.Log("Fork in the road! Waiting for player input...");
@@ -65,11 +69,11 @@ public class Player_Behavior : NetworkBehaviour {
 				return true;
 			}else{
 					Debug.Log("linear path");
-				targetTile_forward = targets[0];
+				targetTile = targets[0];
 				return false;
 			}
 		}else{
-			currentTile = targetTile_backward;
+			currentTile = targetTile;
 
 			List<GameObject> targets = currentTile.GetComponent<Tile>().previousTiles;
 			if(targets.Count > 1){ //currently only supports forks with 2 choices
@@ -78,7 +82,7 @@ public class Player_Behavior : NetworkBehaviour {
 				return true;
 			}else{
 					Debug.Log("linear path");
-				targetTile_backward = targets[0];
+				targetTile = targets[0];
 				return false;
 			}
 		}
@@ -89,12 +93,8 @@ public class Player_Behavior : NetworkBehaviour {
 		if(isMoving){
 			//move to next tile
 			Vector3 target;
-			if(isMovingForward){
-				target = targetTile_forward.transform.GetChild(player_num).position;
-			}else{
-				target = targetTile_backward.transform.GetChild(player_num).position;
-			}
-			 
+			target = targetTile.transform.GetChild(player_num).position;
+
 			gameObject.transform.LookAt(target);
 			if(debug_enable_DebugMode){
 				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,debug_force_Speed*Time.deltaTime);
@@ -124,12 +124,7 @@ public class Player_Behavior : NetworkBehaviour {
 				if(atFork){
 					t+="Press the LEFT or RIGHT arrow key to continue!";
 				}else{
-					if(isMovingForward){
-						t+="Distance to target = "+Vector3.Distance(gameObject.transform.position,targetTile_forward.transform.GetChild(player_num).position);
-					}else{
-						t+="Distance to target = "+Vector3.Distance(gameObject.transform.position,targetTile_backward.transform.GetChild(player_num).position);
-					}
-					
+					t+="Distance to target = "+Vector3.Distance(gameObject.transform.position,targetTile.transform.GetChild(player_num).position);
 				} 
 				text_debug.GetComponent<Text>().text = t;
 			}
@@ -138,20 +133,17 @@ public class Player_Behavior : NetworkBehaviour {
 			if(!isChangingTarget){
 				bool hasReachedDestination = false; //used to prevent big code duplication
 				//logic separated for debugging
-				if(isMovingForward && gameObject.transform.position == targetTile_forward.transform.GetChild(player_num).position){
-					Debug.Log("Forwards destination reached!");
-					hasReachedDestination = true;
-				}else if(!isMovingForward && gameObject.transform.position == targetTile_backward.transform.GetChild(player_num).position){
-					Debug.Log("Backwards destination reached!");
+				if(gameObject.transform.position == targetTile.transform.GetChild(player_num).position){
+					Debug.Log("Destination reached!");
 					hasReachedDestination = true;
 				}
 
 				if(hasReachedDestination){
-					if((numSpacesToMove <= 1 && !doneMoving) || targetTile_forward.GetComponent<Tile>().isFinal){ //also stop player when at the final tile
+					if((numSpacesToMove <= 1 && !doneMoving) || targetTile.GetComponent<Tile>().isFinal){ //also stop player when at the final tile
 						numSpacesToMove=0; //for display purposes
 						doneMoving=true;//prevents multiple messages being sent
 
-						if(targetTile_forward.GetComponent<Tile>().isFinal){
+						if(targetTile.GetComponent<Tile>().isFinal){
 							NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop_Final));
 						}else{
 							NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
@@ -171,25 +163,38 @@ public class Player_Behavior : NetworkBehaviour {
 
 		//space bar begins player movement only at beginning of turn
 		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
+            //skip turn due to player being frozen
+            if(isFrozen)
+            {
+                TurnOver();
+            }
+            else
+            {
+                //force player to move n spaces for movement debugging
+                if (debug_enable_DebugMode)
+                {
+                    numSpacesToMove = debug_force_DiceRoll;
+                    if (player_num != 0) numSpacesToMove = 6;//force second player to move less so first player can finish first
+                }
+                else
+                {
+                    System.Random rng = new System.Random(); //C# System.Random, not Unity.Random
+                    numSpacesToMove = rng.Next(1, max_tiles_per_turn + 1);
+                }
 
-			//force player to move n spaces for movement debugging
-			if(debug_enable_DebugMode){
-				numSpacesToMove = debug_force_DiceRoll;
-				if(player_num!=0)numSpacesToMove = 6;//force second player to move less so first player can finish first
-			}else{
-				System.Random rng = new System.Random(); //C# System.Random, not Unity.Random
-				numSpacesToMove = rng.Next(1,max_tiles_per_turn+1);
-			}
+                Debug.Log("You rolled a " + numSpacesToMove);
 
-				Debug.Log("You rolled a "+numSpacesToMove);
-
-			if(debug_enable_DebugMode && debug_force_BackwardMovement){
-				//force player to move backwards for debugging
-				NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
-			}else{
-				//tell server to tell each client to move player forwards
-				NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerMove));
-			}
+                if (debug_enable_DebugMode && debug_force_BackwardMovement)
+                {
+                    //force player to move backwards for debugging
+                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
+                }
+                else
+                {
+                    //tell server to tell each client to move player forwards
+                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.PlayerMove));
+                }
+            }
 		}
 
 		if(Input.GetKeyDown(KeyCode.RightArrow) && atFork && isMyTurn){
@@ -204,7 +209,7 @@ public class Player_Behavior : NetworkBehaviour {
 	public void RpcForkChoice(int i){ //0 is left and 1 is right
 			if(isMovingForward){
 				List<GameObject> targets = currentTile.GetComponent<Tile>().nextTiles;
-				targetTile_forward = targets[i];
+				targetTile = targets[i];
 				
 				isChangingTarget = false; //continues movement
 				atFork = false; //locks further left/right arrow key detection
@@ -213,7 +218,7 @@ public class Player_Behavior : NetworkBehaviour {
 			}else{
 				List<GameObject> targets = currentTile.GetComponent<Tile>().previousTiles;
 				
-				targetTile_backward = targets[i];
+				targetTile = targets[i];
 				//only fork that has 3 choices is the backwards path of the ending tile, so there is no need to handle 3 choices
 
 				isChangingTarget = false; //continues movement
@@ -229,7 +234,7 @@ public class Player_Behavior : NetworkBehaviour {
 		isMovingForward = true;
 		isChangingTarget=targetNextTile(true);
 
-		Debug.Log("Moving to tile "+targetTile_forward);
+		Debug.Log("Moving to tile "+targetTile);
 		
 		if(atFork){
 			animationState = AnimationStates.HumanoidIdle;
@@ -246,7 +251,7 @@ public class Player_Behavior : NetworkBehaviour {
 		isMovingForward = false;
 		isChangingTarget=targetNextTile(false);
 
-		Debug.Log("Moving to tile "+targetTile_backward);
+		Debug.Log("Moving to tile "+targetTile);
 		
 		if(atFork){
 			animationState = AnimationStates.HumanoidIdle;
@@ -299,10 +304,13 @@ public class Player_Behavior : NetworkBehaviour {
 	[TargetRpc]
 	public void TargetRpcBeginTurn(NetworkConnection target){
 		isMyTurn = true; //only local player's turn flag is set
-			Debug.Log("TargetRpcBeginTurn Player"+player_num+"'s turn");
+        GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().abilityUsed = false;
+        Debug.Log("TargetRpcBeginTurn Player"+player_num+"'s turn");
 	}
 
 	private void TurnOver(){
+        //end frozen ability at end of turn
+        isFrozen = false;
 		isMyTurn = false;
 		//message the server that the turn is over
 		NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.TurnOver));

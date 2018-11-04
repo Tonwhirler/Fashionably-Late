@@ -1751,7 +1751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e7d27bd02eb5ac4c8ca0f7b9292aacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug_enable_DebugMode: 1
+  debug_enable_DebugMode: 0
   debug_force_BackwardMovement: 0
   debug_force_DiceRoll: 100
   debug_force_Speed: 100
