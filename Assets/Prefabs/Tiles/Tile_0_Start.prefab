@@ -221,6 +221,7 @@ MonoBehaviour:
   previousTiles:
   - {fileID: 1030721651318840, guid: cc970c11067c01c4cb97289d09eb2aba, type: 2}
   isFinal: 0
+  isStart: 1
 --- !u!114 &114756337101623182
 MonoBehaviour:
   m_ObjectHideFlags: 1

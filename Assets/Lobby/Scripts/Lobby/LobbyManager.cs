@@ -7,6 +7,8 @@ using UnityEngine.Networking.Match;
 using UnityEngine.Networking.NetworkSystem;
 using System.Collections;
 
+//this is a free plugin from the unity store, my changes are denoted with //=== blocks
+
 //=== Global Scope
 //represents the different messages a client can send to the server
 public enum MyMessageType

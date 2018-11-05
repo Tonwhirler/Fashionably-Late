@@ -7,4 +7,5 @@ public class Tile : MonoBehaviour {
 	public List<GameObject> nextTiles;
     public List<GameObject> previousTiles;
     public bool isFinal = false;
+    public bool isStart = false;
 }

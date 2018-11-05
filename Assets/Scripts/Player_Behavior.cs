@@ -86,6 +86,12 @@ public class Player_Behavior : NetworkBehaviour {
 			}else{
 					Debug.Log("linear path");
 				targetTile = targets[0];
+
+				if(currentTile.GetComponent<Tile>().isStart){
+					Debug.Log("Player cannot move backwards from the start tile");
+					targetTile = currentTile;
+				}
+
 				return false;
 			}
 			//TODO: need to make sure player stops at starting tile
