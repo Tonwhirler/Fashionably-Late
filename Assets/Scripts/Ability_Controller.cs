@@ -43,10 +43,10 @@ public class Ability_Controller : MonoBehaviour {
         switch (currentAbility)
         {
             case (int) MyAbilityType.ForceBack:
-                Debug.Log("Use ability ForceBack");
-           
+                
                 if (abilityUsed == false && !player.GetComponent<Player_Behavior>().isMoving && player.GetComponent<Player_Behavior>().isMyTurn)
                 {
+                    Debug.Log("Use ability ForceBack");
                     //move player 1 space back, the 1 space is temporary
                     player.GetComponent<Player_Behavior>().numSpacesToMove = 1;
                     NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
@@ -57,13 +57,13 @@ public class Ability_Controller : MonoBehaviour {
                 break;
 
             case (int) MyAbilityType.ForceForward:
-                Debug.Log("Use ability ForceForward");
 
                 if (abilityUsed == false && !player.GetComponent<Player_Behavior>().isMoving && player.GetComponent<Player_Behavior>().isMyTurn)
                 {
+                    Debug.Log("Use ability ForceForward");
                     //move player 1 space forward, the 1 space is temporary
                     player.GetComponent<Player_Behavior>().numSpacesToMove = 1;
-                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.PlayerMove));
+                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.PlayerMoveForwards));
                     abilityUsed = true;
                     //give new ability when old one is used
                     RandomAbility();
@@ -71,10 +71,10 @@ public class Ability_Controller : MonoBehaviour {
                 break;
 
             case (int) MyAbilityType.Freeze:
-                Debug.Log("Use ability Freeze");
 
                 if (abilityUsed == false && !player.GetComponent<Player_Behavior>().isMoving && player.GetComponent<Player_Behavior>().isMyTurn)
                 {
+                    Debug.Log("Use ability Freeze");
                     //set frozen bool so player cannot take turn
                     player.GetComponent<Player_Behavior>().isFrozen = true;
                     abilityUsed = true;

@@ -12,11 +12,12 @@ public class Player_Behavior : NetworkBehaviour {
 	public int debug_force_DiceRoll; //fix dice roll
 	public float debug_force_Speed; //fix player speed
 
-	private float speed = 2.5f; //2.5f is normal speed
+	private float speed = 3f; //normal speed
 	//private float boostSpeed = 5f; //make item-based movement faster with running animation
 
 	//these are visible to inspector to allow the linking of player prefab and tile prefab
 	public GameObject currentTile;
+	[HideInInspector]
 	public GameObject targetTile;
 	
 	[HideInInspector]
@@ -40,15 +41,17 @@ public class Player_Behavior : NetworkBehaviour {
 	private bool isChangingTarget = false; //disable checking if the player has reached the target while the target is being changed
 	private bool atFork = false;
 
+	private bool movedAfterItem = false;
+
 	//UI Elements, when HUD is done, make these public and set in inspector
 	private GameObject text_debug;//debug textbox on screen
 	private GameObject text_turn;//turn textbox on screen
-	private GameObject text_finished;
+	private GameObject text_finished;//textbox for when a player reached the last tile
 
 	void Start () {
 		if(isLocalPlayer) GameObject.Find("Main Camera").GetComponent<CameraController>().SetPlayer(gameObject);
         if(isLocalPlayer) GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().SetPlayer(gameObject);
-        if (isLocalPlayer) GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().GiveStartingAbilities();
+        if(isLocalPlayer) GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().GiveStartingAbilities();
         text_debug = GameObject.Find("DebugText");
 		text_turn = GameObject.Find("TurnText");
 		text_finished = GameObject.Find("FinishText");
@@ -85,6 +88,7 @@ public class Player_Behavior : NetworkBehaviour {
 				targetTile = targets[0];
 				return false;
 			}
+			//TODO: need to make sure player stops at starting tile
 		}
 	}
 
@@ -93,7 +97,7 @@ public class Player_Behavior : NetworkBehaviour {
 		if(isMoving){
 			//move to next tile
 			Vector3 target;
-			target = targetTile.transform.GetChild(player_num).position;
+			target = targetTile.transform.GetChild(player_num).position; //player moves to a set position within tile corresponding to player number
 
 			gameObject.transform.LookAt(target);
 			if(debug_enable_DebugMode){
@@ -109,14 +113,21 @@ public class Player_Behavior : NetworkBehaviour {
 
 		if(isMyTurn){
 			text_turn.GetComponent<Text>().text = "Your turn!";
-			if(!isMoving) text_debug.GetComponent<Text>().text ="Press SPACE to continue!";
+			if(!isMoving){
+				if(isFrozen){
+					text_debug.GetComponent<Text>().text ="FROZEN, press SPACE to skip turn!";
+				}else{
+					text_debug.GetComponent<Text>().text ="Press SPACE to roll dice!";
+					if(!movedAfterItem)text_debug.GetComponent<Text>().text +="\nOR click the button to use an item!";
+				}
+			} 
 			
 		}else{
 			text_turn.GetComponent<Text>().text = "Not your turn.";
 			text_debug.GetComponent<Text>().text = "";
 		}
 
-		if(isMoving){
+		if(isMoving){ //only local player detects when the movement is to end
 			if(isMyTurn){
 				//display detailed debugging info for localPlayer
 				String t = numSpacesToMove+" spaces left to move\n";
@@ -192,7 +203,7 @@ public class Player_Behavior : NetworkBehaviour {
                 else
                 {
                     //tell server to tell each client to move player forwards
-                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.PlayerMove));
+                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.PlayerMoveForwards));
                 }
             }
 		}
@@ -230,26 +241,9 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	public void RpcMove(){
-		isMovingForward = true;
-		isChangingTarget=targetNextTile(true);
-
-		Debug.Log("Moving to tile "+targetTile);
-		
-		if(atFork){
-			animationState = AnimationStates.HumanoidIdle;
-		}else{
-			animationState = AnimationStates.HumanoidWalk;
-		}
-		
-		isMoving=true;
-		doneMoving = false;
-	}
-
-	[ClientRpc]
-	public void RpcMoveBackwards(){
-		isMovingForward = false;
-		isChangingTarget=targetNextTile(false);
+	public void RpcMove(bool forwards){
+		isMovingForward = forwards;
+		isChangingTarget=targetNextTile(forwards);
 
 		Debug.Log("Moving to tile "+targetTile);
 		
@@ -269,9 +263,20 @@ public class Player_Behavior : NetworkBehaviour {
 		isMoving=false;
 		animationState = AnimationStates.HumanoidIdle;
 
-		//if the player used an item, restart their turn, else end their turn
-
-		if(isLocalPlayer)TurnOver();
+		//if the player used an item that was not freeze, restart their turn, else end their turn
+		if(GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().abilityUsed){
+				Debug.Log("Player\tAbility USED this turn");
+			if(movedAfterItem){ //prevents player from taking infinite turns after using an item
+				movedAfterItem = false;
+					Debug.Log("\tAbility already used, ending turn");
+				TurnOver();
+			}else{
+				movedAfterItem = true;
+			}
+		}else{
+				Debug.Log("Player\tAbility NOT used this turn");
+			if(isLocalPlayer)TurnOver();
+		}
 	}
 
 	[ClientRpc]
