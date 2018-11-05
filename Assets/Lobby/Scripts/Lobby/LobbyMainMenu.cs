@@ -28,6 +28,7 @@ namespace Prototype.NetworkLobby
 
         public void OnClickHost()
         {
+            lobbyManager.networkAddress = ipInput.text;
             lobbyManager.StartHost();
         }
 
