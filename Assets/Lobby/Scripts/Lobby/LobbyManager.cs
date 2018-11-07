@@ -7,12 +7,14 @@ using UnityEngine.Networking.Match;
 using UnityEngine.Networking.NetworkSystem;
 using System.Collections;
 
+//this is a free plugin from the unity store, my changes are denoted with //=== blocks
+
 //=== Global Scope
 //represents the different messages a client can send to the server
 public enum MyMessageType
 {
     TurnOver = 1, //player's turn is over
-    PlayerMove = 2, //player begins to move
+    PlayerMoveForwards = 2, //player begins to move forwards
     PlayerStop = 3, //player has moved all of dice roll
     PlayerStop_Final = 4, //player has landed on final tile
     PlayerTargetChange = 5, //player has reached tile, but still has movement left
@@ -85,7 +87,7 @@ namespace Prototype.NetworkLobby
 					gameManager.turnOver=true;
 				break;
 			
-			case (int) MyMessageType.PlayerMove:
+			case (int) MyMessageType.PlayerMoveForwards:
 					Debug.Log("Server got message: PlayerMove from connection "+netMsg.conn);
 					gameManager.MoveCurrentPlayer();
 				break;

@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour {
 
 	public void MoveCurrentPlayer(){
 		Debug.Log("Moving player"+currentPlayer);
-		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcMove();
+		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcMove(true);
 	}
 
 	public void StopCurrentPlayer(){
@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour {
 
 	public void ApplyItemBackwards(int spaces){
 		Debug.Log("Moving Player Backwards "+spaces+" spaces");
-		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcMoveBackwards();
+		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcMove(false);
 	}
 
 	public void EndCurrentPlayer(){ //when the current player has reached the goal, remove from turn cycle list
