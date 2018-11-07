@@ -196,9 +196,6 @@ public class Player_Behavior : NetworkBehaviour {
 				}
 			}
 		}
-
-		//input code refactored into button functions
-
 	}
 
 	[ClientRpc]

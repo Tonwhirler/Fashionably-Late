@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
 	[HideInInspector]
 	public List<GameObject> activePlayers; //references to each of the players in the game
 	
-	public int max_turns = 20; //prevents game from going too long for debugging, will be removed for full game
+	public int max_turns = 50; //prevents game from going too long
 	
 	private int turn_number; //increments after each player acts
 	private int currentPlayer=0; //current player's index in players
