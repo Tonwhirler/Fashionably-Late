@@ -1757,14 +1757,14 @@ MonoBehaviour:
   debug_force_Speed: 100
   currentTile: {fileID: 1833852659714676, guid: 6f67713d7a016ed4aa3f1bcf4b525a93,
     type: 2}
-  targetTile_forward: {fileID: 1833852659714676, guid: 6f67713d7a016ed4aa3f1bcf4b525a93,
-    type: 2}
-  targetTile_backward: {fileID: 1833852659714676, guid: 6f67713d7a016ed4aa3f1bcf4b525a93,
-    type: 2}
+  targetTile: {fileID: 0}
   player_num: 0
   animationState: 2
   numSpacesToMove: 0
   max_tiles_per_turn: 5
+  isMyTurn: 0
+  isMoving: 0
+  isFrozen: 0
 --- !u!114 &114643126987091608
 MonoBehaviour:
   m_ObjectHideFlags: 1
