@@ -7,6 +7,9 @@ using UnityEngine.Networking.NetworkSystem;
 
 
 public class Ability_Controller : MonoBehaviour {
+    public GameObject abilityButton;
+    public GameObject diceButton;
+    [HideInInspector]
     public GameObject player;
     [HideInInspector]
     public bool abilityUsed = false;
@@ -53,6 +56,11 @@ public class Ability_Controller : MonoBehaviour {
                     abilityUsed = true;
                     //give new ability when old one is used
                     RandomAbility();
+
+                    abilityButton.GetComponent<CanvasGroup>().alpha = 0f;
+                    abilityButton.GetComponent<Button>().interactable = false;
+                    diceButton.GetComponent<CanvasGroup>().alpha = 0f;
+                    diceButton.GetComponent<Button>().interactable = false;
                 }            
                 break;
 
@@ -67,6 +75,11 @@ public class Ability_Controller : MonoBehaviour {
                     abilityUsed = true;
                     //give new ability when old one is used
                     RandomAbility();
+
+                    abilityButton.GetComponent<CanvasGroup>().alpha = 0f;
+                    abilityButton.GetComponent<Button>().interactable = false;
+                    diceButton.GetComponent<CanvasGroup>().alpha = 0f;
+                    diceButton.GetComponent<Button>().interactable = false;
                 }
                 break;
 
@@ -80,6 +93,9 @@ public class Ability_Controller : MonoBehaviour {
                     abilityUsed = true;
                     //give new ability when old one is used
                     RandomAbility();
+
+                    abilityButton.GetComponent<CanvasGroup>().alpha = 0f;
+                    abilityButton.GetComponent<Button>().interactable = false;
                 }              
                 break;
 

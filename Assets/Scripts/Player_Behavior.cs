@@ -35,6 +35,7 @@ public class Player_Behavior : NetworkBehaviour {
     [HideInInspector]
     public bool isMoving = false; //player is currently moving to destination tile
     [HideInInspector]
+	[SyncVar(hook = "OnChangeIsFrozen")]
     public bool isFrozen = false; //player is currently frozen and cannot move for one turn
     private bool isMovingForward = true;
 	private bool doneMoving = false; //true when player has used all available moves
@@ -49,9 +50,12 @@ public class Player_Behavior : NetworkBehaviour {
 	private GameObject text_finished;//textbox for when a player reached the last tile
 
 	void Start () {
-		if(isLocalPlayer) GameObject.Find("Main Camera").GetComponent<CameraController>().SetPlayer(gameObject);
-        if(isLocalPlayer) GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().SetPlayer(gameObject);
-        if(isLocalPlayer) GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().GiveStartingAbilities();
+		if(isLocalPlayer){
+			GameObject.Find("Main Camera").GetComponent<CameraController>().SetPlayer(gameObject);
+       		GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().SetPlayer(gameObject);
+        	GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().GiveStartingAbilities();
+       		GameObject.Find("Button Controller").GetComponent<Button_Controller>().SetPlayer(gameObject);
+		}
         text_debug = GameObject.Find("DebugText");
 		text_turn = GameObject.Find("TurnText");
 		text_finished = GameObject.Find("FinishText");
@@ -69,6 +73,12 @@ public class Player_Behavior : NetworkBehaviour {
 			if(targets.Count > 1){ //currently only supports forks with 2 choices
 					Debug.Log("Fork in the road! Waiting for player input...");
 				atFork = true;
+				if(isLocalPlayer){
+					GameObject.Find("Button Controller").GetComponent<Button_Controller>().left.GetComponent<CanvasGroup>().alpha = 1f;
+					GameObject.Find("Button Controller").GetComponent<Button_Controller>().left.GetComponent<Button>().interactable = true;
+					GameObject.Find("Button Controller").GetComponent<Button_Controller>().right.GetComponent<CanvasGroup>().alpha = 1f;
+					GameObject.Find("Button Controller").GetComponent<Button_Controller>().right.GetComponent<Button>().interactable = true;
+				}
 				return true;
 			}else{
 					Debug.Log("linear path");
@@ -82,6 +92,12 @@ public class Player_Behavior : NetworkBehaviour {
 			if(targets.Count > 1){ //currently only supports forks with 2 choices
 					Debug.Log("Fork in the road! Waiting for player input...");
 				atFork = true;
+				if(isLocalPlayer){
+					GameObject.Find("Button Controller").GetComponent<Button_Controller>().left.GetComponent<CanvasGroup>().alpha = 1f;
+					GameObject.Find("Button Controller").GetComponent<Button_Controller>().left.GetComponent<Button>().interactable = true;
+					GameObject.Find("Button Controller").GetComponent<Button_Controller>().right.GetComponent<CanvasGroup>().alpha = 1f;
+					GameObject.Find("Button Controller").GetComponent<Button_Controller>().right.GetComponent<Button>().interactable = true;
+				}
 				return true;
 			}else{
 					Debug.Log("linear path");
@@ -121,10 +137,13 @@ public class Player_Behavior : NetworkBehaviour {
 			text_turn.GetComponent<Text>().text = "Your turn!";
 			if(!isMoving){
 				if(isFrozen){
-					text_debug.GetComponent<Text>().text ="FROZEN, press SPACE to skip turn!";
+					text_debug.GetComponent<Text>().text ="FROZEN, skip your turn!";
 				}else{
-					text_debug.GetComponent<Text>().text ="Press SPACE to roll dice!";
-					if(!movedAfterItem)text_debug.GetComponent<Text>().text +="\nOR click the button to use an item!";
+					if(!movedAfterItem){
+						text_debug.GetComponent<Text>().text ="Use your ability\nOR roll dice!";
+					}else{
+						text_debug.GetComponent<Text>().text ="Roll dice!";
+					}
 				}
 			} 
 			
@@ -178,47 +197,7 @@ public class Player_Behavior : NetworkBehaviour {
 			}
 		}
 
-		//space bar begins player movement only at beginning of turn
-		if(Input.GetKeyDown(KeyCode.Space) && !isMoving && isMyTurn){
-            //skip turn due to player being frozen
-            if(isFrozen)
-            {
-                TurnOver();
-            }
-            else
-            {
-                //force player to move n spaces for movement debugging
-                if (debug_enable_DebugMode)
-                {
-                    numSpacesToMove = debug_force_DiceRoll;
-                    if (player_num != 0) numSpacesToMove = 6;//force second player to move less so first player can finish first
-                }
-                else
-                {
-                    System.Random rng = new System.Random(); //C# System.Random, not Unity.Random
-                    numSpacesToMove = rng.Next(1, max_tiles_per_turn + 1);
-                }
-
-                Debug.Log("You rolled a " + numSpacesToMove);
-
-                if (debug_enable_DebugMode && debug_force_BackwardMovement)
-                {
-                    //force player to move backwards for debugging
-                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
-                }
-                else
-                {
-                    //tell server to tell each client to move player forwards
-                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.PlayerMoveForwards));
-                }
-            }
-		}
-
-		if(Input.GetKeyDown(KeyCode.RightArrow) && atFork && isMyTurn){
-			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerForkChoice_Right));
-		}else if(Input.GetKeyDown(KeyCode.LeftArrow) && atFork && isMyTurn){
-			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerForkChoice_Left));
-		}
+		//input code refactored into button functions
 
 	}
 
@@ -277,7 +256,12 @@ public class Player_Behavior : NetworkBehaviour {
 					Debug.Log("\tAbility already used, ending turn");
 				TurnOver();
 			}else{
+				//allow player to roll dice after using item
 				movedAfterItem = true;
+				if(isLocalPlayer){		
+					GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponent<CanvasGroup>().alpha = 1f;
+					GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponent<Button>().interactable = true;
+				}
 			}
 		}else{
 				Debug.Log("Player\tAbility NOT used this turn");
@@ -317,6 +301,12 @@ public class Player_Behavior : NetworkBehaviour {
 		isMyTurn = true; //only local player's turn flag is set
         GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().abilityUsed = false;
         Debug.Log("TargetRpcBeginTurn Player"+player_num+"'s turn");
+		if(isLocalPlayer){
+			GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponent<CanvasGroup>().alpha = 1f;
+			GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponent<Button>().interactable = true;
+       		GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().abilityButton.GetComponent<CanvasGroup>().alpha = 1f;
+       		GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().abilityButton.GetComponent<Button>().interactable = true;
+		}
 	}
 
 	private void TurnOver(){
@@ -331,6 +321,78 @@ public class Player_Behavior : NetworkBehaviour {
 	//SyncVar hook to change animations
 	void OnChangeAnimationState(AnimationStates state){
 		GetComponent<AnimationController>().PlayAnimation(state);
+	}
+
+	//SyncVar hook to change dice button text when frozen
+	void OnChangeIsFrozen(bool b){
+		if(!isLocalPlayer)return;
+		if(b){
+       		GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text = "Skip Turn";
+		}else{
+       		GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text = "Roll Dice";
+		}
+	}
+
+	public void DiceClicked(GameObject dice, GameObject ability){
+		if(!isMoving && isMyTurn){
+			dice.GetComponent<CanvasGroup>().alpha = 0f;
+			dice.GetComponent<Button>().interactable = false;
+        	ability.GetComponent<CanvasGroup>().alpha = 0f;
+			ability.GetComponent<Button>().interactable = false;
+
+            //skip turn due to player being frozen
+            if(isFrozen)
+            {
+                TurnOver();
+            }
+            else
+            {
+                //force player to move n spaces for movement debugging
+                if (debug_enable_DebugMode)
+                {
+                    numSpacesToMove = debug_force_DiceRoll;
+                    if (player_num != 0) numSpacesToMove = 6;//force second player to move less so first player can finish first
+                }
+                else
+                {
+                    System.Random rng = new System.Random(); //C# System.Random, not Unity.Random
+                    numSpacesToMove = rng.Next(1, max_tiles_per_turn + 1);
+                }
+
+                Debug.Log("You rolled a " + numSpacesToMove);
+
+                if (debug_enable_DebugMode && debug_force_BackwardMovement)
+                {
+                    //force player to move backwards for debugging
+                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
+                }
+                else
+                {
+                    //tell server to tell each client to move player forwards
+                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.PlayerMoveForwards));
+                }
+            }
+		}
+	}
+
+	public void RightClicked(GameObject left, GameObject right){
+		if(atFork && isMyTurn){
+			left.GetComponent<CanvasGroup>().alpha = 0f;
+			left.GetComponent<Button>().interactable = false;
+        	right.GetComponent<CanvasGroup>().alpha = 0f;
+			right.GetComponent<Button>().interactable = false;
+			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerForkChoice_Right));
+		}
+	}
+
+	public void LeftClicked(GameObject left, GameObject right){
+		if(atFork && isMyTurn){
+			left.GetComponent<CanvasGroup>().alpha = 0f;
+			left.GetComponent<Button>().interactable = false;
+        	right.GetComponent<CanvasGroup>().alpha = 0f;
+			right.GetComponent<Button>().interactable = false;
+			NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerForkChoice_Left));
+		}
 	}
 
 }
