@@ -156,6 +156,58 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85751de13796fee47abc8f3e88f2bcb4, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1001 &69118789
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4395076189662446, guid: 1dca8281a3fb8ac419a4cb1a7f73cdca, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 499.54364
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395076189662446, guid: 1dca8281a3fb8ac419a4cb1a7f73cdca, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 261.7177
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395076189662446, guid: 1dca8281a3fb8ac419a4cb1a7f73cdca, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 11.606035
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395076189662446, guid: 1dca8281a3fb8ac419a4cb1a7f73cdca, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395076189662446, guid: 1dca8281a3fb8ac419a4cb1a7f73cdca, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395076189662446, guid: 1dca8281a3fb8ac419a4cb1a7f73cdca, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395076189662446, guid: 1dca8281a3fb8ac419a4cb1a7f73cdca, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395076189662446, guid: 1dca8281a3fb8ac419a4cb1a7f73cdca, type: 2}
+      propertyPath: m_RootOrder
+      value: 91
+      objectReference: {fileID: 0}
+    - target: {fileID: 82665492781448656, guid: 1dca8281a3fb8ac419a4cb1a7f73cdca,
+        type: 2}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: c3bc5e6b36c864c10b8525ff36798a55, type: 3}
+    - target: {fileID: 82665492781448656, guid: 1dca8281a3fb8ac419a4cb1a7f73cdca,
+        type: 2}
+      propertyPath: m_Volume
+      value: 0.191
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1dca8281a3fb8ac419a4cb1a7f73cdca, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &100573375
 GameObject:
   m_ObjectHideFlags: 0
