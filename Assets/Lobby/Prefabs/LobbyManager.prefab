@@ -3277,7 +3277,7 @@ MonoBehaviour:
   m_GamePlayerPrefab: {fileID: 1830868085492942, guid: 78397868dbf6e82439cd71756e4c3ca0,
     type: 2}
   m_LobbyScene: Lobby
-  m_PlayScene: Map_Movement_Testing
+  m_PlayScene: Map_November_Demo
   lobbySlots: []
   prematchCountdown: 1
   topPanel: {fileID: 11424994}
@@ -5776,7 +5776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aee795af1dfdca247937c1a60adeec5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  players: []
+  activePlayers: []
   max_turns: 20
   turnOver: 0
 --- !u!225 &225011701219813958
