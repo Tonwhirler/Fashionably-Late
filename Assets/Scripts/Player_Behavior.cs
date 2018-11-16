@@ -299,8 +299,10 @@ public class Player_Behavior : NetworkBehaviour {
         GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().abilityUsed = false;
         Debug.Log("TargetRpcBeginTurn Player"+player_num+"'s turn");
 		if(isLocalPlayer){
+			Debug.Log("\tEnabling Buttons");
 			GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponent<CanvasGroup>().alpha = 1f;
 			GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponent<Button>().interactable = true;
+			GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponent<CanvasGroup>().interactable = true;
        		GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().abilityButton.GetComponent<CanvasGroup>().alpha = 1f;
        		GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().abilityButton.GetComponent<Button>().interactable = true;
 		}
@@ -321,9 +323,9 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	//SyncVar hook to change dice button text when frozen
-	void OnChangeIsFrozen(bool b){
+	void OnChangeIsFrozen(bool is_frozen){
 		if(!isLocalPlayer)return;
-		if(b){
+		if(is_frozen){
        		GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text = "Skip Turn";
 		}else{
        		GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text = "Roll Dice";
