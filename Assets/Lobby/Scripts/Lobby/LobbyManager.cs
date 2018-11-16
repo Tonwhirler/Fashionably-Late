@@ -46,7 +46,6 @@ namespace Prototype.NetworkLobby
 
         public LobbyInfoPanel infoPanel;
         public LobbyCountdownPanel countdownPanel;
-        public GameObject addPlayerButton;
 
         protected RectTransform currentPanel;
 
@@ -372,7 +371,6 @@ namespace Prototype.NetworkLobby
             foreach (PlayerController p in ClientScene.localPlayers)
                 localPlayerCount += (p == null || p.playerControllerId == -1) ? 0 : 1;
 
-            addPlayerButton.SetActive(localPlayerCount < maxPlayersPerConnection && _playerNumber < maxPlayers);
         }
 
         // ----------------- Server callbacks ------------------

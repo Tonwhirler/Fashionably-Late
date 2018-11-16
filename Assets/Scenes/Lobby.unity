@@ -113,7 +113,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &1053359301
+--- !u!1001 &296308602
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -192,85 +192,9 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11475086, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
-      propertyPath: m_CustomConfig
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 225277663833811134, guid: c0978251ff7b10d4fb954a4b56acd9f0,
-        type: 2}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225990058056181728, guid: c0978251ff7b10d4fb954a4b56acd9f0,
-        type: 2}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225272085896922386, guid: c0978251ff7b10d4fb954a4b56acd9f0,
-        type: 2}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225165112153785946, guid: c0978251ff7b10d4fb954a4b56acd9f0,
-        type: 2}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225011701219813958, guid: c0978251ff7b10d4fb954a4b56acd9f0,
-        type: 2}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225552489391526038, guid: c0978251ff7b10d4fb954a4b56acd9f0,
-        type: 2}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225552489391526038, guid: c0978251ff7b10d4fb954a4b56acd9f0,
-        type: 2}
-      propertyPath: m_Interactable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225011701219813958, guid: c0978251ff7b10d4fb954a4b56acd9f0,
-        type: 2}
-      propertyPath: m_Interactable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225165112153785946, guid: c0978251ff7b10d4fb954a4b56acd9f0,
-        type: 2}
-      propertyPath: m_Interactable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225272085896922386, guid: c0978251ff7b10d4fb954a4b56acd9f0,
-        type: 2}
-      propertyPath: m_Interactable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225990058056181728, guid: c0978251ff7b10d4fb954a4b56acd9f0,
-        type: 2}
-      propertyPath: m_Interactable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225277663833811134, guid: c0978251ff7b10d4fb954a4b56acd9f0,
-        type: 2}
-      propertyPath: m_Interactable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 22453414, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 22453414, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: -440.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 22463094, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.00009155273
-      objectReference: {fileID: 0}
-    - target: {fileID: 11461806, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
+    - target: {fileID: 11465630, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
       propertyPath: m_Text
-      value: MATCHMAKER
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
