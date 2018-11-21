@@ -19,8 +19,8 @@ public enum MyMessageType
     PlayerTargetChange = 5, //player has reached tile, but still has movement left
     PlayerForkChoice_Left = 6, //player chose the left forked path
     PlayerForkChoice_Right = 7, //player chose the right forked path
-    ItemMoveBackwards = 8 //item to move the player backwards a specific number of spaces
-
+    ItemMoveBackwards = 8, //item to move the player backwards a specific number of spaces
+    ItemMoveForwards = 9
     /*
     format for message containing target player number and ability is as follows: int [ability_num][target_player_num] concatenated together
         consequentially, messageType values [n][0] through [n][3], where n > 0 and n < number of abilities, are reserved.
@@ -86,7 +86,7 @@ namespace Prototype.NetworkLobby
     public void OnEnumMessage(NetworkMessage netMsg)
 	{
 		IntegerMessage msg = netMsg.ReadMessage<IntegerMessage>();
-		
+		int numSpaces;
 		switch(msg.value){
 			case (int) MyMessageType.TurnOver:
 					Debug.Log("Server got message: TurnOver from connection "+netMsg.conn);
@@ -126,14 +126,20 @@ namespace Prototype.NetworkLobby
 
             case (int) MyMessageType.ItemMoveBackwards:
                     Debug.Log("Server got message: ItemMoveBackwards from connection "+netMsg.conn);
-                    int numSpaces = 1; //modify when quality testing; different strength items could have different movements (think mushroom and golden mushroom from mario party)
+                    numSpaces = 1; //modify when quality testing; different strength items could have different movements (think mushroom and golden mushroom from mario party)
                     gameManager.ApplyItemBackwards(numSpaces);
+                break;
+
+            case (int) MyMessageType.ItemMoveForwards:
+                    Debug.Log("Server got message: ItemMoveForwards from connection "+netMsg.conn);
+                    numSpaces = 1; //modify when quality testing; different strength items could have different movements (think mushroom and golden mushroom from mario party)
+                    gameManager.ApplyItemForwards(numSpaces);                    
                 break;
 
 			default: //try to parse a targeted ability message
                 int target_player_num = msg.value % 10;
                 int ability_enum = (msg.value - (msg.value % 10)) / 10;
-                Debug.Log("\tmsg.value = "+msg.value+", ["+target_player_num+"]"+"["+ability_enum+"]");
+                Debug.Log("\tmsg.value = "+msg.value+", ["+ability_enum+"]"+"["+target_player_num+"]");
                 if((target_player_num >= 0 && target_player_num <= 3)
                     && (ability_enum > 0 && ability_enum <= max_num_abilities)){
                     //valid parsing of targeted ability message

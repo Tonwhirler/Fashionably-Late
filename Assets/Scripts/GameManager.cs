@@ -143,7 +143,14 @@ public class GameManager : MonoBehaviour {
 
 	public void ApplyItemBackwards(int spaces){
 		Debug.Log("Moving Player Backwards "+spaces+" spaces");
-		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcMove(false);
+		Debug.Log("\tTODO: NOT IMPLEMENTED");
+		//activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcMove(false);
+	}
+
+	public void ApplyItemForwards(int spaces){
+		Debug.Log("Moving Player Backwards "+spaces+" spaces");
+		Debug.Log("\tTODO: NOT IMPLEMENTED");
+		//activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcMove(true);
 	}
 
 	public void EndCurrentPlayer(){ //when the current player has reached the goal, remove from turn cycle list
