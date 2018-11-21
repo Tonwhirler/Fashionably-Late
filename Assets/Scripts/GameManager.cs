@@ -157,7 +157,24 @@ public class GameManager : MonoBehaviour {
 		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcStop_ReachedFinish();
 	}
 
-	public void UseAbilityOnPlayer(int player_num, int ability_enum){
-		Debug.Log("\tTODO: targetRPC targeted player "+player_num+" to use ability "+ability_enum);
+	public void UseAbilityOnPlayer(int target_player_num, int ability_enum){
+		GameObject targetPlayer = null;
+
+		foreach(GameObject p in activePlayers){
+			if(p.GetComponent<Player_Behavior>().player_num == target_player_num){
+				targetPlayer = p;
+				break;
+			}
+		}
+
+		if(targetPlayer == null){
+			//target was not found in active players
+			Debug.Log("\tTargeted player not found!");
+			return;
+		}
+
+		targetPlayer.GetComponent<Player_Behavior>().TargetRpcApplyAbilityOnMe(
+					NetworkServer.connections[activePlayers[target_player_num].GetComponent<Player_Behavior>().player_num],
+					ability_enum);
 	}
 }

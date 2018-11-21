@@ -45,6 +45,7 @@ public class Ability_Controller : MonoBehaviour {
 
     public void UseAbility()
     {
+        //The onClick function for the button, code below only affects the client's player
         Debug.Log("Use ability called");
         if (currentAbility == 0)
         {
@@ -56,14 +57,7 @@ public class Ability_Controller : MonoBehaviour {
                 
                 if (abilityUsed == false && !player.GetComponent<Player_Behavior>().isMoving && player.GetComponent<Player_Behavior>().isMyTurn)
                 {
-/*                  Debug.Log("Use ability ForceBack");
-                    //move player 1 space back, the 1 space is temporary
-                    player.GetComponent<Player_Behavior>().numSpacesToMove = 1;
-                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
-                    abilityUsed = true;
-                    //give new ability when old one is used
-                    RandomAbility();
-*/
+
                     playerOneButton.GetComponent<CanvasGroup>().alpha = 1f;
                     playerTwoButton.GetComponent<CanvasGroup>().alpha = 1f;
                     playerThreeButton.GetComponent<CanvasGroup>().alpha = 1f;
@@ -85,14 +79,7 @@ public class Ability_Controller : MonoBehaviour {
 
                 if (abilityUsed == false && !player.GetComponent<Player_Behavior>().isMoving && player.GetComponent<Player_Behavior>().isMyTurn)
                 {
-/*                    Debug.Log("Use ability ForceForward");
-                    //move player 1 space forward, the 1 space is temporary
-                    player.GetComponent<Player_Behavior>().numSpacesToMove = 1;
-                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.PlayerMoveForwards));
-                    abilityUsed = true;
-                    //give new ability when old one is used
-                    RandomAbility();
-*/
+
                     playerOneButton.GetComponent<CanvasGroup>().alpha = 1f;
                     playerTwoButton.GetComponent<CanvasGroup>().alpha = 1f;
                     playerThreeButton.GetComponent<CanvasGroup>().alpha = 1f;
@@ -114,13 +101,7 @@ public class Ability_Controller : MonoBehaviour {
 
                 if (abilityUsed == false && !player.GetComponent<Player_Behavior>().isMoving && player.GetComponent<Player_Behavior>().isMyTurn)
                 {
-/*                    Debug.Log("Use ability Freeze");
-                    //set frozen bool so player cannot take turn
-                    player.GetComponent<Player_Behavior>().isFrozen = true;
-                    abilityUsed = true;
-                    //give new ability when old one is used
-                    RandomAbility();
-*/
+
                     playerOneButton.GetComponent<CanvasGroup>().alpha = 1f;
                     playerTwoButton.GetComponent<CanvasGroup>().alpha = 1f;
                     playerThreeButton.GetComponent<CanvasGroup>().alpha = 1f;
@@ -235,5 +216,48 @@ public class Ability_Controller : MonoBehaviour {
         playerTwoButton.GetComponent<Button>().interactable = false;
         playerThreeButton.GetComponent<Button>().interactable = false;
         playerFourButton.GetComponent<Button>().interactable = false;
+    }
+
+    public void UseAbility(int ability_num){
+        //this function uses the ability specified; can be used on players out of turn
+
+        switch(ability_num){
+            case (int) MyAbilityType.ForceBack:
+                Debug.Log("Use ability ForceBack");
+/*   TODO: figure out which part of commented block goes here and in the onClick function
+
+
+                    //move player 1 space back, the 1 space is temporary
+                    player.GetComponent<Player_Behavior>().numSpacesToMove = 1;
+                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
+                    abilityUsed = true;
+                    //give new ability when old one is used
+                    RandomAbility();
+*/
+            break;
+
+            case (int) MyAbilityType.ForceForward:
+                Debug.Log("Use ability ForceForward");
+/*                    
+                    //move player 1 space forward, the 1 space is temporary
+                    player.GetComponent<Player_Behavior>().numSpacesToMove = 1;
+                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.PlayerMoveForwards));
+                    abilityUsed = true;
+                    //give new ability when old one is used
+                    RandomAbility();
+*/
+            break;
+
+            case (int) MyAbilityType.Freeze:
+                Debug.Log("Use ability Freeze");
+/*                    
+                    //set frozen bool so player cannot take turn
+                    player.GetComponent<Player_Behavior>().isFrozen = true;
+                    abilityUsed = true;
+                    //give new ability when old one is used
+                    RandomAbility();
+*/
+            break;
+        }
     }
 }

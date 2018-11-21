@@ -394,4 +394,10 @@ public class Player_Behavior : NetworkBehaviour {
 		}
 	}
 
+	[TargetRpc]
+	public void TargetRpcApplyAbilityOnMe(NetworkConnection target,int ability_num){
+		Debug.Log("\tTODO TargetRpcApplyAbilityOnMe: apply ability "+ability_num+ " on this client's player");
+		GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().UseAbility(ability_num);
+	}
+
 }
