@@ -7,8 +7,14 @@ using UnityEngine.Networking.NetworkSystem;
 
 
 public class Ability_Controller : MonoBehaviour {
+    public GameObject playerOneButton;
+    public GameObject playerTwoButton;
+    public GameObject playerThreeButton;
+    public GameObject playerFourButton;
+
     public GameObject abilityButton;
     public GameObject diceButton;
+
     [HideInInspector]
     public GameObject player;
     [HideInInspector]
@@ -57,6 +63,16 @@ public class Ability_Controller : MonoBehaviour {
                     //give new ability when old one is used
                     RandomAbility();
 
+                    playerOneButton.GetComponent<CanvasGroup>().alpha = 1f;
+                    playerTwoButton.GetComponent<CanvasGroup>().alpha = 1f;
+                    playerThreeButton.GetComponent<CanvasGroup>().alpha = 1f;
+                    playerFourButton.GetComponent<CanvasGroup>().alpha = 1f;
+
+                    playerOneButton.GetComponent<Button>().interactable = true;
+                    playerTwoButton.GetComponent<Button>().interactable = true;
+                    playerThreeButton.GetComponent<Button>().interactable = true;
+                    playerFourButton.GetComponent<Button>().interactable = true;
+
                     abilityButton.GetComponent<CanvasGroup>().alpha = 0f;
                     abilityButton.GetComponent<Button>().interactable = false;
                     diceButton.GetComponent<CanvasGroup>().alpha = 0f;
@@ -76,6 +92,16 @@ public class Ability_Controller : MonoBehaviour {
                     //give new ability when old one is used
                     RandomAbility();
 
+                    playerOneButton.GetComponent<CanvasGroup>().alpha = 1f;
+                    playerTwoButton.GetComponent<CanvasGroup>().alpha = 1f;
+                    playerThreeButton.GetComponent<CanvasGroup>().alpha = 1f;
+                    playerFourButton.GetComponent<CanvasGroup>().alpha = 1f;
+
+                    playerOneButton.GetComponent<Button>().interactable = true;
+                    playerTwoButton.GetComponent<Button>().interactable = true;
+                    playerThreeButton.GetComponent<Button>().interactable = true;
+                    playerFourButton.GetComponent<Button>().interactable = true;
+
                     abilityButton.GetComponent<CanvasGroup>().alpha = 0f;
                     abilityButton.GetComponent<Button>().interactable = false;
                     diceButton.GetComponent<CanvasGroup>().alpha = 0f;
@@ -93,6 +119,16 @@ public class Ability_Controller : MonoBehaviour {
                     abilityUsed = true;
                     //give new ability when old one is used
                     RandomAbility();
+
+                    playerOneButton.GetComponent<CanvasGroup>().alpha = 1f;
+                    playerTwoButton.GetComponent<CanvasGroup>().alpha = 1f;
+                    playerThreeButton.GetComponent<CanvasGroup>().alpha = 1f;
+                    playerFourButton.GetComponent<CanvasGroup>().alpha = 1f;
+
+                    playerOneButton.GetComponent<Button>().interactable = true;
+                    playerTwoButton.GetComponent<Button>().interactable = true;
+                    playerThreeButton.GetComponent<Button>().interactable = true;
+                    playerFourButton.GetComponent<Button>().interactable = true;
 
                     abilityButton.GetComponent<CanvasGroup>().alpha = 0f;
                     abilityButton.GetComponent<Button>().interactable = false;
@@ -133,5 +169,62 @@ public class Ability_Controller : MonoBehaviour {
                 Debug.Log("Ability button text not set");
                 break;
         }
+    }
+
+    public void TargetPlayerOne()
+    {
+        //change target player here
+
+        playerOneButton.GetComponent<CanvasGroup>().alpha = 0f;
+        playerTwoButton.GetComponent<CanvasGroup>().alpha = 0f;
+        playerThreeButton.GetComponent<CanvasGroup>().alpha = 0f;
+        playerFourButton.GetComponent<CanvasGroup>().alpha = 0f;
+
+        playerOneButton.GetComponent<Button>().interactable = false;
+        playerTwoButton.GetComponent<Button>().interactable = false;
+        playerThreeButton.GetComponent<Button>().interactable = false;
+        playerFourButton.GetComponent<Button>().interactable = false;
+    }
+    public void TargetPlayerTwo()
+    {
+        //change target player here
+
+        playerOneButton.GetComponent<CanvasGroup>().alpha = 0f;
+        playerTwoButton.GetComponent<CanvasGroup>().alpha = 0f;
+        playerThreeButton.GetComponent<CanvasGroup>().alpha = 0f;
+        playerFourButton.GetComponent<CanvasGroup>().alpha = 0f;
+
+        playerOneButton.GetComponent<Button>().interactable = false;
+        playerTwoButton.GetComponent<Button>().interactable = false;
+        playerThreeButton.GetComponent<Button>().interactable = false;
+        playerFourButton.GetComponent<Button>().interactable = false;
+    }
+    public void TargetPlayerThree()
+    {
+        //change target player here
+
+        playerOneButton.GetComponent<CanvasGroup>().alpha = 0f;
+        playerTwoButton.GetComponent<CanvasGroup>().alpha = 0f;
+        playerThreeButton.GetComponent<CanvasGroup>().alpha = 0f;
+        playerFourButton.GetComponent<CanvasGroup>().alpha = 0f;
+
+        playerOneButton.GetComponent<Button>().interactable = false;
+        playerTwoButton.GetComponent<Button>().interactable = false;
+        playerThreeButton.GetComponent<Button>().interactable = false;
+        playerFourButton.GetComponent<Button>().interactable = false;
+    }
+    public void TargetPlayerFour()
+    {
+        //change target player here
+
+        playerOneButton.GetComponent<CanvasGroup>().alpha = 0f;
+        playerTwoButton.GetComponent<CanvasGroup>().alpha = 0f;
+        playerThreeButton.GetComponent<CanvasGroup>().alpha = 0f;
+        playerFourButton.GetComponent<CanvasGroup>().alpha = 0f;
+
+        playerOneButton.GetComponent<Button>().interactable = false;
+        playerTwoButton.GetComponent<Button>().interactable = false;
+        playerThreeButton.GetComponent<Button>().interactable = false;
+        playerFourButton.GetComponent<Button>().interactable = false;
     }
 }
