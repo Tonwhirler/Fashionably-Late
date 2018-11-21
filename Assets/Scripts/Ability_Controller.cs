@@ -46,9 +46,15 @@ public class Ability_Controller : MonoBehaviour {
         player = target;
     }
 
-    public void UseAbility()
+    public void UseAbility() //The onClick function for the button, code below only affects the client's player
     {
-        //The onClick function for the button, code below only affects the client's player
+        int p_num = player.GetComponent<Player_Behavior>().player_num;
+        //display which player is the current player, for ease of use
+        if(p_num==0)playerOneButton.GetComponentInChildren<Text>().text = "Player 1 (you)";
+        else if(p_num==1)playerTwoButton.GetComponentInChildren<Text>().text = "Player 2 (you)";
+        else if(p_num==2)playerThreeButton.GetComponentInChildren<Text>().text = "Player 3 (you)";
+        else if(p_num==3)playerFourButton.GetComponentInChildren<Text>().text = "Player 4 (you)";
+
         Debug.Log("Use ability called");
         if (currentAbility == 0)
         {

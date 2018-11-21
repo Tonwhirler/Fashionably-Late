@@ -185,7 +185,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void PlayerStop_Item(){
-		Debug.Log("Re-enabling the current player to roll the dice");
+		Debug.Log("Re-enabling the current player ("+currentPlayer+") to roll the dice"+
+		"\nAnd stopping player "+targetPlayer);
 		//stop the targeted player
 		activePlayers[targetPlayer].GetComponent<Player_Behavior>().RpcStop_Item();
 		//enable current player to act again

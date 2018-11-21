@@ -295,6 +295,7 @@ public class Player_Behavior : NetworkBehaviour {
 			Debug.Log("RpcStop_Item (player"+player_num+")");
 		isMoving=false;
 		animationState = AnimationStates.HumanoidIdle;
+		movingBecauseOfItem = false;
 	}
 
 	[ClientRpc]
