@@ -156,4 +156,8 @@ public class GameManager : MonoBehaviour {
 		}
 		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcStop_ReachedFinish();
 	}
+
+	public void UseAbilityOnPlayer(int player_num, int ability_enum){
+		Debug.Log("\tTODO: targetRPC targeted player "+player_num+" to use ability "+ability_enum);
+	}
 }

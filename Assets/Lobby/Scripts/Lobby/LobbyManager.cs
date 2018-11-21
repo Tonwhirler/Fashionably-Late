@@ -6,7 +6,6 @@ using UnityEngine.Networking.Types;
 using UnityEngine.Networking.Match;
 using UnityEngine.Networking.NetworkSystem;
 using System.Collections;
-
 //this is a free plugin from the unity store, my changes are denoted with //=== blocks
 
 //=== Global Scope
@@ -21,7 +20,14 @@ public enum MyMessageType
     PlayerForkChoice_Left = 6, //player chose the left forked path
     PlayerForkChoice_Right = 7, //player chose the right forked path
     ItemMoveBackwards = 8 //item to move the player backwards a specific number of spaces
+
+    /*
+    format for message containing target player number and ability is as follows: int [ability_num][target_player_num] concatenated together
+        consequentially, messageType values [n][0] through [n][3], where n > 0 and n < number of abilities, are reserved.
+    ex: 23 parses into ability 2, forceforward, and targets player 3
+    */
 }
+
 //===
 
 namespace Prototype.NetworkLobby
@@ -75,6 +81,7 @@ namespace Prototype.NetworkLobby
 	public static GameManager gameManager = null;
 
     private bool canStartGame = false;
+    private int max_num_abilities = 3; //needed because I could not get Enum.IsDefined(Type, value) working correctly
 
     public void OnEnumMessage(NetworkMessage netMsg)
 	{
@@ -123,9 +130,20 @@ namespace Prototype.NetworkLobby
                     gameManager.ApplyItemBackwards(numSpaces);
                 break;
 
-			default:
-				Debug.Log("Server got unidentified message from connection "+netMsg.conn);
-				break;
+			default: //try to parse a targeted ability message
+                int target_player_num = msg.value % 10;
+                int ability_enum = (msg.value - (msg.value % 10)) / 10;
+                Debug.Log("\tmsg.value = "+msg.value+", ["+target_player_num+"]"+"["+ability_enum+"]");
+                if((target_player_num >= 0 && target_player_num <= 3)
+                    && (ability_enum > 0 && ability_enum <= max_num_abilities)){
+                    //valid parsing of targeted ability message
+                    Debug.Log("Server got targeted ability message from connection "+netMsg.conn);
+                    gameManager.UseAbilityOnPlayer(target_player_num,ability_enum);
+                    break;
+                }
+
+                Debug.Log("Server got unidentified message '"+msg.value+" "+System.Enum.IsDefined(typeof(MyAbilityType), msg.value)+" "+typeof(MyAbilityType)+"' from connection "+netMsg.conn);
+                break;
 		}
 	}
 

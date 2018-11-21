@@ -5,6 +5,14 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.Networking.NetworkSystem;
 
+    //global namespace
+    public enum MyAbilityType
+    {
+        ForceBack = 1,
+        ForceForward = 2,
+        Freeze = 3
+        //when adding new abilities, be sure to increment max_num_abilities global var in LobbyManager
+    }
 
 public class Ability_Controller : MonoBehaviour {
     public GameObject playerOneButton;
@@ -30,13 +38,6 @@ public class Ability_Controller : MonoBehaviour {
         RandomAbility();
     }
 
-    public enum MyAbilityType
-    {
-        ForceBack = 1,
-        ForceForward = 2,
-        Freeze = 3
-    }
-
     public void SetPlayer(GameObject target)
     {
         player = target;
@@ -55,14 +56,14 @@ public class Ability_Controller : MonoBehaviour {
                 
                 if (abilityUsed == false && !player.GetComponent<Player_Behavior>().isMoving && player.GetComponent<Player_Behavior>().isMyTurn)
                 {
-                    Debug.Log("Use ability ForceBack");
+/*                  Debug.Log("Use ability ForceBack");
                     //move player 1 space back, the 1 space is temporary
                     player.GetComponent<Player_Behavior>().numSpacesToMove = 1;
                     NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
                     abilityUsed = true;
                     //give new ability when old one is used
                     RandomAbility();
-
+*/
                     playerOneButton.GetComponent<CanvasGroup>().alpha = 1f;
                     playerTwoButton.GetComponent<CanvasGroup>().alpha = 1f;
                     playerThreeButton.GetComponent<CanvasGroup>().alpha = 1f;
@@ -84,14 +85,14 @@ public class Ability_Controller : MonoBehaviour {
 
                 if (abilityUsed == false && !player.GetComponent<Player_Behavior>().isMoving && player.GetComponent<Player_Behavior>().isMyTurn)
                 {
-                    Debug.Log("Use ability ForceForward");
+/*                    Debug.Log("Use ability ForceForward");
                     //move player 1 space forward, the 1 space is temporary
                     player.GetComponent<Player_Behavior>().numSpacesToMove = 1;
                     NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.PlayerMoveForwards));
                     abilityUsed = true;
                     //give new ability when old one is used
                     RandomAbility();
-
+*/
                     playerOneButton.GetComponent<CanvasGroup>().alpha = 1f;
                     playerTwoButton.GetComponent<CanvasGroup>().alpha = 1f;
                     playerThreeButton.GetComponent<CanvasGroup>().alpha = 1f;
@@ -113,13 +114,13 @@ public class Ability_Controller : MonoBehaviour {
 
                 if (abilityUsed == false && !player.GetComponent<Player_Behavior>().isMoving && player.GetComponent<Player_Behavior>().isMyTurn)
                 {
-                    Debug.Log("Use ability Freeze");
+/*                    Debug.Log("Use ability Freeze");
                     //set frozen bool so player cannot take turn
                     player.GetComponent<Player_Behavior>().isFrozen = true;
                     abilityUsed = true;
                     //give new ability when old one is used
                     RandomAbility();
-
+*/
                     playerOneButton.GetComponent<CanvasGroup>().alpha = 1f;
                     playerTwoButton.GetComponent<CanvasGroup>().alpha = 1f;
                     playerThreeButton.GetComponent<CanvasGroup>().alpha = 1f;
@@ -173,7 +174,9 @@ public class Ability_Controller : MonoBehaviour {
 
     public void TargetPlayerOne()
     {
-        //change target player here
+        //tell server to target player with ability, remember player_num starts with 0
+        int msg = (currentAbility*10);
+        NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage(msg));
 
         playerOneButton.GetComponent<CanvasGroup>().alpha = 0f;
         playerTwoButton.GetComponent<CanvasGroup>().alpha = 0f;
@@ -187,7 +190,9 @@ public class Ability_Controller : MonoBehaviour {
     }
     public void TargetPlayerTwo()
     {
-        //change target player here
+        //tell server to target player with ability, remember player_num starts with 0
+        int msg = (currentAbility*10) + 1;
+        NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage(msg));
 
         playerOneButton.GetComponent<CanvasGroup>().alpha = 0f;
         playerTwoButton.GetComponent<CanvasGroup>().alpha = 0f;
@@ -201,7 +206,9 @@ public class Ability_Controller : MonoBehaviour {
     }
     public void TargetPlayerThree()
     {
-        //change target player here
+        //tell server to target player with ability, remember player_num starts with 0
+        int msg = (currentAbility*10) + 2;
+        NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage(msg));
 
         playerOneButton.GetComponent<CanvasGroup>().alpha = 0f;
         playerTwoButton.GetComponent<CanvasGroup>().alpha = 0f;
@@ -215,7 +222,9 @@ public class Ability_Controller : MonoBehaviour {
     }
     public void TargetPlayerFour()
     {
-        //change target player here
+        //tell server to target player with ability, remember player_num starts with 0
+        int msg = (currentAbility*10) + 3;
+        NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage(msg));
 
         playerOneButton.GetComponent<CanvasGroup>().alpha = 0f;
         playerTwoButton.GetComponent<CanvasGroup>().alpha = 0f;
