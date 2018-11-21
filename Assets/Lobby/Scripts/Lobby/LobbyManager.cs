@@ -20,12 +20,13 @@ public enum MyMessageType
     PlayerForkChoice_Left = 6, //player chose the left forked path
     PlayerForkChoice_Right = 7, //player chose the right forked path
     ItemMoveBackwards = 8, //item to move the player backwards a specific number of spaces
-    ItemMoveForwards = 9
+    ItemMoveForwards = 9,
     /*
     format for message containing target player number and ability is as follows: int [ability_num][target_player_num] concatenated together
         consequentially, messageType values [n][0] through [n][3], where n > 0 and n < number of abilities, are reserved.
     ex: 23 parses into ability 2, forceforward, and targets player 3
     */
+    PlayerStop_Item = 14
 }
 
 //===
@@ -134,6 +135,11 @@ namespace Prototype.NetworkLobby
                     Debug.Log("Server got message: ItemMoveForwards from connection "+netMsg.conn);
                     numSpaces = 1; //modify when quality testing; different strength items could have different movements (think mushroom and golden mushroom from mario party)
                     gameManager.ApplyItemForwards(numSpaces);                    
+                break;
+
+            case (int) MyMessageType.PlayerStop_Item:
+                    Debug.Log("Server got message: PlayerStop_Item from connection "+netMsg.conn);
+                    gameManager.PlayerStop_Item();
                 break;
 
 			default: //try to parse a targeted ability message

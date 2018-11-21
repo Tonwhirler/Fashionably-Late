@@ -44,6 +44,8 @@ public class Player_Behavior : NetworkBehaviour {
 
 	private bool movedAfterItem = false;
 
+	private bool movingBecauseOfItem = false; //allows player to move spaces when being affected by a movement item
+
 	//UI Elements, when HUD is done, make these public and set in inspector
 	private GameObject text_debug;//debug textbox on screen
 	private GameObject text_turn;//turn textbox on screen
@@ -153,7 +155,7 @@ public class Player_Behavior : NetworkBehaviour {
 		}
 
 		if(isMoving){ //only local player detects when the movement is to end
-			if(isMyTurn){
+			if(isMyTurn || movingBecauseOfItem){
 				//display detailed debugging info for localPlayer
 				String t = numSpacesToMove+" spaces left to move\n";
 
@@ -179,12 +181,15 @@ public class Player_Behavior : NetworkBehaviour {
 						numSpacesToMove=0; //for display purposes
 						doneMoving=true;//prevents multiple messages being sent
 
-						if(targetTile.GetComponent<Tile>().isFinal){
-							NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop_Final));
+						if(movingBecauseOfItem){
+							NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop_Item));
 						}else{
-							NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
+							if(targetTile.GetComponent<Tile>().isFinal){
+								NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop_Final));
+							}else{
+								NetworkManager.singleton.client.Send(MsgType.Highest+1,new IntegerMessage((int)MyMessageType.PlayerStop));
+							}
 						}
-
 						
 					}else if(numSpacesToMove > 1){
 						numSpacesToMove-=1;
@@ -240,6 +245,25 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	[ClientRpc]
+	public void RpcMove_Item(bool forwards){
+		isMovingForward = forwards;
+		isChangingTarget=targetNextTile(forwards);
+
+		Debug.Log("Moving to tile "+targetTile);
+		
+		if(atFork){
+			animationState = AnimationStates.HumanoidIdle;
+		}else{
+			animationState = AnimationStates.HumanoidWalk;
+		}
+		
+		isMoving=true;
+		doneMoving = false;
+
+		movingBecauseOfItem = true;
+	}
+
+	[ClientRpc]
 	public void RpcStop(){
 			Debug.Log("RpcStop");
 		isMoving=false;
@@ -264,6 +288,13 @@ public class Player_Behavior : NetworkBehaviour {
 				Debug.Log("Player\tAbility NOT used this turn");
 			if(isLocalPlayer)TurnOver();
 		}
+	}
+
+	[ClientRpc]
+	public void RpcStop_Item(){
+			Debug.Log("RpcStop_Item (player"+player_num+")");
+		isMoving=false;
+		animationState = AnimationStates.HumanoidIdle;
 	}
 
 	[ClientRpc]
@@ -396,8 +427,14 @@ public class Player_Behavior : NetworkBehaviour {
 
 	[TargetRpc]
 	public void TargetRpcApplyAbilityOnMe(NetworkConnection target,int ability_num){
-		Debug.Log("\tTODO TargetRpcApplyAbilityOnMe: apply ability "+ability_num+ " on this client's player");
+		Debug.Log("TargetRpcApplyAbilityOnMe: apply ability "+ability_num+ " to player "+player_num);
 		GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().UseAbility(ability_num);
+	}
+
+	[TargetRpc]
+	public void TargetRpcEnableDiceButton(NetworkConnection target){
+		GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponent<CanvasGroup>().alpha = 1f;
+		GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponent<Button>().interactable = true;
 	}
 
 }

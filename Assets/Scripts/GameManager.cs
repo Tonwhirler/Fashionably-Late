@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour {
 	public int max_turns = 50; //prevents game from going too long
 	
 	private int turn_number; //increments after each player acts
-	private int currentPlayer=0; //current player's index in players
+	private int currentPlayer=0; //current player's index in activePlayers
+	private int targetPlayer=0; //target for items, index in activePlayers
 
 	[HideInInspector]
 	public bool turnOver; //true when the player has finished its turn
@@ -141,18 +142,6 @@ public class GameManager : MonoBehaviour {
 		activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcForkChoice(i);
 	}
 
-	public void ApplyItemBackwards(int spaces){
-		Debug.Log("Moving Player Backwards "+spaces+" spaces");
-		Debug.Log("\tTODO: NOT IMPLEMENTED");
-		//activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcMove(false);
-	}
-
-	public void ApplyItemForwards(int spaces){
-		Debug.Log("Moving Player Backwards "+spaces+" spaces");
-		Debug.Log("\tTODO: NOT IMPLEMENTED");
-		//activePlayers[currentPlayer].GetComponent<Player_Behavior>().RpcMove(true);
-	}
-
 	public void EndCurrentPlayer(){ //when the current player has reached the goal, remove from turn cycle list
 		if(firstPlayerHasEnded){
 			Debug.Log("secondPlayerHasEnded");
@@ -165,23 +154,42 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void UseAbilityOnPlayer(int target_player_num, int ability_enum){
-		GameObject targetPlayer = null;
+		targetPlayer = -1;
 
-		foreach(GameObject p in activePlayers){
-			if(p.GetComponent<Player_Behavior>().player_num == target_player_num){
-				targetPlayer = p;
+		for(int i=0; i<activePlayers.Count; i++){
+			if(activePlayers[i].GetComponent<Player_Behavior>().player_num == target_player_num){
+				targetPlayer = i;
 				break;
 			}
 		}
 
-		if(targetPlayer == null){
+		if(targetPlayer == -1){
 			//target was not found in active players
 			Debug.Log("\tTargeted player not found!");
 			return;
 		}
 
-		targetPlayer.GetComponent<Player_Behavior>().TargetRpcApplyAbilityOnMe(
-					NetworkServer.connections[activePlayers[target_player_num].GetComponent<Player_Behavior>().player_num],
+		activePlayers[targetPlayer].GetComponent<Player_Behavior>().TargetRpcApplyAbilityOnMe(
+					NetworkServer.connections[activePlayers[targetPlayer].GetComponent<Player_Behavior>().player_num],
 					ability_enum);
+	}
+
+	public void ApplyItemBackwards(int spaces){
+		Debug.Log("Moving Player "+targetPlayer+" Backwards "+spaces+" spaces");
+		activePlayers[targetPlayer].GetComponent<Player_Behavior>().RpcMove_Item(false);
+	}
+
+	public void ApplyItemForwards(int spaces){
+		Debug.Log("Moving Player "+targetPlayer+" Forwards "+spaces+" spaces");
+		activePlayers[targetPlayer].GetComponent<Player_Behavior>().RpcMove_Item(true);
+	}
+
+	public void PlayerStop_Item(){
+		Debug.Log("Re-enabling the current player to roll the dice");
+		//stop the targeted player
+		activePlayers[targetPlayer].GetComponent<Player_Behavior>().RpcStop_Item();
+		//enable current player to act again
+		activePlayers[currentPlayer].GetComponent<Player_Behavior>().TargetRpcEnableDiceButton(
+			NetworkServer.connections[activePlayers[currentPlayer].GetComponent<Player_Behavior>().player_num]);
 	}
 }
