@@ -302,8 +302,8 @@ public class Player_Behavior : NetworkBehaviour {
 			Debug.Log("\tEnabling Buttons");
 			GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponent<CanvasGroup>().alpha = 1f;
 			GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponent<Button>().interactable = true;
-			GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponent<CanvasGroup>().interactable = true;
-       		GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().abilityButton.GetComponent<CanvasGroup>().alpha = 1f;
+       		if(isFrozen)return; //don't enable the ability button if frozen
+			GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().abilityButton.GetComponent<CanvasGroup>().alpha = 1f;
        		GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().abilityButton.GetComponent<Button>().interactable = true;
 		}
 	}
