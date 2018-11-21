@@ -6,7 +6,7 @@ public class CameraController : MonoBehaviour {
     [HideInInspector]
     public GameObject player;       //Public variable to store a reference to the player game object
 
-    //private float rotationSpeed = 2;
+    private float rotationSpeed = 1.5;
 
     public void SetPlayer(GameObject target)
     {
@@ -19,8 +19,10 @@ public class CameraController : MonoBehaviour {
         if(player == null)return;
 
         transform.position = player.transform.GetChild(0).position;
-                //Slerp is smooth rotation, but target is messed up somehow
-                //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(player.transform.position), rotationSpeed * Time.deltaTime);
-        transform.LookAt(player.transform.position); //instant rotation, doesn't look good but works
+        
+        //smooth camera rotation, can modify speed
+        transform.rotation = Quaternion.Lerp(transform.rotation,
+            player.transform.GetChild(0).rotation,
+            Time.deltaTime*rotationSpeed);
     }
 }
