@@ -1794,6 +1794,7 @@ MonoBehaviour:
   isMyTurn: 0
   isMoving: 0
   isFrozen: 0
+  rotationSpeed: 2
 --- !u!114 &114643126987091608
 MonoBehaviour:
   m_ObjectHideFlags: 1

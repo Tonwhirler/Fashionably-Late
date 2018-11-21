@@ -114,6 +114,8 @@ public class Player_Behavior : NetworkBehaviour {
 		}
 	}
 
+	public float rotationSpeed; //set in inspector
+
 	void Update () {
 		//all clients can move this gameObject
 		if(isMoving){
@@ -121,12 +123,16 @@ public class Player_Behavior : NetworkBehaviour {
 			Vector3 target;
 			target = targetTile.transform.GetChild(player_num).position; //player moves to a set position within tile corresponding to player number
 
-			gameObject.transform.LookAt(target);
-			if(debug_enable_DebugMode){
-				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,debug_force_Speed*Time.deltaTime);
-			}else{
-				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,speed*Time.deltaTime);
-			}
+			//instantly rotate to face target
+			//gameObject.transform.LookAt(target);
+			
+			//smoothly rotate to face target
+			gameObject.transform.rotation = Quaternion.Lerp(transform.rotation,
+            		targetTile.transform.GetChild(player_num).rotation,
+            		Time.deltaTime*rotationSpeed);
+
+			//move towards target
+			gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,speed*Time.deltaTime);
 			
 		}
 
