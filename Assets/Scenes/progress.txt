@@ -1,2 +1,1 @@
-working on making sure tiles are facing their next tile
-Finished through Tile_R5
+working on smoothing player's rotation during movement (to prevent player from walking sideways)
