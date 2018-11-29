@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour {
 	//To be called by the NetworkManager
 	public void StartGame(){
 		readyScreen = GameObject.Find("Ready Splashscreen");
-		gameOverScreen = GameObject.Find("Game Over Splashscreen");
 		StartCoroutine(GameLoop());
 	}
 	
@@ -40,7 +39,6 @@ public class GameManager : MonoBehaviour {
 		yield return StartCoroutine(TurnLoop());
 
 		yield return StartCoroutine(GameOver());
-		gameOverScreen.GetComponent<CanvasGroup>().alpha = 1f;
 	}
 
 	//resets each player to start and clears the score
@@ -101,6 +99,11 @@ public class GameManager : MonoBehaviour {
 	//calculates the results of the game, displays statistics
 	private IEnumerator GameOver(){
 		Debug.Log("GameOver");
+
+		for(int i = 0; i<NetworkServer.connections.Count; i++){
+			NetworkServer.connections[i].playerControllers[0].gameObject.GetComponent<Player_Behavior>().RpcShowGameOverScreen();
+		}
+
 		yield return new WaitForSeconds(0.1f);
 	}
 
