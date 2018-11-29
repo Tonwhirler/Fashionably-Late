@@ -1033,6 +1033,7 @@ MonoBehaviour:
   - {fileID: 522323487}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &35171399
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1309,6 +1310,7 @@ MonoBehaviour:
   - {fileID: 555547412}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &40574076
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13207,6 +13209,7 @@ MonoBehaviour:
   - {fileID: 1847302769}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &175855043
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13351,6 +13354,7 @@ MonoBehaviour:
   - {fileID: 1303058056}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &180773600
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13465,6 +13469,7 @@ MonoBehaviour:
   - {fileID: 1303058056}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &181389623
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -14016,6 +14021,7 @@ MonoBehaviour:
   - {fileID: 1734784620}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &213723666
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -14267,6 +14273,7 @@ MonoBehaviour:
   - {fileID: 525085272}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &233542533
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15624,6 +15631,7 @@ MonoBehaviour:
   - {fileID: 1857963582}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &274640733
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16106,6 +16114,7 @@ MonoBehaviour:
   - {fileID: 40574074}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &287818624
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16937,6 +16946,7 @@ MonoBehaviour:
   - {fileID: 1087094148}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &315403369
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -17051,6 +17061,7 @@ MonoBehaviour:
   - {fileID: 412512288}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &316758869
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -17623,6 +17634,7 @@ MonoBehaviour:
   - {fileID: 350260463}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &349684141
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -17737,6 +17749,7 @@ MonoBehaviour:
   - {fileID: 2070416688}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &350260465
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -17931,6 +17944,7 @@ MonoBehaviour:
   - {fileID: 1071291718}
   isFinal: 1
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &357978266
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -18433,6 +18447,7 @@ MonoBehaviour:
   - {fileID: 287818622}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &380344058
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -18547,6 +18562,7 @@ MonoBehaviour:
   - {fileID: 1343210496}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &385013944
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19429,6 +19445,7 @@ MonoBehaviour:
   - {fileID: 181389621}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &412512290
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -20941,85 +20958,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 131985284}
   m_Enabled: 1
---- !u!1 &472918740
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 1900578932439832, guid: 1c4b9523c8773ff47886682e0e496bcd,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 472918741}
-  - component: {fileID: 472918743}
-  - component: {fileID: 472918742}
-  m_Layer: 5
-  m_Name: DebugModeText
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &472918741
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 224120426182689168, guid: 1c4b9523c8773ff47886682e0e496bcd,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 472918740}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1205562491}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 10, y: 108}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0, y: 0.5}
---- !u!114 &472918742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114671568329352340, guid: 1c4b9523c8773ff47886682e0e496bcd,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 472918740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 18
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 0
-    m_MaxSize: 72
-    m_Alignment: 0
-    m_AlignByGeometry: 1
-    m_RichText: 1
-    m_HorizontalOverflow: 1
-    m_VerticalOverflow: 1
-    m_LineSpacing: 1
-  m_Text: 
---- !u!222 &472918743
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 222924700039548308, guid: 1c4b9523c8773ff47886682e0e496bcd,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 472918740}
-  m_CullTransparentMesh: 0
 --- !u!1 &472926578
 GameObject:
   m_ObjectHideFlags: 0
@@ -21088,6 +21026,7 @@ MonoBehaviour:
   - {fileID: 2009392421}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &474948497
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -22260,6 +22199,7 @@ MonoBehaviour:
   - {fileID: 1476261703}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &522323489
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -22374,6 +22314,7 @@ MonoBehaviour:
   - {fileID: 180773598}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &525085274
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -22717,6 +22658,7 @@ MonoBehaviour:
   - {fileID: 1726758126}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &555547414
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -24599,6 +24541,7 @@ MonoBehaviour:
   - {fileID: 357978263}
   isFinal: 0
   isStart: 1
+  useCurrentTileRotation: 0
 --- !u!136 &635980741
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -24828,6 +24771,7 @@ MonoBehaviour:
   - {fileID: 1967167774}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &637386059
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -24942,6 +24886,7 @@ MonoBehaviour:
   - {fileID: 1631184590}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &637803729
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -25768,6 +25713,7 @@ MonoBehaviour:
   - {fileID: 721853697}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &666403197
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -26074,6 +26020,7 @@ MonoBehaviour:
   - {fileID: 1909349278}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &672151441
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -26257,7 +26204,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1205562491}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -27273,6 +27220,7 @@ MonoBehaviour:
   - {fileID: 522323487}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &721853699
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -27639,6 +27587,7 @@ MonoBehaviour:
   - {fileID: 213723664}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &726144264
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -33416,6 +33365,7 @@ MonoBehaviour:
   - {fileID: 1098404184}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &783557683
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -34094,6 +34044,7 @@ MonoBehaviour:
   - {fileID: 974108057}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &809779704
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -34762,6 +34713,7 @@ MonoBehaviour:
   - {fileID: 783557681}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &841422961
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -35899,6 +35851,7 @@ MonoBehaviour:
   - {fileID: 1507061002}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &872970527
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36712,7 +36665,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1205562491}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -37091,6 +37044,7 @@ MonoBehaviour:
   - {fileID: 672151439}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &919229468
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -37235,6 +37189,7 @@ MonoBehaviour:
   - {fileID: 1695326057}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &920968138
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -38449,6 +38404,7 @@ MonoBehaviour:
   - {fileID: 316758867}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &974108059
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -38564,6 +38520,7 @@ MonoBehaviour:
   - {fileID: 1502006327}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &978726183
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -43957,6 +43914,7 @@ MonoBehaviour:
   - {fileID: 726144262}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1007221590
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -45492,6 +45450,7 @@ MonoBehaviour:
   - {fileID: 1007221588}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1071291720
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -45898,6 +45857,7 @@ MonoBehaviour:
   - {fileID: 637386057}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1087094150
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -46348,6 +46308,7 @@ MonoBehaviour:
   - {fileID: 274640731}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1098404186
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -49373,7 +49334,6 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 472918741}
   - {fileID: 1296090905}
   - {fileID: 905799113}
   - {fileID: 673243200}
@@ -49402,7 +49362,7 @@ RectTransform:
   m_Children:
   - {fileID: 592674976}
   m_Father: {fileID: 1205562491}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -49826,7 +49786,7 @@ RectTransform:
   m_Children:
   - {fileID: 931481764}
   m_Father: {fileID: 1205562491}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -49846,7 +49806,7 @@ RectTransform:
   m_Children:
   - {fileID: 349012255}
   m_Father: {fileID: 1205562491}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -49866,7 +49826,7 @@ RectTransform:
   m_Children:
   - {fileID: 390651186}
   m_Father: {fileID: 1205562491}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -50704,6 +50664,7 @@ MonoBehaviour:
   - {fileID: 1904314608}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1245388044
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -51003,6 +50964,7 @@ MonoBehaviour:
   - {fileID: 2009392421}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1251062989
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -51889,6 +51851,7 @@ MonoBehaviour:
   - {fileID: 919229466}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1265730446
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -56985,7 +56948,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1205562491}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -57188,6 +57151,7 @@ MonoBehaviour:
   - {fileID: 1435039661}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1303058058
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -58414,6 +58378,7 @@ MonoBehaviour:
   - {fileID: 872970525}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1343210498
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -58772,6 +58737,7 @@ MonoBehaviour:
   - {fileID: 175855041}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1353255780
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -58886,6 +58852,7 @@ MonoBehaviour:
   - {fileID: 2115931259}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1354702646
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -59215,6 +59182,7 @@ MonoBehaviour:
   - {fileID: 1535969085}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1365481541
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -60138,6 +60106,7 @@ MonoBehaviour:
   - {fileID: 978726181}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1382691724
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61223,6 +61192,7 @@ MonoBehaviour:
   - {fileID: 1474710791}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1419195444
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61751,6 +61721,7 @@ MonoBehaviour:
   - {fileID: 2117372492}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1435039663
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -62236,6 +62207,7 @@ MonoBehaviour:
   - {fileID: 1354702644}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1448842070
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -62724,6 +62696,7 @@ MonoBehaviour:
   - {fileID: 233542531}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 1
 --- !u!136 &1465327258
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -63237,6 +63210,7 @@ MonoBehaviour:
   - {fileID: 841422959}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1474710793
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -63351,6 +63325,7 @@ MonoBehaviour:
   - {fileID: 637803727}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1476261705
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -64250,6 +64225,7 @@ MonoBehaviour:
   - {fileID: 385013942}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1502006329
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -64419,6 +64395,7 @@ MonoBehaviour:
   - {fileID: 1265730444}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1504708351
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -64533,6 +64510,7 @@ MonoBehaviour:
   - {fileID: 1792323042}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1507061004
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -64707,6 +64685,7 @@ MonoBehaviour:
   - {fileID: 1245388042}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1512858966
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -65229,6 +65208,7 @@ MonoBehaviour:
   - {fileID: 1419195442}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1535969087
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66730,6 +66710,7 @@ MonoBehaviour:
   - {fileID: 1504708349}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1620040063
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66899,6 +66880,7 @@ MonoBehaviour:
   - {fileID: 1856243208}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1631184592
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -68166,6 +68148,7 @@ MonoBehaviour:
   - {fileID: 841422959}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1695326059
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -69152,6 +69135,7 @@ MonoBehaviour:
   - {fileID: 2040350793}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1726758128
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -69513,6 +69497,7 @@ MonoBehaviour:
   - {fileID: 474948495}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1734784622
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -69981,6 +69966,7 @@ MonoBehaviour:
   - {fileID: 2021555295}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1750389253
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -70894,6 +70880,7 @@ MonoBehaviour:
   - {fileID: 666403195}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1792323044
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -71115,6 +71102,7 @@ MonoBehaviour:
   - {fileID: 1750389251}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1797343970
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -72254,11 +72242,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextTiles:
-  - {fileID: 1847302769}
+  - {fileID: 175855041}
   previousTiles:
   - {fileID: 1797343968}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1847302771
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -72794,6 +72783,7 @@ MonoBehaviour:
   - {fileID: 1448842068}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1856243210
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -72985,6 +72975,7 @@ MonoBehaviour:
   - {fileID: 1465327256}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1857963584
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -73997,6 +73988,7 @@ MonoBehaviour:
   - {fileID: 1512858964}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1893476479
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -74360,6 +74352,7 @@ MonoBehaviour:
   - {fileID: 1620040061}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1904314610
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -74474,6 +74467,7 @@ MonoBehaviour:
   - {fileID: 920968136}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1909349280
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -76088,6 +76082,7 @@ MonoBehaviour:
   - {fileID: 35171397}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &1967167776
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -76975,6 +76970,7 @@ MonoBehaviour:
   - {fileID: 315403367}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &2009392423
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -77316,6 +77312,7 @@ MonoBehaviour:
   - {fileID: 1251062987}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &2020304892
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -77430,6 +77427,7 @@ MonoBehaviour:
   - {fileID: 2070923783}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &2021555297
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -78097,6 +78095,7 @@ MonoBehaviour:
   - {fileID: 2020304890}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &2040350795
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -78680,6 +78679,7 @@ MonoBehaviour:
   - {fileID: 1893476477}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &2070416690
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -78902,6 +78902,7 @@ MonoBehaviour:
   - {fileID: 1382691722}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &2070923785
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -84665,6 +84666,7 @@ MonoBehaviour:
   - {fileID: 809779702}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &2115931261
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -84809,6 +84811,7 @@ MonoBehaviour:
   - {fileID: 635980739}
   isFinal: 0
   isStart: 0
+  useCurrentTileRotation: 0
 --- !u!136 &2117372494
 CapsuleCollider:
   m_ObjectHideFlags: 0
