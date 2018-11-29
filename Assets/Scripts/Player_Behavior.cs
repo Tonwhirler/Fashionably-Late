@@ -368,7 +368,7 @@ public class Player_Behavior : NetworkBehaviour {
             {
                 System.Random rng = new System.Random(); //C# System.Random, not Unity.Random
                 numSpacesToMove = rng.Next(1, max_tiles_per_turn + 1);
-numSpacesToMove=100;
+
                 Debug.Log("You rolled a " + numSpacesToMove);
 
                 //tell server to tell each client to move player forwards
