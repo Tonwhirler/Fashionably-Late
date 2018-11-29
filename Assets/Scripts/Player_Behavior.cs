@@ -7,15 +7,14 @@ using UnityEngine.UI;
 using UnityEngine.Networking.NetworkSystem;
 
 public class Player_Behavior : NetworkBehaviour {
-	public bool debug_enable_DebugMode; //only use debug_force variables when true
-	public bool debug_force_BackwardMovement; //set in prefab editor
-	public int debug_force_DiceRoll; //fix dice roll
-	public float debug_force_Speed; //fix player speed
 
 	private float speed = 3f; //normal speed
-	//private float boostSpeed = 5f; //make item-based movement faster with running animation
+	private float itemSpeed = 5f; //make item-based movement faster with running animation
 
-	//these are visible to inspector to allow the linking of player prefab and tile prefab
+	private float rotationSpeed = 2.0f;
+	private float itemRotationSpeed = 4.0f;
+
+	[HideInInspector]
 	public GameObject currentTile;
 	[HideInInspector]
 	public GameObject targetTile;
@@ -44,6 +43,9 @@ public class Player_Behavior : NetworkBehaviour {
 
 	private bool movedAfterItem = false;
 
+	private bool rotateBeforeMovement = false;
+	private bool rotateAfterMovement = false;
+
 	//UI Elements, when HUD is done, make these public and set in inspector
 	private GameObject text_debug;//debug textbox on screen
 	private GameObject text_turn;//turn textbox on screen
@@ -60,9 +62,7 @@ public class Player_Behavior : NetworkBehaviour {
 		text_turn = GameObject.Find("TurnText");
 		text_finished = GameObject.Find("FinishText");
         targetTile = GameObject.Find("Tile_0_Start");
-
-
-        if (debug_enable_DebugMode)GameObject.Find("DebugModeText").GetComponent<Text>().text = "<DEBUG MODE ENABLED>";
+		currentTile = GameObject.Find("Tile_0_Start");
 	}
 	
 	//returns false if target has been chosen, true if the target is still being chosen (fork)
@@ -110,7 +110,6 @@ public class Player_Behavior : NetworkBehaviour {
 
 				return false;
 			}
-			//TODO: need to make sure player stops at starting tile
 		}
 	}
 
@@ -121,15 +120,28 @@ public class Player_Behavior : NetworkBehaviour {
 			Vector3 target;
 			target = targetTile.transform.GetChild(player_num).position; //player moves to a set position within tile corresponding to player number
 
-			gameObject.transform.LookAt(target);
-			if(debug_enable_DebugMode){
-				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,debug_force_Speed*Time.deltaTime);
-			}else{
-				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,speed*Time.deltaTime);
-			}
-			
-		}
+			//instantly rotate to face target
+			//gameObject.transform.LookAt(target);
 
+			//invisible subcomponent of GameObject used to lerp rotation
+			gameObject.transform.GetChild(1).LookAt(target);
+
+			//smoothly rotate to face target
+			gameObject.transform.rotation = Quaternion.Lerp(transform.rotation,
+            	gameObject.transform.GetChild(1).rotation,
+            	Time.deltaTime*rotationSpeed);
+
+			//move towards target
+			gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,speed*Time.deltaTime);
+			
+			if(animationState == AnimationStates.HumanoidIdle){
+				//rotate to face middle of a fork
+				gameObject.transform.rotation = Quaternion.Lerp(transform.rotation,
+					targetTile.transform.rotation,
+					Time.deltaTime*rotationSpeed);
+			}
+		}
+		
 		//only local player can detect input
 		if(!isLocalPlayer)return;
 
@@ -138,11 +150,19 @@ public class Player_Behavior : NetworkBehaviour {
 			if(!isMoving){
 				if(isFrozen){
 					text_debug.GetComponent<Text>().text ="FROZEN, skip your turn!";
+					if(GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text == "Roll Dice"){
+						//prevent changing the button every frame; change only when it needs to now
+						GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text = "Skip Turn";
+					}
 				}else{
 					if(!movedAfterItem){
 						text_debug.GetComponent<Text>().text ="Use your ability\nOR roll dice!";
 					}else{
 						text_debug.GetComponent<Text>().text ="Roll dice!";
+					}
+					if(GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text == "Skip Turn"){
+						//prevent changing the button every frame; change only when it needs to now
+						GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text = "Roll Dice";
 					}
 				}
 			} 
@@ -346,30 +366,13 @@ public class Player_Behavior : NetworkBehaviour {
             }
             else
             {
-                //force player to move n spaces for movement debugging
-                if (debug_enable_DebugMode)
-                {
-                    numSpacesToMove = debug_force_DiceRoll;
-                    if (player_num != 0) numSpacesToMove = 6;//force second player to move less so first player can finish first
-                }
-                else
-                {
-                    System.Random rng = new System.Random(); //C# System.Random, not Unity.Random
-                    numSpacesToMove = rng.Next(1, max_tiles_per_turn + 1);
-                }
+                System.Random rng = new System.Random(); //C# System.Random, not Unity.Random
+                numSpacesToMove = rng.Next(1, max_tiles_per_turn + 1);
 
                 Debug.Log("You rolled a " + numSpacesToMove);
 
-                if (debug_enable_DebugMode && debug_force_BackwardMovement)
-                {
-                    //force player to move backwards for debugging
-                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.ItemMoveBackwards));
-                }
-                else
-                {
-                    //tell server to tell each client to move player forwards
-                    NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.PlayerMoveForwards));
-                }
+                //tell server to tell each client to move player forwards
+                NetworkManager.singleton.client.Send(MsgType.Highest + 1, new IntegerMessage((int)MyMessageType.PlayerMoveForwards));
             }
 		}
 	}
