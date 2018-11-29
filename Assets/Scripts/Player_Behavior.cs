@@ -9,7 +9,10 @@ using UnityEngine.Networking.NetworkSystem;
 public class Player_Behavior : NetworkBehaviour {
 
 	private float speed = 3f; //normal speed
-	//private float boostSpeed = 5f; //make item-based movement faster with running animation
+	private float itemSpeed = 5f; //make item-based movement faster with running animation
+
+	private float rotationSpeed = 2.0f;
+	private float itemRotationSpeed = 4.0f;
 
 	[HideInInspector]
 	public GameObject currentTile;
@@ -39,6 +42,9 @@ public class Player_Behavior : NetworkBehaviour {
 	private bool atFork = false;
 
 	private bool movedAfterItem = false;
+
+	private bool rotateBeforeMovement = false;
+	private bool rotateAfterMovement = false;
 
 	//UI Elements, when HUD is done, make these public and set in inspector
 	private GameObject text_debug;//debug textbox on screen
@@ -106,8 +112,6 @@ public class Player_Behavior : NetworkBehaviour {
 			}
 		}
 	}
-
-	public float rotationSpeed; //set in inspector
 
 	void Update () {
 		//all clients can move this gameObject

@@ -1,3 +1,0 @@
-Working on implementing item speed variables and sprint animation.
-
-Working on rotating before moving when using item_back, and rotating player forward after moving backwards.
