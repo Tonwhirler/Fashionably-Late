@@ -15,7 +15,7 @@ public class Player_Behavior : NetworkBehaviour {
 	private float speed = 3f; //normal speed
 	//private float boostSpeed = 5f; //make item-based movement faster with running animation
 
-	//these are visible to inspector to allow the linking of player prefab and tile prefab
+	[HideInInspector]
 	public GameObject currentTile;
 	[HideInInspector]
 	public GameObject targetTile;
@@ -60,7 +60,7 @@ public class Player_Behavior : NetworkBehaviour {
 		text_turn = GameObject.Find("TurnText");
 		text_finished = GameObject.Find("FinishText");
         targetTile = GameObject.Find("Tile_0_Start");
-
+		currentTile = GameObject.Find("Tile_0_Start");
 
         if (debug_enable_DebugMode)GameObject.Find("DebugModeText").GetComponent<Text>().text = "<DEBUG MODE ENABLED>";
 	}
@@ -127,9 +127,11 @@ public class Player_Behavior : NetworkBehaviour {
 			//gameObject.transform.LookAt(target);
 			
 			//smoothly rotate to face target
-			gameObject.transform.rotation = Quaternion.Lerp(transform.rotation,
-            		targetTile.transform.GetChild(player_num).rotation,
+			if(isMovingForward){
+				gameObject.transform.rotation = Quaternion.Lerp(transform.rotation,
+            		targetTile.transform.rotation,
             		Time.deltaTime*rotationSpeed);
+			}
 
 			//move towards target
 			gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position,target,speed*Time.deltaTime);

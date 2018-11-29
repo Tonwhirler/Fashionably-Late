@@ -17,10 +17,10 @@ public class CameraController : MonoBehaviour {
         if(player == null)return;
 
         transform.position = player.transform.GetChild(0).position;
-        
+        transform.rotation = player.transform.GetChild(0).rotation;
         //smooth camera rotation, can modify speed
-        transform.rotation = Quaternion.Lerp(transform.rotation,
+        /*transform.rotation = Quaternion.Lerp(transform.rotation,
             player.transform.GetChild(0).rotation,
-            Time.deltaTime*(player.GetComponent<Player_Behavior>().rotationSpeed+1f));
+            Time.deltaTime*(player.GetComponent<Player_Behavior>().rotationSpeed+1f));*/
     }
 }

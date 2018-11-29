@@ -810,7 +810,7 @@ GameObject:
   m_Layer: 0
   m_Name: CameraPos
   m_TagString: Untagged
-  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1784,7 +1784,7 @@ MonoBehaviour:
   debug_force_BackwardMovement: 0
   debug_force_DiceRoll: 100
   debug_force_Speed: 100
-  currentTile: {fileID: 1833852659714676, guid: 6f67713d7a016ed4aa3f1bcf4b525a93,
+  currentTile: {fileID: 1206703715584806, guid: 8f82f2735f1fca3408b66529cb3c68a6,
     type: 2}
   targetTile: {fileID: 0}
   player_num: 0
