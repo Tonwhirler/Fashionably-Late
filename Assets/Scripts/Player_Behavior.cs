@@ -168,7 +168,7 @@ public class Player_Behavior : NetworkBehaviour {
 			} 
 			
 		}else{
-			text_turn.GetComponent<Text>().text = "Not your turn.";
+			text_turn.GetComponent<Text>().text = "";
 			text_debug.GetComponent<Text>().text = "";
 		}
 
@@ -368,7 +368,7 @@ public class Player_Behavior : NetworkBehaviour {
             {
                 System.Random rng = new System.Random(); //C# System.Random, not Unity.Random
                 numSpacesToMove = rng.Next(1, max_tiles_per_turn + 1);
-
+numSpacesToMove=100;
                 Debug.Log("You rolled a " + numSpacesToMove);
 
                 //tell server to tell each client to move player forwards
@@ -397,4 +397,11 @@ public class Player_Behavior : NetworkBehaviour {
 		}
 	}
 
+	[ClientRpc]
+	public void RpcShowGameOverScreen(){
+		if(isLocalPlayer){
+			GameObject.Find("Game Over Splashscreen").GetComponent<CanvasGroup>().alpha=1f;
+			text_finished.GetComponent<Text>().text = "";
+		}
+	}
 }
