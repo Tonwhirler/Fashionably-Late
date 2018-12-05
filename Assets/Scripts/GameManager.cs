@@ -10,18 +10,23 @@ public class GameManager : MonoBehaviour {
 	public List<GameObject> activePlayers; //references to each of the players in the game
 	
 	public int max_turns = 50; //prevents game from going too long
-	
+	public int final_countdown = 5; //number of rounds before the game ends after the first player finishes the game
+	private bool force_end = false; //true when the countdown is over
+
 	private int turn_number; //increments after each player acts
 	private int currentPlayer=0; //current player's index in players
 
 	[HideInInspector]
 	public bool turnOver; //true when the player has finished its turn
 	
-	private bool firstPlayerHasEnded = false; //true when first player has reached the end goal
+	[HideInInspector]
+	public bool firstPlayerHasEnded = false; //true when first player has reached the end goal
 	private bool secondPlayerHasEnded = false;	//true when second player has reached the end goal
 
 	private GameObject readyScreen;
 	private GameObject gameOverScreen;
+
+	private int winner = -1; //player number of the winning player, sets to first player to finish, then second player to finish
 
 	//To be called by the NetworkManager
 	public void StartGame(){
@@ -67,17 +72,31 @@ public class GameManager : MonoBehaviour {
 				Debug.Log("Player "+activePlayers[i].GetComponent<Player_Behavior>().player_num+" turn");
 				
 				//Rpc client to take turn, assumes player_num is correctly tied to player's network connection index
-				activePlayers[i].GetComponent<Player_Behavior>().TargetRpcBeginTurn(
-					NetworkServer.connections[activePlayers[i].GetComponent<Player_Behavior>().player_num]);
+				if(firstPlayerHasEnded){
+					activePlayers[i].GetComponent<Player_Behavior>().TargetRpcBeginTurn(
+						NetworkServer.connections[activePlayers[i].GetComponent<Player_Behavior>().player_num],final_countdown);
+				}else{
+					activePlayers[i].GetComponent<Player_Behavior>().TargetRpcBeginTurn(
+						NetworkServer.connections[activePlayers[i].GetComponent<Player_Behavior>().player_num],-1);
+				}
 
 				yield return StartCoroutine(WaitForTurnOver()); //wait here until player's turn is over
 
 				if(secondPlayerHasEnded){ //go directly to game over
+					winner = activePlayers[i].GetComponent<Player_Behavior>().player_num;
 					break;
 				}else if(firstPlayerHasEnded && !hasSetFristPlayer){ //remove current player after the turn round is over
-					//NOTE: a flag will be needed in player script when using items out of turn is implemented so finished player cannot act out of turn
+					winner = activePlayers[i].GetComponent<Player_Behavior>().player_num;
 					playerToRemove = i;
 					hasSetFristPlayer = true; //fixes bug where playerToRemove is overwritten by the last player
+				}else if(firstPlayerHasEnded){
+					//start final countdown
+					if(final_countdown > 0){
+						final_countdown--;
+					}else{
+						force_end = true;
+						break;
+					}
 				}
 
 				Debug.Log("Server recognized turn ended, waiting 1 second");
@@ -85,7 +104,7 @@ public class GameManager : MonoBehaviour {
 			}
 			Debug.Log("Turn  "+turn_number+"end\n");
 
-			if(secondPlayerHasEnded)break; //allows breaking out of nested loop from inner loop
+			if(secondPlayerHasEnded || force_end)break; //allows breaking out of nested loop from inner loop
 
 			if(firstPlayerHasEnded && !hasRemovedFirstPlayer){
 				Debug.Log("Removing Player"+playerToRemove+" from turn loop");
@@ -101,7 +120,7 @@ public class GameManager : MonoBehaviour {
 		Debug.Log("GameOver");
 
 		for(int i = 0; i<NetworkServer.connections.Count; i++){
-			NetworkServer.connections[i].playerControllers[0].gameObject.GetComponent<Player_Behavior>().RpcShowGameOverScreen();
+			NetworkServer.connections[i].playerControllers[0].gameObject.GetComponent<Player_Behavior>().RpcShowGameOverScreen(winner);
 		}
 
 		yield return new WaitForSeconds(0.1f);

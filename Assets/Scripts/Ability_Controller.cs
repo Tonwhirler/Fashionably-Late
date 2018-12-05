@@ -108,6 +108,7 @@ public class Ability_Controller : MonoBehaviour {
     public void RandomAbility()
     {
         currentAbility = Random.Range(1,4); // creates a number between 1 and 3
+
         Debug.Log("Current Ability = " + currentAbility);
         UpdateUI();
     }

@@ -9,10 +9,8 @@ using UnityEngine.Networking.NetworkSystem;
 public class Player_Behavior : NetworkBehaviour {
 
 	private float speed = 3f; //normal speed
-	private float itemSpeed = 5f; //make item-based movement faster with running animation
 
 	private float rotationSpeed = 2.0f;
-	private float itemRotationSpeed = 4.0f;
 
 	[HideInInspector]
 	public GameObject currentTile;
@@ -43,8 +41,7 @@ public class Player_Behavior : NetworkBehaviour {
 
 	private bool movedAfterItem = false;
 
-	private bool rotateBeforeMovement = false;
-	private bool rotateAfterMovement = false;
+	private int final_countdown = -1; //-1 until the final countdown has begun, then equal to number of turns left in the game
 
 	//UI Elements, when HUD is done, make these public and set in inspector
 	private GameObject text_debug;//debug textbox on screen
@@ -120,9 +117,6 @@ public class Player_Behavior : NetworkBehaviour {
 			Vector3 target;
 			target = targetTile.transform.GetChild(player_num).position; //player moves to a set position within tile corresponding to player number
 
-			//instantly rotate to face target
-			//gameObject.transform.LookAt(target);
-
 			//invisible subcomponent of GameObject used to lerp rotation
 			gameObject.transform.GetChild(1).LookAt(target);
 
@@ -146,24 +140,24 @@ public class Player_Behavior : NetworkBehaviour {
 		if(!isLocalPlayer)return;
 
 		if(isMyTurn){
-			text_turn.GetComponent<Text>().text = "Your turn!";
+			if(final_countdown != -1){
+				String s = "Your turn! (Final Countdown: "+final_countdown+")";
+				text_turn.GetComponent<Text>().text = s;
+			}else{
+				text_turn.GetComponent<Text>().text = "Your turn!";
+			}
+
 			if(!isMoving){
 				if(isFrozen){
 					text_debug.GetComponent<Text>().text ="FROZEN, skip your turn!";
-					if(GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text == "Roll Dice"){
-						//prevent changing the button every frame; change only when it needs to now
-						GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text = "Skip Turn";
-					}
+					GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text = "Skip Turn";
 				}else{
 					if(!movedAfterItem){
 						text_debug.GetComponent<Text>().text ="Use your ability\nOR roll dice!";
 					}else{
 						text_debug.GetComponent<Text>().text ="Roll dice!";
 					}
-					if(GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text == "Skip Turn"){
-						//prevent changing the button every frame; change only when it needs to now
-						GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text = "Roll Dice";
-					}
+					GameObject.Find("Button Controller").GetComponent<Button_Controller>().dice.GetComponentInChildren<Text>().text = "Roll Dice";
 				}
 			} 
 			
@@ -195,7 +189,7 @@ public class Player_Behavior : NetworkBehaviour {
 				}
 
 				if(hasReachedDestination){
-					if((numSpacesToMove <= 1 && !doneMoving) || targetTile.GetComponent<Tile>().isFinal){ //also stop player when at the final tile
+					if((numSpacesToMove <= 1 && !doneMoving) || (targetTile.GetComponent<Tile>().isFinal && !doneMoving)){ //also stop player when at the final tile
 						numSpacesToMove=0; //for display purposes
 						doneMoving=true;//prevents multiple messages being sent
 
@@ -314,8 +308,9 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	[TargetRpc]
-	public void TargetRpcBeginTurn(NetworkConnection target){
+	public void TargetRpcBeginTurn(NetworkConnection target, int countdown){
 		isMyTurn = true; //only local player's turn flag is set
+		final_countdown = countdown;
         GameObject.Find("Ability Controller").GetComponent<Ability_Controller>().abilityUsed = false;
         Debug.Log("TargetRpcBeginTurn Player"+player_num+"'s turn");
 		if(isLocalPlayer){
@@ -398,10 +393,15 @@ public class Player_Behavior : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	public void RpcShowGameOverScreen(){
+	public void RpcShowGameOverScreen(int winner){
 		if(isLocalPlayer){
 			GameObject.Find("Game Over Splashscreen").GetComponent<CanvasGroup>().alpha=1f;
 			text_finished.GetComponent<Text>().text = "";
+			if(winner == -1){
+				GameObject.Find("Game Over Splashscreen").GetComponentInChildren<Text>().text = "Game Over\nNo winner this time!";
+			}else{
+				GameObject.Find("Game Over Splashscreen").GetComponentInChildren<Text>().text = "Game Over\nPlayer "+(winner+1)+" wins!";
+			}
 		}
 	}
 }
