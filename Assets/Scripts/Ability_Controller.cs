@@ -8,6 +8,10 @@ using UnityEngine.Networking.NetworkSystem;
 
 public class Ability_Controller : MonoBehaviour {
     public GameObject abilityButton;
+    public Button button;
+    public Sprite freezeSprite;
+    public Sprite forwardSprite;
+    public Sprite backSprite;
     public GameObject diceButton;
     [HideInInspector]
     public GameObject player;
@@ -119,15 +123,18 @@ public class Ability_Controller : MonoBehaviour {
         switch (currentAbility)
         {
             case (int)MyAbilityType.ForceBack:
-                text_ability.text = "Force Back";
+                //text_ability.text = "Force Back";
+                button.image.sprite = backSprite;
                 break;
 
             case (int)MyAbilityType.ForceForward:
-                text_ability.text = "Force Forward";
+                //text_ability.text = "Force Forward";
+                button.image.sprite = forwardSprite;
                 break;
 
             case (int)MyAbilityType.Freeze:
-                text_ability.text = "Freeze";
+                //text_ability.text = "Freeze";
+                button.image.sprite = freezeSprite;
                 break;
 
             default:
