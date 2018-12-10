@@ -139,11 +139,11 @@ namespace Prototype.NetworkLobby
             switch(pn){
                 case 1: currentModel = Instantiate(player1Prefab, gamePlayer.transform.position, gamePlayer.transform.rotation);
                 break;
-                case 2: currentModel = Instantiate(player2Prefab, gamePlayer.transform.position, gamePlayer.transform.rotation);
+                case 2: currentModel = Instantiate(player4Prefab, gamePlayer.transform.position, gamePlayer.transform.rotation);
                 break;
                 case 3: currentModel = Instantiate(player3Prefab, gamePlayer.transform.position, gamePlayer.transform.rotation);
                 break;
-                case 4: currentModel = Instantiate(player4Prefab, gamePlayer.transform.position, gamePlayer.transform.rotation);
+                case 4: currentModel = Instantiate(player2Prefab, gamePlayer.transform.position, gamePlayer.transform.rotation);
                 break;
                 default: currentModel = Instantiate(player1Prefab, gamePlayer.transform.position, gamePlayer.transform.rotation);
                 break;
