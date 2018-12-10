@@ -129,7 +129,29 @@ namespace Prototype.NetworkLobby
 		}
 	}
 
+    public GameObject player1Prefab;
+    public GameObject player2Prefab;
+    public GameObject player3Prefab;
+    public GameObject player4Prefab;
+    private int pn=1;//player num
         public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer){
+            GameObject currentModel;
+            switch(pn){
+                case 1: currentModel = Instantiate(player1Prefab, gamePlayer.transform.position, gamePlayer.transform.rotation);
+                break;
+                case 2: currentModel = Instantiate(player2Prefab, gamePlayer.transform.position, gamePlayer.transform.rotation);
+                break;
+                case 3: currentModel = Instantiate(player3Prefab, gamePlayer.transform.position, gamePlayer.transform.rotation);
+                break;
+                case 4: currentModel = Instantiate(player4Prefab, gamePlayer.transform.position, gamePlayer.transform.rotation);
+                break;
+                default: currentModel = Instantiate(player1Prefab, gamePlayer.transform.position, gamePlayer.transform.rotation);
+                break;
+            }
+            pn++;
+            //bind rigged model to empty playerModel
+            currentModel.transform.parent = gamePlayer.transform;
+
             //bind players to GameManager
             canStartGame = gameManager.AddPlayer(gamePlayer);
 

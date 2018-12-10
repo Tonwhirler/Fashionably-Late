@@ -3098,7 +3098,11 @@ MonoBehaviour:
   m_OfflineScene: Lobby
   m_OnlineScene: 
   m_SpawnPrefabs:
-  - {fileID: 1830868085492942, guid: 78397868dbf6e82439cd71756e4c3ca0, type: 2}
+  - {fileID: 1706093371774538, guid: bb7cc8e9975c4e040a9901b23fabb659, type: 2}
+  - {fileID: 1365846567118570, guid: 0d33b4a1eb7afec4cab530a1d657c105, type: 2}
+  - {fileID: 1566531782828874, guid: d69153e4820ae65409b3211c43e6afa3, type: 2}
+  - {fileID: 1482763101499430, guid: 6224c27d354059643a5a088741618bb9, type: 2}
+  - {fileID: 1620368507072184, guid: 6f3ee81a36253eb4bb9fe72b2e6af641, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -3160,7 +3164,7 @@ MonoBehaviour:
   m_MinPlayers: 2
   m_LobbyPlayerPrefab: {fileID: 11487034, guid: ad727d7e1462ecc4f83c898ecc501997,
     type: 2}
-  m_GamePlayerPrefab: {fileID: 1830868085492942, guid: 78397868dbf6e82439cd71756e4c3ca0,
+  m_GamePlayerPrefab: {fileID: 1706093371774538, guid: bb7cc8e9975c4e040a9901b23fabb659,
     type: 2}
   m_LobbyScene: Lobby
   m_PlayScene: Map
@@ -3176,6 +3180,14 @@ MonoBehaviour:
   hostInfo: {fileID: 11415712}
   _playerNumber: 0
   _isMatchmaking: 0
+  player1Prefab: {fileID: 1365846567118570, guid: 0d33b4a1eb7afec4cab530a1d657c105,
+    type: 2}
+  player2Prefab: {fileID: 1566531782828874, guid: d69153e4820ae65409b3211c43e6afa3,
+    type: 2}
+  player3Prefab: {fileID: 1482763101499430, guid: 6224c27d354059643a5a088741618bb9,
+    type: 2}
+  player4Prefab: {fileID: 1620368507072184, guid: 6f3ee81a36253eb4bb9fe72b2e6af641,
+    type: 2}
 --- !u!114 &11476426
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5647,7 +5659,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activePlayers: []
   max_turns: 20
+  final_countdown: 5
   turnOver: 0
+  firstPlayerHasEnded: 0
 --- !u!114 &114816244189152128
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5661,7 +5675,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activePlayers: []
   max_turns: 20
+  final_countdown: 5
   turnOver: 0
+  firstPlayerHasEnded: 0
 --- !u!225 &225011701219813958
 CanvasGroup:
   m_ObjectHideFlags: 1
