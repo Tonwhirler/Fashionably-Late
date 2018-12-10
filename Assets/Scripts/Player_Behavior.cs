@@ -334,7 +334,7 @@ public class Player_Behavior : NetworkBehaviour {
 
 	//SyncVar hook to change animations
 	void OnChangeAnimationState(AnimationStates state){
-		GetComponent<AnimationController>().PlayAnimation(state);
+		gameObject.GetComponentInChildren<AnimationController>().PlayAnimation(state);
 	}
 
 	//SyncVar hook to change dice button text when frozen
